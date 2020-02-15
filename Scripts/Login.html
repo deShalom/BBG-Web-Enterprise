@@ -1,12 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title>The BigBoi login page!</title>
+    <title>GRE: Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--This is the link to our CSS!-->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
 </head>
 
 <style>
@@ -67,16 +68,22 @@
         </div>
 
     <!-- This divider will hold the log-in box -->
-<form class="w3-display-middle w3-container w3-card-4 w3-dark-grey">
-  <h2 class="w3-center">Welcome</h2>
+<form action="authenticate.php" method="post" class="w3-display-middle w3-container w3-card-4 w3-dark-grey">
+  <h2 class="w3-center">Login</h2>
 
    <!-- Username input field -->
-  <p class="w3-center"><label>Username</label>
-  <input class="w3-input w3-border" name="first" type="text" name="lg_username" id="lg_username"></p>
+  <p class="w3-center">
+      <label>Username</label>
+      <i class="fas fa-user"></i>
+      <input class="w3-input w3-border" type="text" name="username" placeholder="Username" id="username" required>
+  </p>
 
   <!-- Password input field -->
-  <p class="w3-center"><label>Password</label>
-  <input class="w3-input w3-border" name="last" type="password" name="lg_password" id="lg_password"></p>
+  <p class="w3-center">
+      <label>Password</label>
+      <i class="fas fa-lock"></i>
+      <input class="w3-input w3-border" type="text" name="password" placeholder="Password" id="password" required>
+      <button class="w3-button w3-dark-gray w3-margin-top">Create an account!</button>    
 </form>
     </div>
 
