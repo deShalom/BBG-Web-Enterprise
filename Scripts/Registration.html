@@ -76,7 +76,7 @@
         </div>
 
         <!-- This divider will hold the log-in box -->
-        <form action="authenticate.php" method="post" class="w3-display-middle w3-container w3-card-4 w3-dark-grey">
+        <form action="authenticate.php" method="post" class="w3-display-right w3-margin-right w3-container w3-card-4 w3-dark-grey">
             <h2 class="w3-center">Create an account</h2>
 
             <!-- Username input field -->
@@ -90,8 +90,14 @@
             <p class="w3-center">
                 <label>Please enter a Password below</label>
                 <i class="fas fa-lock"></i>
-                <input class="w3-input w3-border w3-center" type="text" name="password" placeholder="Password" id="password" required>
-                <button class="w3-button w3-dark-gray w3-margin-top">Submit</button>
+                <input class="w3-input w3-border w3-center" type="password" name="password" placeholder="Password" id="password" required>
+				
+				 <!-- Password input field -->
+            <p class="w3-center">
+                <label>Confirm Password</label>
+                <i class="fas fa-lock"></i>
+                <input class="w3-input w3-border w3-center" type="password" name="password" placeholder="Password" id="password" required>
+				<button class="w3-button w3-dark-gray w3-margin-top">Submit</button>
         </form>
     </div>
 
