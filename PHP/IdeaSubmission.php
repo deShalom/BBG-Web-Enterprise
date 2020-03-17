@@ -73,6 +73,7 @@
     }
 
 
+// SQL statement to update the Post ID and User ID in the Documents table
 
 // SQL statement to insert Post data from the website to the Post db.
     $sqlpost = "INSERT INTO Posts (needdbfieldnamesplease) VALUES ('$category','$problem','$idea','$anon')";
