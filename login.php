@@ -188,3 +188,60 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 </html><!DOCTYPE html>
 
+
+<?php 
+session_start();
+require_once('connect.php');
+require(config.php');
+require('PHPMailer/PHPMailerAutoload.php');
+if(isset($_POST) & !empty($_POST)){
+$username = mysqli-real-escape-string($connection, $_post['username']);
+$sql = "SELECT * FROM 'login' WHERE username = '$username'";
+$res = mysqli_query($connection, $sql);
+$count = mysqli_num_rows($res);
+if($count == 1){
+$r = mysqli_fetch_assoc($res);
+$password = $r['password'];
+$to = $r['email'];
+$subject = "Your Recoverd Password";
+
+$message = "Please use this password to login" . $password;
+$headers = "From: daredicing.com";
+if(mail($to, $subject, $message, $headers)){
+echo "Your password has been sent to your email ID.";
+}else{
+echo "Failed to recover your password. Try again.";
+}
+
+}else{
+echo "Username cannot be found in database.";
+}
+}
+
+?>
+<!DOCTYPE html>
+<html>
+<head>
+<title>GRE: Reset Password Verification</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+
+<link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+<div class="container">
+<?php if(isset($smsg)){ ?><div class="alert alert-success" role="alert"> <?php echo $smsg; ?> </div><?php } ?>
+<?php if(isset($fmsg)){ ?><div class="alert alert-dnager" role="alert"> <?php echo $fmsg; ?> </div><?php } ?>
+<form class="form-signin" method="POST">
+<h2 class="form-signin-heading">Please Register</h2>
+<div class="input-group">
+<span class="input-group-addon" id="basic-addon1">@</span>
+<input type="text" name="username" class="form-control" placeholder="Username" required>
+</div>
+<button class="btn btn-lg btn-primary btn-block" type="submit">Forgoten Password</button>
+<a class="btn btn-lg btn-primary btn-block" href="register.php">Register</a>
+</form>
+</div>
+</body>
+</html>
