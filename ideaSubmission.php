@@ -55,7 +55,7 @@
                     $fileDestination = $target_dir.$fileNameNew;
                     move_uploaded_file($fileTempName, $fileDestination); // Function which uploads the file using the temporary space and our final file destination.
                         // SQL statement to update the Post ID and User ID in the Documents table
-                    $sqlupdatepost = "INSERT INTO Documents ('FileName','FileType','PostID','UserID') VALUES ('$fileNameNew','$fileActualExt','')"; // NEED TO GRAB USERID from SESSION
+                    $sqlupdatepost = "INSERT INTO Documents ('FileName','FileType','PostID','UserID') VALUES ('$fileNameNew','$fileActualExt','$userID')"; // NEED TO GRAB USERID from SESSION
                     header("Location: ../index.html?UploadSuccess") // If all goes well, we are take to the Index page with "UploadSuccess" written in the address bar.
                     // If statement to update the column in Posts table to True if the post has documents attached to it.
                     if ($docupload = TRUE){
@@ -99,7 +99,7 @@
     
 
 
-    }
+    } // everything within these curly brackets happens upon the "submitidea" button press 
 
     // my own notes:
     // does the table "Categories" really need to exist? There's no other information on Categories except
@@ -111,6 +111,9 @@
 
 
 ?>
+
+
+
 
 <!DOCTYPE html>
 
