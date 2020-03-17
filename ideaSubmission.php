@@ -1,14 +1,19 @@
 <?php
+    session_start();
+
 // opens a connection to the DB via the config file
     include_once 'config.php';
     include_once 'session.php';
 
+    
 // Creating a super global variable allowing us to use the data from the html file.
 // Creating a boolean variable to let us know if a post has documents attached. With FALSE as default.
     $category = $_POST['category'];
     $problem = $_POST['problem'];
     $idea = $_POST['idea'];
     $docupload = FALSE;
+    $posttitle = $_POST['posttitle'];
+    $ideadept = $_POST['ideaDept'];
 // Checks if user wants to be anon; if checked return 1, if not return 0.
     $anon = $_POST['anon'] ? 1 : 0;
 // Grabs the userID from the sessions.
@@ -83,13 +88,10 @@
         }
     
     
-    
-    
+        
     // SQL statement to insert Post data from the website to the Post db.
-        $sqlpost = "INSERT INTO Posts (needdbfieldnamesplease) VALUES ('$category','$problem','$idea','$anon')";
+        $sqlpost = "INSERT INTO Posts ('Department','Title','Category','Problemtxt','Body','isAnonymous') VALUES ('$ideaDept','$posttitle','$category','$problem','$idea','$anon')";
     
-    // SQL statement to update the Documents table.
-        $sqldocs = "INSERT INTO Documents () VALUES ()";
     
     // This runs the mysqli DB connection string found in config.php and my $sql statement above.
         mysqli_query($conn, $sqlpost, $sqldocs);
@@ -109,14 +111,6 @@
 
 
 ?>
-
-
-
-
-
-
-
-
 
 <!DOCTYPE html>
 
@@ -231,7 +225,7 @@
                         <option value="cat4">cat4</option>
                     </select>
                     <label for="IdeaDept">Choose a Department:</label>
-                    <select id="IdeaDept" name="department" class="w3-dropdown-click">
+                    <select id="ideaDept" name="department" class="w3-dropdown-click">
                         <option value="cat1">Department1</option>
                         <option value="cat2">Dept2</option>
                         <option value="cat3">Dept3</option>
