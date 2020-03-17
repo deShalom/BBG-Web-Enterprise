@@ -47,6 +47,15 @@
                     $fileDestination = $target_dir.$fileNameNew;
                     move_uploaded_file($fileTempName, $fileDestination); // Function which uploads the file using the temporary space and our final file destination.
                     header("Location: ../index.html?UploadSuccess") // If all goes well, we are take to the Index page with "UploadSuccess" written in the address bar.
+                    // If statement to update the column in Posts table to True if the post has documents attached to it.
+                    if ($docupload = TRUE){
+                        $sqldoctrue = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('True')";
+                        mysqli_query($mysqli, $sqldoctrue);
+                    }
+                    else{
+                        $sqldoctfalse = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('False')";
+                        mysqli_query($mysqli, $sqldocfalse);
+                    }
                 }    
                 else{
                     echo "The file you are trying to upload is too big!";
@@ -60,42 +69,40 @@
             echo "You are trying to upload a file type we do not support!";
         }
 
+        if ($docupload = TRUE){
+            $sqldoctrue = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('True')";
+            mysqli_query($mysqli, $sqldoctrue);
+        }else{
+            $sqldoctfalse = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('False')";
+            mysqli_query($mysqli, $sqldocfalse);
+        }
+    
+    
+    // SQL statement to update the Post ID and User ID in the Documents table
+    
+    
+    // SQL statement to insert Post data from the website to the Post db.
+        $sqlpost = "INSERT INTO Posts (needdbfieldnamesplease) VALUES ('$category','$problem','$idea','$anon')";
+    
+    // SQL statement to update the Documents table.
+        $sqldocs = "INSERT INTO Documents () VALUES ()";
+    
+    // This runs the mysqli DB connection string found in config.php and my $sql statement above.
+        mysqli_query($mysqli, $sqlpost, $sqldocs);
+    
+    
+    // once code is ran, takes us back to index.html and a message "IdeaSubmittedGratz" is displayed.
+        header("Location: ../index.html?IdeaIsSubmitted!");
+
+
+
     }
-
-    // If statement to update the column in Posts table to True if the post has documents attached to it.
-
-    if ($docupload = TRUE){
-        $sqldoctrue = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('True')";
-        mysqli_query($mysqli, $sqldoctrue);
-    }else{
-        $sqldoctfalse = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('False')";
-        mysqli_query($mysqli, $sqldocfalse);
-    }
-
-
-// SQL statement to update the Post ID and User ID in the Documents table
-
-// SQL statement to insert Post data from the website to the Post db.
-    $sqlpost = "INSERT INTO Posts (needdbfieldnamesplease) VALUES ('$category','$problem','$idea','$anon')";
-
-// SQL statement to update the Documents table.
-    $sqldocs = "INSERT INTO Documents () VALUES ()";
-
-// This runs the mysqli DB connection string found in config.php and my $sql statement above.
-    mysqli_query($mysqli, $sqlpost, $sqldocs);
-
-
-// once code is ran, takes us back to index.html and a message "IdeaSubmittedGratz" is displayed.
-    header("Location: ../index.html?IdeaIsSubmitted!");
-
-
-
-
-
 
     // my own notes:
     // does the table "Categories" really need to exist? There's no other information on Categories except
     // the name, wouldn't it be easier to just have it as a unique column in table "Posts"?
+
+    // For uploads, would it be easier to make a folder act as a target directory for documents? Rather than creating a table.
 
 
 ?>
