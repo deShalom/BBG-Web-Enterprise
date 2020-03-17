@@ -171,6 +171,12 @@
         font-size:12pt;
     }
 
+    #titlebox {
+        height:50px;
+        width:800px;
+        font-size:18pt;
+    }
+
     @media only screen and (max-width:800px) {
         /* For tablets: */
         .main {
@@ -218,15 +224,32 @@
             <fieldset>
                 <p class="w3-center">
                     <label for="IdeaCategory">Choose a Category:</label>
-                    <select id="IdeaCategory" class="w3-dropdown-click">
+                    <select id="IdeaCategory" name="category" class="w3-dropdown-click">
                         <option value="cat1">category1</option>
                         <option value="cat2">cat2</option>
                         <option value="cat3">cat3</option>
                         <option value="cat4">cat4</option>
                     </select>
+                    <label for="IdeaDept">Choose a Department:</label>
+                    <select id="IdeaDept" name="department" class="w3-dropdown-click">
+                        <option value="cat1">Department1</option>
+                        <option value="cat2">Dept2</option>
+                        <option value="cat3">Dept3</option>
+                        <option value="cat4">Dept4</option>
+                    </select>
+                </p>
+            </fieldset>
+            
+            <br />
+            <!--Setting the title of the Post-->
+            <fieldset>
+                <p class="w3-center">
+                    <label for="fname">Title of Post</label><br />
+                    <textarea class="w3-center" type=text name=posttitle placeholder="Title of Post: " id="titlebox" required></textarea>
                 </p>
             </fieldset>
             <br />
+
             <!--Fieldset including the ability for the user to describe the problem and enter their idea-->
             <fieldset>
                 <p class="w3-center">
