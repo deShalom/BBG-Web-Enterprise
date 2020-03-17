@@ -71,7 +71,7 @@ echo "<p>nigger</p>";
     <!-- Navigation Bar (Within Header) -->
     <div class="w3-padding-8">
         <div class="w3-bar w3-dark-gray">
-            <div class="w3-right w3-bar-item w3-button">Logout</div>
+            <div class="w3-right w3-bar-item w3-button" style="background-color:#3E3E3E" Logout</div>
         </div>
     </div>
 
