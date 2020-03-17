@@ -60,6 +60,13 @@
 
 <body>
 
+<?php
+echo "<h2>nigger</h2>";
+?>
+
+
+
+
     <!-- Navigation Bar (Within Header) -->
     <div class="w3-padding-8">
         <div class="w3-bar w3-dark-gray">
