@@ -17,7 +17,7 @@
 // Checks if user wants to be anon; if checked return 1, if not return 0.
     $anon = $_POST['anon'] ? 1 : 0;
 // Grabs the userID from the sessions.
-    $userID = $_POST['userID'];
+    $userID = $_SESSION['userID'];
    
 
 
@@ -47,7 +47,7 @@
         $fileActualExt = strtlower(end($fileExt));
 
     // This is an array which sets what file extentions we allow to be uploaded. (add whatever we want to be allowed)
-        $allowed = array('jpg','pdf');
+        $allowed = array('jpg','pdf','png','doc','gif','jpeg','tif');
         
     // Checking if uploaded file is allowed by us, file size (10000kbs) check, and unique name changing
     // and error checking with a nested IF and error msgs.
@@ -62,8 +62,8 @@
                     if ($docupload = TRUE){
                         $sqldoctrue = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('True')";
                         mysqli_query($conn, $sqldoctrue);
-                        // Post ID get
-                        $postIDget = "SELECT PostID FROM Posts" ;  // Find a way of making sure that the Documents have the correct PostID
+                        // Selecting the most recent PostID (which was created 1 line up when updating the boolean) and assigning it to the uploaded documents.
+                        $postIDget = "SELECT PostID FROM Posts GROUP BY userID LIMIT 1";  
                         mysqli_query($conn, $postIDget)
                         $postID = $_POST[$postIDget];
                         // SQL statement to update the Post ID and User ID in the Documents table                        
