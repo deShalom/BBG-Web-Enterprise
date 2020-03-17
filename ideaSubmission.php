@@ -18,6 +18,7 @@
     $anon = $_POST['anon'] ? 1 : 0;
 // Grabs the userID from the sessions.
     $userID = $_POST['userID'];
+   
 
 
 // IF File upload statement; gathering the file information, formatting it and sending it to the target directory with a new unique name.
@@ -39,8 +40,7 @@
     // This seperates the file name and the file extention (its type)(whatever is before and after the ".")
         $fileExt = explode('.'. $fileName);
 
-    // Post ID get
-        $postID =     
+ 
 
     // This takes the extention of the file, which could be in capital letters, such as JPEG or w/e and makes it all lower case
     // by grabbing it from the last place in the created array above (via the use of explode).
@@ -61,9 +61,14 @@
                     // If statement to update the column in Posts table to True if the post has documents attached to it.
                     if ($docupload = TRUE){
                         $sqldoctrue = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('True')";
-                        // SQL statement to update the Post ID and User ID in the Documents table
-                        $sqlupdatepost = "INSERT INTO Documents ('FileName','FileType','PostID','UserID') VALUES ('$fileNameNew','$fileActualExt','$postID','$userID')"; // NEED TO GRAB USERID from SESSION
-                        mysqli_query($conn, $sqldoctrue, $sqlupdatepost);
+                        mysqli_query($conn, $sqldoctrue);
+                        // Post ID get
+                        $postIDget = "SELECT PostID FROM Posts" ;  // Find a way of making sure that the Documents have the correct PostID
+                        mysqli_query($conn, $postIDget)
+                        $postID = $_POST[$postIDget];
+                        // SQL statement to update the Post ID and User ID in the Documents table                        
+                        $sqlupdatepost = "INSERT INTO Documents ('FileName','FileType','PostID','UserID') VALUES ('$fileNameNew','$fileActualExt','$postID','$userID')"; // grabbing userID from session (whoever is logged in)
+                        mysqli_query($conn, $sqlupdatepost);
                     }
                     else{
                         $sqldoctfalse = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('False')";
@@ -82,13 +87,7 @@
             echo "You are trying to upload a file type we do not support!";
         }
 
-        if ($docupload = TRUE){
-            $sqldoctrue = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('True')";
-            mysqli_query($conn, $sqldoctrue);
-        }else{
-            $sqldoctfalse = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('False')";
-            mysqli_query($conn, $sqldocfalse);
-        }
+    }
     
     
         
