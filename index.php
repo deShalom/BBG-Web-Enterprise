@@ -61,7 +61,7 @@
 <body>
 
 <?php
-echo "nigger";
+echo "<p>nigger</p>";
 ?>
 
 
