@@ -39,6 +39,9 @@
     // This seperates the file name and the file extention (its type)(whatever is before and after the ".")
         $fileExt = explode('.'. $fileName);
 
+    // Post ID get
+        $postID =     
+
     // This takes the extention of the file, which could be in capital letters, such as JPEG or w/e and makes it all lower case
     // by grabbing it from the last place in the created array above (via the use of explode).
         $fileActualExt = strtlower(end($fileExt));
@@ -53,14 +56,14 @@
                 if ($fileSize < 10000){
                     $fileNameNew = uniqid('', true).".".$fileActualExt; // This creates a unique name for each file and adds the extention back (which is now in lower case).
                     $fileDestination = $target_dir.$fileNameNew;
-                    move_uploaded_file($fileTempName, $fileDestination); // Function which uploads the file using the temporary space and our final file destination.
-                        // SQL statement to update the Post ID and User ID in the Documents table
-                    $sqlupdatepost = "INSERT INTO Documents ('FileName','FileType','PostID','UserID') VALUES ('$fileNameNew','$fileActualExt','$userID')"; // NEED TO GRAB USERID from SESSION
+                    move_uploaded_file($fileTempName, $fileDestination); // Function which uploads the file using the temporary space and our final file destination.  
                     header("Location: ../index.html?UploadSuccess") // If all goes well, we are take to the Index page with "UploadSuccess" written in the address bar.
                     // If statement to update the column in Posts table to True if the post has documents attached to it.
                     if ($docupload = TRUE){
                         $sqldoctrue = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('True')";
-                        mysqli_query($conn, $sqldoctrue);
+                        // SQL statement to update the Post ID and User ID in the Documents table
+                        $sqlupdatepost = "INSERT INTO Documents ('FileName','FileType','PostID','UserID') VALUES ('$fileNameNew','$fileActualExt','$postID','$userID')"; // NEED TO GRAB USERID from SESSION
+                        mysqli_query($conn, $sqldoctrue, $sqlupdatepost);
                     }
                     else{
                         $sqldoctfalse = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('False')";
