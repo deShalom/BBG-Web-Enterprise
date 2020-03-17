@@ -91,11 +91,6 @@
         mysqli_query($mysqli, $sqlpost, $sqldocs);
     
     
-    // once code is ran, takes us back to index.html and a message "IdeaSubmittedGratz" is displayed.
-        header("Location: ../index.html?IdeaIsSubmitted!");
-
-
-
     }
 
     // my own notes:
