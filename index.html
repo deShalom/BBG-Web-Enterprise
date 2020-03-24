@@ -1,7 +1,17 @@
 ﻿<?php 
 Session_start();
 include_once 'config.php';
-//include_once 'session.php';
+    include_once 'session.php';
+$sqlgettop = "SELECT Title, Body, Upvotes FROM Posts ORDER BY Upvotes DESCENDING;";
+$result = mysqli_query($conn, $sqlgettop)
+$resultCheck = mysqli_num_rows($result);
+
+if ($resultCheck>0){
+    while ($row = mysqli_fetch_assoc($result)){
+        echo $row
+    }
+}
+ 
 ?>
 <!DOCTYPE html>
 

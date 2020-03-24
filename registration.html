@@ -1,4 +1,4 @@
-﻿﻿<?php
+﻿<?php
 	session_start();
 ?>
 
@@ -83,16 +83,16 @@ $EMAIL = $_POST['email'];
 
 if(empty($USERNAME) || empty($PASSWORD) || empty($CONFIRMPASSWORD) || empty($EMAIL))
 {
-	header("Location: ../Registration.html?error=emptyfields&username=".$USERNAME);
+	header("Location: ../Registration.html?error=emptyfields&username=".$USERNAME.);
 	exit();
 }
-else if(!filter_var($email, FILTER_VALIDATE_EMAIL) &&("/^[a-zA-Z0-9]*$/".$USERNAME))
+else if(!filter_var($email, FILTER_VALIDATE_EMAIL) &&("/^[a-zA-Z0-9]*$/", $USERNAME))
 {
 	header("Location: ../Registration.html?error=invaildinformation");
 	exit();
 }
 
-else if(!preg_match("/^[a-zA-Z0-9]*$/", $USERNAME))
+else if(!preg_match("/^[a-zA-Z0-9]*$/", $USERNAME)
 {
 	header("Location: ../Registration.html?error=invaildemail=".$EMAIL);
 	exit();
@@ -115,13 +115,13 @@ else
 	{
 		mysqli_stmt_bind_param($stmt, "s", $USERNAME );
 		mysqli_stmt_execute($stmt);
-		mysqli_stmt_store_result($stmt);
+		mysqli_stmt_store_result($stmt)
 		
 		$resultChecker = mysqli_stmt_num_rows($stmt);
 		if ($resultChecker > 0)
 		{
 			header("Location: ../Registration.html?error=usernametaken");
-			exit();
+			exit()
 		}
 		else {
 			
@@ -140,8 +140,7 @@ else
 		$hashPassword = password_hash($PASSWORD, PASSWORD_DEFAULT);	
 		mysqli_stmt_bind_param($stmt, "sss", $USERNAME, $PASSWORD, $EMAIL);
 		mysqli_stmt_execute($stmt);
-        header("Location: ../index.php");
-        
+		header("Location: ../Registration.html?RegistrationComplete");
 		exit();
 			}
 		}
@@ -150,7 +149,6 @@ else
 mysqli_stmt_close($stmt);
 mysqi_close($conn);
 
-}
 }
 ?>
 
@@ -163,7 +161,7 @@ mysqi_close($conn);
         </div>
 
         <!-- This divider will hold the log-in box -->
-        <form action="index.php" method="post" class="w3-display-right w3-margin-right w3-container w3-card-4 w3-dark-grey">
+        <form action="authenticate.php" method="post" class="w3-display-right w3-margin-right w3-container w3-card-4 w3-dark-grey">
             <h2 class="w3-center">Create an account</h2>
 
 				<?php
@@ -193,8 +191,7 @@ mysqi_close($conn);
 					{
 						echo '<p class="signupsuccessful"> Registration Complete </p>';
 					}
-                }  
-            
+				}  
 ?>
 
             <!-- Username input field -->
@@ -235,4 +232,3 @@ mysqi_close($conn);
     </div>
 </body>
 </html>
-            

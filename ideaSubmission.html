@@ -1,30 +1,23 @@
 <?php
     session_start();
-    if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-        header("location: index.php");
-        exit;
-    }
-
-?>
-
-<?php
 
 // opens a connection to the DB via the config file
     include_once 'config.php';
+    include_once 'session.php';
 
     
 // Creating a super global variable allowing us to use the data from the html file.
 // Creating a boolean variable to let us know if a post has documents attached. With FALSE as default.
-    $category = mysqli_real_escape_string($conn, $_POST['category']) ;
-    $problem = mysqli_real_escape_string($conn, $_POST['problem']);
-    $idea = mysqli_real_escape_string($conn, $_POST['idea']);
+    $category = $_POST['category'];
+    $problem = $_POST['problem'];
+    $idea = $_POST['idea'];
     $docupload = FALSE;
-    $posttitle = mysqli_real_escape_string($conn, $_POST['posttitle']);
-    $ideadept = mysqli_real_escape_string($conn, $_POST['ideaDept']);
+    $posttitle = $_POST['posttitle'];
+    $ideadept = $_POST['ideaDept'];
 // Checks if user wants to be anon; if checked return 1, if not return 0.
-    $anon = mysqli_real_escape_string($conn, $_POST['anon'] ? 1 : 0);
+    $anon = $_POST['anon'] ? 1 : 0;
 // Grabs the userID from the sessions.
-    $userID = mysqli_real_escape_string($conn, $_SESSION['userID']);
+    $userID = $_SESSION['userID'];
    
 
 
@@ -34,27 +27,27 @@
 
         // Variables assinged to super globals allowing us to utilise the file details.
 
-        $file = mysqli_real_escape_string($conn, $_FILES['fileToUpload']); // $_Files helps us get all the information from the file that we want to upload.
-        $fileName = mysqli_real_escape_string($conn, $file['name']);      // Same shit as above but instead of writing out $_FILES infront of each variable, I set it to $file for conveniences sake.
-        $fileTempName = mysqli_real_escape_string($conn, $file['tmp_name']);
-        $fileSize = mysqli_real_escape_string($conn, $file['size']);
-        $fileError = mysqli_real_escape_string($conn, $file['error']);
-        $fileType = mysqli_real_escape_string($conn, $file['type']);
+        $file = $_FILES['fileToUpload']; // $_Files helps us get all the information from the file that we want to upload.
+        $fileName = $file['name'];      // Same shit as above but instead of writing out $_FILES infront of each variable, I set it to $file for conveniences sake.
+        $fileTempName = $file['tmp_name'];
+        $fileSize = $file['size'];
+        $fileError = $file['error'];
+        $fileType = $file['type'];
 
     // Setting the target directory for the files.
-    mysqli_real_escape_string($conn, $target_dir = "whatevertheuploadfolderis/");
+        $target_dir = "whatevertheuploadfolderis/";
 
     // This seperates the file name and the file extention (its type)(whatever is before and after the ".")
-    mysqli_real_escape_string($conn, $fileExt = explode('.'. $fileName));
+        $fileExt = explode('.'. $fileName);
 
  
 
     // This takes the extention of the file, which could be in capital letters, such as JPEG or w/e and makes it all lower case
     // by grabbing it from the last place in the created array above (via the use of explode).
-    mysqli_real_escape_string($conn, $fileActualExt = strtlower(end($fileExt)));
+        $fileActualExt = strtlower(end($fileExt));
 
     // This is an array which sets what file extentions we allow to be uploaded. (add whatever we want to be allowed)
-    mysqli_real_escape_string($conn, $allowed = array('jpg','pdf','png','doc','gif','jpeg','tif'));
+        $allowed = array('jpg','pdf','png','doc','gif','jpeg','tif');
         
     // Checking if uploaded file is allowed by us, file size (10000kbs) check, and unique name changing
     // and error checking with a nested IF and error msgs.
@@ -64,15 +57,15 @@
                     $fileNameNew = uniqid('', true).".".$fileActualExt; // This creates a unique name for each file and adds the extention back (which is now in lower case).
                     $fileDestination = $target_dir.$fileNameNew;
                     move_uploaded_file($fileTempName, $fileDestination); // Function which uploads the file using the temporary space and our final file destination.  
-                    header("Location: ../index.html?UploadSuccess"); // If all goes well, we are take to the Index page with "UploadSuccess" written in the address bar.
+                    header("Location: ../index.html?UploadSuccess") // If all goes well, we are take to the Index page with "UploadSuccess" written in the address bar.
                     // If statement to update the column in Posts table to True if the post has documents attached to it.
                     if ($docupload = TRUE){
                         $sqldoctrue = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('True')";
                         mysqli_query($conn, $sqldoctrue);
                         // Selecting the most recent PostID (which was created 1 line up when updating the boolean) and assigning it to the uploaded documents.
                         $postIDget = "SELECT PostID FROM Posts GROUP BY userID LIMIT 1";  
-                        mysqli_query($conn, $postIDget);
-                        mysqli_real_escape_string($conn, $postID = $_POST[$postIDget]);
+                        mysqli_query($conn, $postIDget)
+                        $postID = $_POST[$postIDget];
                         // SQL statement to update the Post ID and User ID in the Documents table                        
                         $sqlupdatepost = "INSERT INTO Documents ('FileName','FileType','PostID','UserID') VALUES ('$fileNameNew','$fileActualExt','$postID','$userID')"; // grabbing userID from session (whoever is logged in)
                         mysqli_query($conn, $sqlupdatepost);
@@ -108,7 +101,7 @@
     
 
 
-     // everything within these curly brackets happens upon the "submitidea" button press 
+    } // everything within these curly brackets happens upon the "submitidea" button press 
 
     // my own notes:
     // does the table "Categories" really need to exist? There's no other information on Categories except
