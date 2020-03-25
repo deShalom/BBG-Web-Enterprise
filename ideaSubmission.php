@@ -1,6 +1,12 @@
 <?php
 session_start();
+
+if(!isset($_SESSION['login_user']))
+{           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
+    header("location: login.php?YouAreNotLoggedIn");
+}
 ?>
+
 <!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">

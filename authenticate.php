@@ -15,13 +15,13 @@ if (isset($_POST['loginbtn']))
         $username = mysqli_real_escape_string($conn, $_POST['username']);
         $password = mysqli_real_escape_string($conn, $_POST['password']);
         // SQL query to fetch information of registerd users and finds user match.
-        $authquery = ("SELECT Username, pass FROM accounts where Username='$username' AND pass='$password'");
+        $authquery = ("SELECT userID, Username, pass FROM accounts where Username='$username' AND pass='$password'");
         $result = mysqli_query($conn, $authquery);
         $rows = mysqli_num_rows($result);
             if ($rows == 1) 
             {
                 $_SESSION['login_user'] = $username; // Initializing Session
-
+                $_SESSION['userID'] = $userID;
                 header("location: index.php"); // Redirecting To Other Page
             } 
             else 

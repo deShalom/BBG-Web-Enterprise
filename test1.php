@@ -99,3 +99,73 @@ echo "Session variables are set.";
 </body>
 </html>
 
+
+
+
+
+<?php // code from ideasub.php at the end; gotta add more shit when the db is properly connected!
+
+// SQL statement to insert Post data from the website to the Post db.
+        $sqlpost = "INSERT INTO Posts ('Department','Title','Category','Problemtxt','Body','isAnonymous') VALUES ('$ideaDept','$posttitle','$category','$problem','$idea','$anon')";
+    
+    
+    // This runs the mysqli DB connection string found in config.php and my $sql statement above.
+        mysqli_query($conn, $sqlpost, $sqldocs);
+
+?>
+
+
+<?php
+
+if ($fileError === 0)
+            {
+                if ($fileSize < 10000)
+                {
+                    $fileNameNew = uniqid('', true).".".$fileActualExt; // This creates a unique name for each file and adds the extention back (which is now in lower case).
+                    $fileDestination = $target_dir.$fileNameNew;
+                    move_uploaded_file($fileTempName, $fileDestination); // Function which uploads the file using the temporary space and our final file destination.  
+                    header("Location: ../index.html?UploadSuccess"); // If all goes well, we are take to the Index page with "UploadSuccess" written in the address bar.
+                    // If statement to update the column in Posts table to True if the post has documents attached to it.
+                    if ($docupload = TRUE){
+                        $sqldoctrue = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('True')";
+                        mysqli_query($conn, $sqldoctrue);
+                        // Selecting the most recent PostID (which was created 1 line up when updating the boolean) and assigning it to the uploaded documents.
+                        $postIDget = "SELECT PostID FROM Posts GROUP BY userID LIMIT 1";  
+                        mysqli_query($conn, $postIDget);
+                        mysqli_real_escape_string($conn, $postID = $_POST[$postIDget]);
+                        // SQL statement to update the Post ID and User ID in the Documents table                        
+                        $sqlupdatepost = "INSERT INTO Documents ('FileName','FileType','PostID','UserID') VALUES ('$fileNameNew','$fileActualExt','$postID','$userID')"; // grabbing userID from session (whoever is logged in)
+                        mysqli_query($conn, $sqlupdatepost);
+                    }
+                    else{
+                        $sqldoctfalse = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('False')";
+                        mysqli_query($conn, $sqldocfalse);
+                    }
+                }    
+                else{
+                    echo "The file you are trying to upload is too big!";
+                }
+            }
+            else {
+                echo "There is an error with the upload of your files! Please try again.";
+
+?>
+
+
+
+<?php
+
+// for ideasub
+// If statement to update the column in Posts table to True if the post has documents attached to it.
+if ($docupload = TRUE){
+    $sqldoctrue = "INSERT INTO Posts ('isUploadedDocuments') VALUES ('True')";
+    mysqli_query($conn, $sqldoctrue);
+    // Selecting the most recent PostID (which was created 1 line up when updating the boolean) and assigning it to the uploaded documents.
+    $postIDget = "SELECT PostID FROM Posts GROUP BY userID LIMIT 1";  
+    mysqli_query($conn, $postIDget);
+    mysqli_real_escape_string($conn, $postID = $_POST[$postIDget]);
+    // SQL statement to update the Post ID and User ID in the Documents table                        
+    $sqlupdatepost = "INSERT INTO Documents ('FileName','FileType','PostID','UserID') VALUES ('$fileNameNew','$fileActualExt','$postID','$userID')"; // grabbing userID from session (whoever is logged in)
+    mysqli_query($conn, $sqlupdatepost);
+
+?>
