@@ -1,11 +1,5 @@
 ﻿<?php
 include('authenticate.php'); // Includes Login Script
-
-if(isset($_SESSION['login_user']))
-{
-    //header("location: index.php");
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -71,8 +65,13 @@ if(isset($_SESSION['login_user']))
 <!-- Page Content -->
 <div class="page w3-content" style="max-width:1500px">
 
+<!-- Gre header -->
+<div class="w3-white w3-border-bottom w3-center">
+            <img src="Images/uog-logo.png" style="margin-bottom: 10px; margin-top: 10px;">
+        </div>
+
     <!-- This divider will hold the log-in box -->
-    <form method="post" action="" class="w3-display-right w3-margin-right w3-container w3-card-4 w3-dark-grey">
+    <form method="post" action="" class="w3-display-middle w3-margin-right w3-container w3-card-4 w3-dark-grey">
         <h2 class="w3-center">Login</h2>
 
         <!-- Username input field -->
@@ -88,14 +87,17 @@ if(isset($_SESSION['login_user']))
             <i class="fas fa-lock"></i>
             <input class="w3-input w3-border w3-center" type="password" name="password" placeholder="Password" id="password" required>
             <button type="submit" class="w3-button w3-dark-gray w3-margin-top" name="loginbtn">Login</button>
-
-
+            <br />
+            <br />
+            <br />
         <div>
-            <a href="Registration.html" button class="w3-button w3-dark-gray w3-margin-top" >Create an account!</button>
+            <a href="Registration.html" button class="w3-button w3-dark-gray w3-display-bottommiddle w3-margin-bottom" >Create an account!</a>
         </div>
 
     </form>
+    <br />
 </div>
+
 
 <div class="footer w3-dark-gray">
     <p><span style='border-bottom:2px white solid;'>Other useful links!</p></span>
