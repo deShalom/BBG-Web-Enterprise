@@ -1,4 +1,14 @@
-﻿<!DOCTYPE html>
+﻿<?php
+include('authenticate.php'); // Includes Login Script
+
+if(isset($_SESSION['login_user']))
+{
+    //header("location: index.php");
+}
+
+?>
+
+<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
@@ -62,14 +72,14 @@
 <div class="page w3-content" style="max-width:1500px">
 
     <!-- This divider will hold the log-in box -->
-    <form method="post" action="index.php" class="w3-display-right w3-margin-right w3-container w3-card-4 w3-dark-grey">
+    <form method="post" action="" class="w3-display-right w3-margin-right w3-container w3-card-4 w3-dark-grey">
         <h2 class="w3-center">Login</h2>
 
         <!-- Username input field -->
         <p class="w3-center" >
             <label>Username</label>
             <i class="fas fa-user"></i>
-            <input class="w3-input w3-border w3-center" type="text" name="username" placeholder="Username" id="username" required>
+            <input class="w3-input w3-border w3-center" type="text" name="username" placeholder="Username" id="name" required>
         </p>
 
         <!-- Password input field -->
@@ -77,7 +87,8 @@
             <label>Password</label>
             <i class="fas fa-lock"></i>
             <input class="w3-input w3-border w3-center" type="password" name="password" placeholder="Password" id="password" required>
-            <button type="submit" class="w3-button w3-dark-gray w3-margin-top" name="loginbtn" id="loginbtn">Login</button>
+            <button type="submit" class="w3-button w3-dark-gray w3-margin-top" name="loginbtn">Login</button>
+
 
         <div>
             <a href="Registration.html" button class="w3-button w3-dark-gray w3-margin-top" >Create an account!</button>

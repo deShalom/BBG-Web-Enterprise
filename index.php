@@ -1,8 +1,8 @@
 ﻿<?php 
-Session_start();
-include_once 'config.php';
-//include_once 'session.php';
+	Session_start();
 ?>
+
+
 <!DOCTYPE html>
 
 
@@ -83,7 +83,8 @@ include_once 'config.php';
     <!-- Navigation Bar (Within Header) -->
     <div class="w3-padding-8">
         <div class="w3-bar w3-dark-gray">
-            <div class="w3-right w3-bar-item w3-button ">Logout</div>
+            <div class="w3-right w3-bar-item w3-button">Logout</div>
+			<button class="w3-button w3-dark-gray w3-margin-top" name="logout" ><a href="logout.php">LOGOUT HERE</a></button>
         </div>
     </div>
 
