@@ -30,31 +30,37 @@ if(!isset($_SESSION['login_user']))
    
 // IF File upload statement; gathering the file information, formatting it and sending it to the target directory with a new unique name.
 
-    if (isset($_POST['submitidea']))
-    { // Checks if the button "submitidea" has been pressed, "isset" does this for us.
+    if (empty($_FILES['fileToUpload']['submitidea'])) 
+    {
+            header("Location: index.php?nodocuploaded");        
+    }
+    else
+    {
+        if (isset($_POST['submitidea']))
+        { // Checks if the button "submitidea" has been pressed, "isset" does this for us.
         $docupload = TRUE;
         // Variables assinged to super globals allowing us to utilise the file details.
-
+    
         $file =$_FILES['fileToUpload']; // $_Files helps us get all the information from the file that we want to upload. - I also use $file for each other variable to shorten the process
         $fileName = $file['name'];      // Same shit as above but instead of writing out $_FILES infront of each variable, I set it to $file for conveniences sake.
         $fileTempName = $file['tmp_name'];
         $fileSize = $file['size'];
         $fileError = $file['error']; // this pops up in the file information when uploading it
         $fileType = $file['type'];
-
+    
         // Setting the target directory for the files.
         $target_dir = ('uploadedDocs/');
-
+    
         // This seperates the file name and the file extention (its type)(whatever is before and after the ".")
         $fileExt = explode('.',$fileName);
-
+    
         // This takes the extention of the file, which could be in capital letters, such as JPEG or w/e and makes it all lower case
         // by grabbing it from the last place in the created array above (via the use of explode).
         $fileActualExt = strtolower(end($fileExt));
-
+    
         // This is an array which sets what file extentions we allow to be uploaded. (add whatever we want to be allowed)
         $allowed = array('jpg','pdf','png','doc','gif','jpeg','tif');
-        
+            
         // Checking if uploaded file is allowed by us, file size (10000kbs) check, and unique name changing
         // and error checking with a nested IF and error msgs.
             if (in_array($fileActualExt, $allowed))
@@ -71,16 +77,12 @@ if(!isset($_SESSION['login_user']))
                     echo "The file you are trying to upload is too big!";
                 }               
             }
-            else {
+            else 
+            {
                 echo "You are trying to upload a file type we do not support!";
             }
-    
+        }
     }
-    else
-    {
-
-    }
-
         
 
     
