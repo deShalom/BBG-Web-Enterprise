@@ -1,26 +1,17 @@
 ﻿<?php 
 Session_start();
 include_once 'config.php';
-    include_once 'session.php';
-$sqlgettop = "SELECT Title, Body, Upvotes FROM Posts ORDER BY Upvotes DESCENDING;";
+ //   include_once 'session.php';
+$sqlgettop = "SELECT Title, Department, Body, Upvotes, Downvotes FROM Posts ORDER BY Upvotes DESC;";
 $result = mysqli_query($conn, $sqlgettop);
-if (!$result) {	
-    error('A database error occurred in processing your '.
-          'submission.\\nIf this 1 error persists, please '.
-          'contact you@example.com.');
-}
+
 $resultCheck = mysqli_num_rows($result);
 
-if ($resultCheck>0){
-    while ($row = mysqli_fetch_assoc($result)){
-		echo $row['Title'];
-		echo $row['Body'];
-		echo "upvotes: ";
-		echo $row['Upvotes'];
-    }
-}
- 
+
+
 ?>
+
+
 <!DOCTYPE html>
 
 
@@ -101,7 +92,8 @@ if ($resultCheck>0){
     <!-- Navigation Bar (Within Header) -->
     <div class="w3-padding-8">
         <div class="w3-bar w3-dark-gray">
-            <div class="w3-right w3-bar-item w3-button ">Logout</div>
+            <div class="w3-right w3-bar-item w3-button">Logout</div>
+			<button class="w3-button w3-dark-gray w3-margin-top" name="logout" ><a href="logout.php">LOGOUT HERE</a></button>
         </div>
     </div>
 
@@ -116,7 +108,7 @@ if ($resultCheck>0){
 		<!-- Sidebar -->
 		<div class="w3-sidebar w3-bar-block w3-border-bottom" style="display:none" id="mySidebar">
 			<button onclick="w3_close()" class="w3-bar-item w3-large">Close &times;</button>
-			<a href="#" class="w3-bar-item w3-button">Link 1</a>
+			<a href="ideaSubmission.php" class="w3-bar-item w3-button">Idea Sub</a>
 			<a href="#" class="w3-bar-item w3-button">Link 2</a>
 			<a href="#" class="w3-bar-item w3-button">Link 3</a>
 			<a href="registration.php" class="w3-bar-item w3-button">Link Reg</a>
@@ -136,15 +128,26 @@ if ($resultCheck>0){
 						</div>
 						<div class="w3-panel">
 							<div class="row">
-								<div class="column">
-									<p> poo</p>
-								</div>
-								<div class="column">
-									<p> poo</p>
-								</div>
-								<div class="column">
-									<p> poo</p>
-								</div>
+								
+									 <?php 
+									 $num=0;
+									if ($resultCheck>0){
+										
+										while ($row = mysqli_fetch_assoc($result)){
+											$ovlVotes = $row['Upvotes']-$row['Downvotes'];
+											echo '<div class=column><h1>'.$row['Title'].'</h1>';
+											echo '<h3>Department: '.$row['Department'].'</h3>';
+											echo '<h4>'.$row['Body'].'</h4><br>';
+											echo " Rating: +";
+											echo $ovlVotes.'<br>'."</div>";
+											$num++;
+											if ($num>2){
+												die();
+											}
+										}
+									}?>
+								
+								
 							</div>
 							
 
