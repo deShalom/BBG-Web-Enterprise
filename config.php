@@ -10,9 +10,9 @@
 
  //Database credentials.
 $host = "localhost";
-$username = "root";
-$password = "";
-$dbName = "testdb1";
+$username = "localhost";
+$password = "v*&Q^Qx12Hcu";
+$dbName = "Greenwich";
  
 /* Attempt to connect to MySQL database */
 $conn = mysqli_connect($host, $username, $password, $dbName);
