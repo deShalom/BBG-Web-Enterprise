@@ -15,7 +15,7 @@ if (isset($_POST['loginbtn']))
         $username = mysqli_real_escape_string($conn, $_POST['username']);
         $password = mysqli_real_escape_string($conn, $_POST['password']);
         // SQL query to fetch information of registerd users and finds user match.
-        $authquery = ("SELECT userID, Username, pass FROM accounts where Username='$username' AND pass='$password'");
+        $authquery = ("SELECT UserID, Username, Password FROM Accounts WHERE Username='$username' AND Password='$password'");
         $result = mysqli_query($conn, $authquery);
         $rows = mysqli_num_rows($result);
             if ($rows == 1) 
