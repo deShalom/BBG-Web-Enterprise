@@ -1,8 +1,4 @@
-﻿﻿<?php
-session_start();
-
-?>
-
+﻿
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -72,89 +68,6 @@ session_start();
 
 <body>
 
-<?php
-if(isset($_POST['Submit']))
-{
-require 'config.php';
-
-$USERNAME = $_POST['username'];
-$PASSWORD = $_POST['password'];
-$CONFIRMPASSWORD = $_POST['confirm-password'];
-$EMAIL = $_POST['email'];
-
-if(empty($USERNAME) || empty($PASSWORD) || empty($CONFIRMPASSWORD) || empty($EMAIL))
-{
-	header("Location: ../Registration.html?error=emptyfields&username=".$USERNAME);
-	exit();
-}
-else if(!filter_var($email, FILTER_VALIDATE_EMAIL) &&("/^[a-zA-Z0-9]*$/".$USERNAME))
-{
-	header("Location: ../Registration.html?error=invaildinformation");
-	exit();
-}
-
-else if(!preg_match("/^[a-zA-Z0-9]*$/", $USERNAME))
-{
-	header("Location: ../Registration.html?error=invaildemail=".$EMAIL);
-	exit();
-}
-else if($PASSWORD !== $CONFIRMPASSWORD)
-{
-	header("Location: ../Registration.html?error=passwordcheckusername=".$USERNAME. "&email=" .$EMAIL);
-	exit();
-}
-else 
-{
-	$sql = "SELECT * FROM Accounts WHERE Username=?";
-	$stmt = mysqli_stmt_init($conn);
-	if (!mysqli_stmt_prepare($stmt, $sql))
-	{
-		header("Location: ../Registration.html?error=databaseerrorr");
-		exit();
-	}
-	else 
-	{
-		mysqli_stmt_bind_param($stmt, "s", $USERNAME );
-		mysqli_stmt_execute($stmt);
-		mysqli_stmt_store_result($stmt);
-		
-		$resultChecker = mysqli_stmt_num_rows($stmt);
-		if ($resultChecker > 0)
-		{
-			header("Location: ../Registration.html?error=usernametaken");
-			exit();
-		}
-		else {
-			
-			/* ADDED THE FIELDS FROM THE SQL TABLE */
-			$sql = "INSERT INTO Accounts (Username, Password,Email) VALUES (?, ?, ?)";
-			$stmt = mysqli_stmt_init($conn);
-		if (!mysqli_stmt_prepare($stmt, $sql))
-			{
-			header("Location: ../Registration.html?error=databaseerrorr");
-			exit();
-			
-			}
-		else 
-			{
-			
-		$hashPassword = password_hash($PASSWORD, PASSWORD_DEFAULT);	
-		mysqli_stmt_bind_param($stmt, "sss", $USERNAME, $PASSWORD, $EMAIL);
-		mysqli_stmt_execute($stmt);
-        header("Location: ../index.php");
-        
-		exit();
-			}
-		}
-	}
-
-mysqli_stmt_close($stmt);
-mysqi_close($conn);
-
-}
-}
-?>
-
     <!-- Page Content -->
     <div class="page w3-content" style="max-width:1500px">
 
@@ -164,39 +77,17 @@ mysqi_close($conn);
         </div>
 
         <!-- This divider will hold the log-in box -->
-        <form action="index.php" method="post" class="w3-display-right w3-margin-right w3-container w3-card-4 w3-dark-grey">
+        <form action="Regs.php" method="post" class="w3-display-middle w3-margin-right w3-container w3-card-4 w3-dark-grey">
             <h2 class="w3-center">Create an account</h2>
 
-				<?php
-				if(isset($_GET['error']))
-				{
-					if($_GET['error'] == "emptyfields")
-					{
-						echo '<p class="signuperror"> Fill in the information! </p>';
-					} 
-					else if($_GET['Error'] == "invaildinformation")
-					{
-						echo '<p class="signuperror"> Check Information </p>';
-					} 
-					else if($_GET['Error'] == "invaildemail")
-					{
-						echo '<p class="signuperror"> Check Email </p>';
-					}
-					else if($_GET['Error'] == "passwordcheckusername")
-					{
-						echo '<p class="signuperror"> passwords do not match </p>';
-					}
-					else if($_GET['Error'] == "usernametaken")
-					{
-						echo '<p class="signuperror"> Username Taken </p>';
-					}
-					else if($_GET['signup'] == "RegistrationComplete")
-					{
-						echo '<p class="signupsuccessful"> Registration Complete </p>';
-					}
-                }  
-            
-?>
+			<?php  if (count($errors) > 0) : ?>
+			<div class="error">
+				<?php foreach ($errors as $error) : ?>
+				<p><?php echo $error ?></p>
+				<?php endforeach ?>
+			</div>
+				<?php  endif ?>
+
 
             <!-- Username input field -->
             <p class="w3-center">
@@ -210,22 +101,35 @@ mysqi_close($conn);
                 <label>Please enter a Password below</label>
                 <i class="fas fa-lock"></i>
                 <input class="w3-input w3-border w3-center" type="password" name="password" placeholder="Password" id="password" required>
-				
+			</p>
 			 <!-- Password input field -->
             <p class="w3-center">
                 <label>Confirm Password</label>
                 <i class="fas fa-lock"></i>
-                <input class="w3-input w3-border w3-center" type="password" name="password" placeholder="Password" id="password" required>
-				
-			<!-- Department  -->
+                <input class="w3-input w3-border w3-center" type="password" name="confirm-password" placeholder="Password" id="confirm-password" required>
+			 </p>
+			<!-- Email input field -->
+			<p class="w3-center">
+				  <label>Email</label>
+				  <i class="fas fa-lock"></i>
+				  <input class="w3-input w3-border w3-center" type="text" name="email" placeholder="EMAIL" id="email" required>
+			 </p>
+			<!-- Department-->
+			<fieldset>
 				<p class="w3-center">
-                <label>Confirm Password</label>
-                <i class="fas fa-lock"></i>
-                <input class="w3-input w3-border w3-center" type="password" name="password" placeholder="Password" id="password" required>
-				
-				<button class="w3-button w3-dark-gray w3-margin-top">Submit</button>
+                <select id="Department" name="ResDept" class="w3-dropdown-click" required>
+                        <option value="Dep1">Department</option>
+                        <option value="Dep2">Dept2</option>
+                        <option value="Dep3">Dept3</option>
+                        <option value="Dep4">Dept4</option>
+                    </select></p>
+			 </fieldset>
+
+								
+				<button class="w3-button w3-dark-gray w3-margin-top" name="registrationBtn" value="Registration">Submit</button>
         </form>
-    </div>
+		</div>
+	</div>
 
     <div class="footer w3-dark-gray">
         <p><span style='border-bottom:2px white solid;'>Other useful links!</p></span>
@@ -236,4 +140,3 @@ mysqi_close($conn);
     </div>
 </body>
 </html>
-            
