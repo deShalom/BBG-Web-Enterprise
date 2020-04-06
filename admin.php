@@ -5,6 +5,41 @@ if(!isset($_SESSION['login_user']))
 {           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
     header("location: login.php?YouAreNotLoggedIn");
 }
+
+$level = intval($_SESSION['level_user']);
+if($level < 5 )
+{           // dont allow if youre not the admin
+    header("location: index.php?YouAreNotTheAdmin");
+}
+
+// opens a connection to the DB via the config file
+    include 'config.php';
+	$loadAccounts = "SELECT Username FROM Accounts";
+	$accountResults = mysqli_query($conn, $loadAccounts);
+	
+	if ($accountResults){
+		$accountRow = mysqli_num_rows($accountResults);
+		mysqli_free_result($accountResults);
+	}
+	
+	$loadIdeas = "SELECT PostID FROM Posts";
+	$ideaResults = mysqli_query($conn, $loadIdeas);
+	
+	if ($ideaResults){
+		$ideaRow = mysqli_num_rows($ideaResults);
+		mysqli_free_result($ideaResults);
+	}
+	
+	$loadComments = "SELECT CommentID FROM Comments";
+	$commentResults = mysqli_query($conn, $loadComments);
+	
+	if ($commentResults){
+		$commentRow = mysqli_num_rows($commentResults);
+		mysqli_free_result($commentResults);
+	}
+	
+	mysqli_close($conn);
+
 ?>
 <!DOCTYPE html>
 
@@ -113,7 +148,9 @@ if(!isset($_SESSION['login_user']))
       <div class="w3-container w3-greenwich w3-padding-16">
         <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
         <div class="w3-right">
-          <h3>X</h3>
+          <h3><?php
+    echo $accountRow;
+?></h3>
         </div>
         <div class="w3-clear"></div>
         <h4>Total Accounts</h4>
@@ -124,7 +161,9 @@ if(!isset($_SESSION['login_user']))
       <div class="w3-container w3-greenwich w3-padding-16">
         <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
         <div class="w3-right">
-          <h3>X</h3>
+          <h3><?php
+    echo $ideaRow;
+?></h3>
         </div>
         <div class="w3-clear"></div>
         <h4>Total Ideas</h4>
@@ -135,7 +174,9 @@ if(!isset($_SESSION['login_user']))
       <div class="w3-container w3-greenwich w3-padding-16">
         <div class="w3-left"><i class="fa fa-comments w3-xxxlarge"></i></div>
         <div class="w3-right">
-          <h3>X</h3>
+          <h3><?php
+    echo $commentRow;
+?></h3>
         </div>
         <div class="w3-clear"></div>
         <h4>Total Comments</h4>
@@ -151,8 +192,32 @@ if(!isset($_SESSION['login_user']))
     	<div class="w3-row-padding w3-padding-16">
     		<div class="topnav w3-col w3-center">
             <h2>User Lookup</h2>
-    			<input type="text" placeholder="Search Username.." style="width:50%">
+			<form action="" method="post">
+    			<input type="text" placeholder="Search Username.." style="width:50%" name="enteredUsername">
                 <button class="w3-button w3-greenwich w3-hover-dark-gray"id="SearchUser"><i class="fa fa-search"></i></button>
+			</form>
+			<?php
+			include "config.php";
+			if (!empty($_REQUEST['enteredUsername'])) {
+				echo $enteredUsername;
+			}
+
+/*
+			$enteredUsername = mysqli_real_escape_string($_REQUEST['enteredUsername']);     
+
+			$findUser = "SELECT * FROM Accounts WHERE Username LIKE '%".$enteredUsername."%'"; 
+			$r_query = mysqli_query($con,$findUser); 
+
+			while ($row = mysqli_fetch_array($r_query)){  
+			echo 'Primary key: ' .$row['UserID'];  
+			echo '<br /> Code: ' .$row['Username'];  
+			echo '<br /> Description: '.$row['Password'];  
+			echo '<br /> Category: '.$row['Email'];  
+			echo '<br /> Cut Size: '.$row['Level'];   
+			}  
+
+			}*/
+			?>
   			</div>
             <div class="w3-quarter w3-padding-16 w3-center">
             <button class="w3-button w3-greenwich w3-hover-dark-gray"id="Ban"><i class="fa fa-user-lock"></i> Ban</button>

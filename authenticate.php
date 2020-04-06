@@ -15,14 +15,21 @@ if (isset($_POST['loginbtn']))
         $username = mysqli_real_escape_string($conn, $_POST['username']);
         $password = mysqli_real_escape_string($conn, $_POST['password']);
         // SQL query to fetch information of registerd users and finds user match.
-        $authquery = ("SELECT UserID, Username, Password FROM Accounts WHERE Username='$username' AND Password='$password'");
+        $authquery = ("SELECT UserID, Username, Password, Level FROM Accounts WHERE Username='$username' AND Password='$password'");
         $result = mysqli_query($conn, $authquery);
         $rows = mysqli_num_rows($result);
+
             if ($rows == 1) 
             {
-                $_SESSION['login_user'] = $username; // Initializing Session
-                $_SESSION['userID'] = $userID;
+				while($row = mysqli_fetch_assoc($result)) {
+					
+					$_SESSION['login_user'] = $username; // Initializing Session
+					$_SESSION['userID'] = $row['UserID'];
+					$_SESSION['level_user'] = $row['Level'];
+				}
+                
                 header("location: index.php"); // Redirecting To Other Page
+				
             } 
             else 
             {
