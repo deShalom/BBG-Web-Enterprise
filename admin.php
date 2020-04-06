@@ -6,7 +6,6 @@ if(!isset($_SESSION['login_user']))
     header("location: login.php?YouAreNotLoggedIn");
 }
 ?>
-
 <!DOCTYPE html>
 
 
@@ -16,7 +15,7 @@ if(!isset($_SESSION['login_user']))
     <title> GRE: Home page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--This is the link to our CSS!-->
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://daredicing.com/css.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
 </head>
 
@@ -94,7 +93,6 @@ if(!isset($_SESSION['login_user']))
 
     <!-- Page Content -->
 	<div class="page w3-content" style="max-width:1500px">
-
 		<div class="w3-white w3-border-bottom">
 			<button class="w3-button w3-white w3-xlarge" onclick="w3_open()">☰</button>
 			<img src="Images/uog-logo.png" style="margin-bottom: 10px; margin-top: 10px;">
@@ -109,42 +107,138 @@ if(!isset($_SESSION['login_user']))
 			<a href="registration.php" class="w3-bar-item w3-button">Link Reg</a>
 		</div>
 
-		<fieldset>
-			<p class="w3-center">
-				<label for="fname">Popular Ideas:</label><br />
-				
-			</p>
-			<div class="w3-panel">
+	<!-- Data Analysis -->
+  <div class="w3-row-padding w3-margin-bottom w3-padding-16">
+    <div class="w3-third">
+      <div class="w3-container w3-greenwich w3-padding-16">
+        <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>X</h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Total Accounts</h4>
+      </div>
+    </div>
+    
+    <div class="w3-third">
+      <div class="w3-container w3-greenwich w3-padding-16">
+        <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>X</h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Total Ideas</h4>
+      </div>
+    </div>
+    
+    <div class="w3-third">
+      <div class="w3-container w3-greenwich w3-padding-16">
+        <div class="w3-left"><i class="fa fa-comments w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>X</h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Total Comments</h4>
+      </div>
+    </div>
+    
+  </div>
 
-				<div class="w3-panel w3-border-bottom">
-					<div class="flex-container">
-						<div class="w3-panel">
-							
-						</div>
-						<div class="w3-panel">
-							<div class="row">
-								<div class="column">
-									<p> poo</p>
-								</div>
-								<div class="column">
-									<p> poo</p>
-								</div>
-								<div class="column">
-									<p> poo</p>
-								</div>
-							</div>
-							
 
-							
-						</div>
-					</div>
-				</div>
-				<p class="w3-center">
+<!-- Search Analysis -->
 
-				</p>
+	<div class="w3-panel">
+    	<div class="w3-row-padding w3-padding-16">
+    		<div class="topnav w3-col w3-center">
+            <h2>User Lookup</h2>
+    			<input type="text" placeholder="Search Username.." style="width:50%">
+                <button class="w3-button w3-greenwich w3-hover-dark-gray"id="SearchUser"><i class="fa fa-search"></i></button>
+  			</div>
+            <div class="w3-quarter w3-padding-16 w3-center">
+            <button class="w3-button w3-greenwich w3-hover-dark-gray"id="Ban"><i class="fa fa-user-lock"></i> Ban</button>
+            </div>
+            <div class="w3-quarter w3-padding-16 w3-center">
+            <button class="w3-button w3-greenwich w3-hover-dark-gray"id="Block"><i class="fa fa-lock"></i> Block</button>
+            </div>
+            <div class="w3-quarter w3-padding-16 w3-center">
+            <button class="w3-button w3-greenwich w3-hover-dark-gray"id="Unban"><i class="fa fa-lock-open"></i> Unban</button>
+            </div>
+            <div class="w3-quarter w3-padding-16 w3-center">
+            <button class="w3-button w3-greenwich w3-hover-dark-gray"id="Unblock"><i class="fa fa-unlock"></i> Unblock</button>
+            </div>
+  		</div>
+ 	 </div>
 
-				<fieldset></fieldset><fieldset></fieldset><fieldset></fieldset>
-				<br />
+	<!-- Department Analysis -->
+
+  <div class="w3-panel">
+    <div class="w3-row-padding-16 w3-padding">
+      <div class="w3-third">
+        <h2>Department</h2>
+        <div class="search-box" style="width:100%" alt="Search Box">
+        <select id="Department" style="width:100%" name="Departments" multiple="multiple">
+        <option value="0" selected="selected">Select Department</option>
+        </select> 
+        
+        <br></br>
+        <button class="w3-button w3-greenwich w3-hover-dark-gray"id="FilterDepartment">Search</button>
+        
+        </div>
+      </div>
+      <div class="w3-twothird">
+        <h2>Data</h2>
+        <table class="w3-table w3-striped w3-white">
+          <tr>
+            <td>New record, over 90 views.</td>
+            <td><i>10 mins</i></td>
+          </tr>
+          <tr>
+            <td>Database error.</td>
+            <td><i>15 mins</i></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<!-- Category Analysis -->
+
+  <div class="w3-panel">
+    <div class="w3-row-padding-16 w3-padding">
+      <div class="w3-third">
+        <h2>Category</h2>
+        <div class="search-box" style="width:100%" alt="Search Box">
+        <select id="Category" style="width:100%" name="Categories" multiple="multiple">
+        <option value="0" selected="selected">Select Category</option>
+        </select> 
+        
+        <br></br>
+        <button class="w3-button w3-greenwich w3-hover-dark-gray"id="FilterCategory">Search</button>
+        
+        </div>
+      </div>
+      <div class="w3-twothird">
+        <h2>Data</h2>
+        <table class="w3-table w3-striped w3-white">
+          <tr>
+            <td>New record, over 90 views.</td>
+            <td><i>10 mins</i></td>
+          </tr>
+          <tr>
+            <td>Database error.</td>
+            <td><i>15 mins</i></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+     <br></br>
+     <br></br>
+     <br></br>
+
+
+
 				<!--Fieldset for Terms and Conditions; made sure that it is a "required" attribute as said in CW spec-->
 				<!-- Side bar header -->
 				<!-- Button Scripts -->
