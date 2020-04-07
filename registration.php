@@ -1,4 +1,6 @@
-﻿
+﻿<?php>
+    include "config.php";
+?>
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -85,8 +87,8 @@
 				<?php foreach ($errors as $error) : ?>
 				<p><?php echo $error ?></p>
 				<?php endforeach ?>
-			</div>
-				<?php  endif ?>
+			    </div>
+			<?php  endif ?>
 
 
             <!-- Username input field -->
@@ -118,14 +120,17 @@
 			<fieldset>
 				<p class="w3-center">
                 <select id="Department" name="ResDept" class="w3-dropdown-click" required>
-                        <option value="Dep1">Department</option>
-                        <option value="Dep2">Dept2</option>
-                        <option value="Dep3">Dept3</option>
-                        <option value="Dep4">Dept4</option>
-                    </select></p>
-			 </fieldset>
+                <?php>
+                    $departmentQuery = "SELECT Department, COUNT(*) FROM Accounts GROUP BY Department HAVING COUNT(*) > 0 ORDER BY Department ASC";
+                    $resultDepartment = mysqli_query($conn, $departmentQuery);
+                    while($rowDepartment=mysqli_fetch_array($resultDepartment))
+                    {
+                         echo '<option>' . $rowDepartment['Department'] . '</option>';
+                    }
+                ?>
 
-								
+                    </select></p>
+			 </fieldset>				
 				<button class="w3-button w3-dark-gray w3-margin-top" name="registrationBtn" value="Registration">Submit</button>
         </form>
 		</div>

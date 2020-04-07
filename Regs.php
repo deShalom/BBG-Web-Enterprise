@@ -36,7 +36,8 @@
 			$mail->SetFrom('Noreply@DareDicing.com');
 			$mail->addAddress($email, $username);
 			$mail->isHTML(TRUE);
-			$mail-> "Hello, $username. Thank for signing up on daredicing.com, you will recieve an email shortly.
+			$mail->Subject = 'Sign Up Link';
+			$mail->Body = "Hello, $username. Thank for signing up on daredicing.com, you will recieve an email shortly.
 			<a href='HTTP://http://daredicing.com/confirmemail.php?email=$email&token$Token'> </a>
 			";
 			
@@ -51,8 +52,6 @@
 			
 			header("Location: /login.php");
 			exit();
-			
-			
 		}
 	}
 	
