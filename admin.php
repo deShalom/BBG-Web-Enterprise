@@ -5,6 +5,19 @@ if(!isset($_SESSION['login_user']))
 {           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
     header("location: login.php?YouAreNotLoggedIn");
 }
+$checkbannedUser = $_SESSION['login_user'];
+$checkbanned = ("SELECT UserID, Username, Password, Level FROM Accounts WHERE Username='$checkbannedUser'");
+        $result = mysqli_query($conn, $authquery);
+        $rows = mysqli_num_rows($result);
+
+            if ($rows == 1) 
+            {
+				while($row = mysqli_fetch_assoc($result)) {
+					
+					$_SESSION['login_user'] = $username; // Initializing Session
+					$_SESSION['userID'] = $row['UserID'];
+					$_SESSION['level_user'] = $row['Level'];
+				}
 
 $level = intval($_SESSION['level_user']);
 if($level < 5 )
@@ -193,35 +206,113 @@ if($level < 5 )
     		<div class="topnav w3-col w3-center">
             <h2>User Lookup</h2>
 			<form action="" method="post">
-    			<input type="text" placeholder="Search Username.." style="width:50%" name="enteredUsername">
+    			<input type="text" placeholder="Search Username.." style="width:50%" name="enteredUsername"/>
                 <button class="w3-button w3-greenwich w3-hover-dark-gray"id="SearchUser"><i class="fa fa-search"></i></button>
 			</form>
 			<?php
+			session_start();
 			include "config.php";
+			$conn;
 			if (!empty($_REQUEST['enteredUsername'])) {
-				echo $enteredUsername;
+				$searchedUser = mysqli_real_escape_string($conn, $_POST['enteredUsername']);
+				//$searchedUser = $_REQUEST['enteredUsername']; 
+				$authquery = ("SELECT UserID, Username, Email, Department, Level FROM Accounts WHERE Username='$searchedUser'");
+				$resultSearch = mysqli_query($conn, $authquery);
+				$rows = mysqli_num_rows($resultSearch);
+				
+
+            if ($rows == 1) 
+            {
+				while($row = mysqli_fetch_assoc($resultSearch)) {
+					$_SESSION['searchedUsername'] = $row['Username'];
+					$_SESSION['searchedLevel'] = $row['Level'];
+					echo "<table style='width:100%'>
+					<tr>
+						<th>Username</th>
+						<th>Email</th>
+						<th>Department</th>
+						<th>Level</th>
+					</tr>";
+					echo "<tr>";
+						echo "<td>" . $row['Username'] . "</td>";
+						echo "<td>" . $row['Email'] . "</td>";
+						echo "<td>" . $row['Department'] . "</td>";
+					switch ($row['Level']) {
+						case '-5':
+							echo"<td>Banned</td>";
+							break;
+						case '-1':
+							echo "<td>Blocked</td>";
+							break;
+						case '0':
+							echo "<td>Staff</td>";
+							break;
+						case '1':
+							echo "<td>QA Coordinator</td>";
+							break;
+						case '5':
+							echo "<td>QA Manger</td>";
+							break;
+					}
+					echo "</table>";
+				}
 			}
-
-/*
-			$enteredUsername = mysqli_real_escape_string($_REQUEST['enteredUsername']);     
-
-			$findUser = "SELECT * FROM Accounts WHERE Username LIKE '%".$enteredUsername."%'"; 
-			$r_query = mysqli_query($con,$findUser); 
-
-			while ($row = mysqli_fetch_array($r_query)){  
-			echo 'Primary key: ' .$row['UserID'];  
-			echo '<br /> Code: ' .$row['Username'];  
-			echo '<br /> Description: '.$row['Password'];  
-			echo '<br /> Category: '.$row['Email'];  
-			echo '<br /> Cut Size: '.$row['Level'];   
-			}  
-
-			}*/
+			else 
+            {
+                $error = "Username does not exist";
+                echo $error;
+            }
+            mysqli_close($conn); // Closing Connection
+			}
 			?>
   			</div>
             <div class="w3-quarter w3-padding-16 w3-center">
-            <button class="w3-button w3-greenwich w3-hover-dark-gray"id="Ban"><i class="fa fa-user-lock"></i> Ban</button>
+			<form method="POST" action="">		
+            <button type="submit" class="w3-button w3-greenwich w3-hover-dark-gray" name="buttonBan"><i class="fa fa-user-lock"></i> Ban</button>
+			<?php
+			session_start();
+			include 'config.php';
+			if (isset($_POST['buttonBan']))
+			{
+				$searchedUser = $_SESSION['searchedUsername'];
+				$searchedLevel = $_SESSION['searchedLevel'];
+				if (isset($_SESSION['searchedUsername']))
+				{
+					
+					
+					switch ($searchedLevel) {
+						case '-5':
+							$message = $searchedUser . " is already Banned";
+							break;
+						case '5':
+							$message = $searchedUser . " is an Administrator and cannot be banned";
+							break;
+						Default :
+							$banquery = ("UPDATE Accounts SET Level = '-5' WHERE Username = '$searchedUser'");
+							if(mysqli_query($conn, $banquery)){
+								$message = "You have successfully banned " . $searchedUser;
+								unset($_SESSION['searchedUsername']);
+							}
+							else{
+								$message = "SQL failed to ban " . $searchedUser;
+							}
+							break;
+					}
+					
+					
+					
+				}
+				else{
+					$message = "You have not searched a Username";
+				}
+				echo "<script type='text/javascript'>alert('$message');</script>";
+			}
+			?>
+			</form>
+			
             </div>
+
+			
             <div class="w3-quarter w3-padding-16 w3-center">
             <button class="w3-button w3-greenwich w3-hover-dark-gray"id="Block"><i class="fa fa-lock"></i> Block</button>
             </div>
