@@ -18,6 +18,7 @@ $checkbanned = ("SELECT UserID, Username, Password, Level FROM Accounts WHERE Us
 					$_SESSION['userID'] = $row['UserID'];
 					$_SESSION['level_user'] = $row['Level'];
 				}
+			}
 
 $level = intval($_SESSION['level_user']);
 if($level < 5 )
