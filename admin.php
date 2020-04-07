@@ -23,7 +23,12 @@ $checkbanned = ("SELECT UserID, Username, Password, Level FROM Accounts WHERE Us
 $level = intval($_SESSION['level_user']);
 if($level < 5 )
 {           // dont allow if youre not the admin
-    header("location: index.php?YouAreNotTheAdmin");
+	if ($level < -4){
+		header("location: banned.php");
+	}else{
+		header("location: index.php?YouAreNotTheAdmin");
+	}
+    
 }
 
 // opens a connection to the DB via the config file
@@ -292,7 +297,7 @@ if($level < 5 )
 							$banquery = ("UPDATE Accounts SET Level = '-5' WHERE Username = '$searchedUser'");
 							if(mysqli_query($conn, $banquery)){
 								$message = "You have successfully banned " . $searchedUser;
-								unset($_SESSION['searchedUsername']);
+								
 							}
 							else{
 								$message = "SQL failed to ban " . $searchedUser;
@@ -300,7 +305,7 @@ if($level < 5 )
 							break;
 					}
 					
-					
+					unset($_SESSION['searchedUsername']);
 					
 				}
 				else{
@@ -315,13 +320,139 @@ if($level < 5 )
 
 			
             <div class="w3-quarter w3-padding-16 w3-center">
-            <button class="w3-button w3-greenwich w3-hover-dark-gray"id="Block"><i class="fa fa-lock"></i> Block</button>
+			<form method="POST" action="">		
+            <button type="submit" class="w3-button w3-greenwich w3-hover-dark-gray" name="buttonBlock"><i class="fa fa-lock"></i> Block</button>
+			<?php
+			session_start();
+			include 'config.php';
+			if (isset($_POST['buttonBlock']))
+			{
+				$searchedUser = $_SESSION['searchedUsername'];
+				$searchedLevel = $_SESSION['searchedLevel'];
+				if (isset($_SESSION['searchedUsername']))
+				{
+					
+					
+					switch ($searchedLevel) {
+						case '-5':
+							$message = $searchedUser . " is already Banned and cannot be Blocked";
+							break;
+						case '5':
+							$message = $searchedUser . " is an Administrator and cannot be Banned";
+							break;
+						case '-1':
+							$message = $searchedUser . " is already Blocked";
+							break;
+						Default :
+							$banquery = ("UPDATE Accounts SET Level = '-1' WHERE Username = '$searchedUser'");
+							if(mysqli_query($conn, $banquery)){
+								$message = "You have successfully Blocked " . $searchedUser;
+								
+							}
+							else{
+								$message = "SQL failed to Block " . $searchedUser;
+							}
+							break;
+					}
+					
+					unset($_SESSION['searchedUsername']);
+					
+				}
+				else{
+					$message = "You have not searched a Username";
+				}
+				echo "<script type='text/javascript'>alert('$message');</script>";
+			}
+			?>
+			</form>
+            </div>
+			
+            <div class="w3-quarter w3-padding-16 w3-center">
+			
+			<form method="POST" action="">		
+            <button type="submit" class="w3-button w3-greenwich w3-hover-dark-gray" name="buttonUnban"><i class="fa fa-lock-open"></i> Unban</button>
+			<?php
+			session_start();
+			include 'config.php';
+			if (isset($_POST['buttonUnban']))
+			{
+				$searchedUser = $_SESSION['searchedUsername'];
+				$searchedLevel = $_SESSION['searchedLevel'];
+				if (isset($_SESSION['searchedUsername']))
+				{
+					
+					
+					switch ($searchedLevel) {
+						case '-5':
+							$banquery = ("UPDATE Accounts SET Level = '0' WHERE Username = '$searchedUser'");
+							if(mysqli_query($conn, $banquery)){
+								$message = "You have successfully Unbanned " . $searchedUser;
+								
+							}
+							else{
+								$message = "SQL failed to Unban " . $searchedUser;
+							}
+							break;
+						Default :
+							$message = $searchedUser . " is not Banned, therefore cannot be Unbanned";
+							break;
+					}
+					
+					unset($_SESSION['searchedUsername']);
+					
+				}
+				else{
+					$message = "You have not searched a Username";
+				}
+				echo "<script type='text/javascript'>alert('$message');</script>";
+			}
+			?>
+			</form>
+			
             </div>
             <div class="w3-quarter w3-padding-16 w3-center">
-            <button class="w3-button w3-greenwich w3-hover-dark-gray"id="Unban"><i class="fa fa-lock-open"></i> Unban</button>
-            </div>
-            <div class="w3-quarter w3-padding-16 w3-center">
-            <button class="w3-button w3-greenwich w3-hover-dark-gray"id="Unblock"><i class="fa fa-unlock"></i> Unblock</button>
+			
+			<form method="POST" action="">		
+            <button type="submit" class="w3-button w3-greenwich w3-hover-dark-gray" name="buttonUnblock"><i class="fa fa-unlock"></i> Unblock</button>
+			<?php
+			session_start();
+			include 'config.php';
+			if (isset($_POST['buttonUnblock']))
+			{
+				$searchedUser = $_SESSION['searchedUsername'];
+				$searchedLevel = $_SESSION['searchedLevel'];
+				if (isset($_SESSION['searchedUsername']))
+				{
+					
+					
+					switch ($searchedLevel) {
+						case '-1':
+							$banquery = ("UPDATE Accounts SET Level = '0' WHERE Username = '$searchedUser'");
+							if(mysqli_query($conn, $banquery)){
+								$message = "You have successfully Unblocked " . $searchedUser;
+								
+							}
+							else{
+								$message = "SQL failed to Unblocked " . $searchedUser;
+							}
+							break;
+						Default :
+							$message = $searchedUser . " is not Blocked, therefore cannot be Unblocked";
+							break;
+					}
+					
+					unset($_SESSION['searchedUsername']);
+					
+				}
+				else{
+					$message = "You have not searched a Username";
+				}
+				echo "<script type='text/javascript'>alert('$message');</script>";
+			}
+			?>
+			</form>
+		
+			
             </div>
   		</div>
  	 </div>
@@ -333,27 +464,67 @@ if($level < 5 )
       <div class="w3-third">
         <h2>Department</h2>
         <div class="search-box" style="width:100%" alt="Search Box">
-        <select id="Department" style="width:100%" name="Departments" multiple="multiple">
-        <option value="0" selected="selected">Select Department</option>
+		<form method="POST">
+        <select id="Department" style="width:100%" name="Department">
+		<?php
+			session_start();
+			include 'config.php';
+			$departmentQuery = "SELECT Department, COUNT(*) FROM Posts GROUP BY Department HAVING COUNT(*) > 0 ORDER BY Department ASC";
+			$resultDepartment = mysqli_query($conn, $departmentQuery);
+			while($rowDepartment=mysqli_fetch_array($resultDepartment)){
+				echo '<option>' . $rowDepartment['Department'] . '</option>';
+			}
+		?>
         </select> 
         
         <br></br>
-        <button class="w3-button w3-greenwich w3-hover-dark-gray"id="FilterDepartment">Search</button>
-        
+		<button type="submit" class="w3-button w3-greenwich w3-hover-dark-gray" name="FilterDepartment">Search</button>
+        </form>
+		
         </div>
       </div>
       <div class="w3-twothird">
-        <h2>Data</h2>
-        <table class="w3-table w3-striped w3-white">
-          <tr>
-            <td>New record, over 90 views.</td>
-            <td><i>10 mins</i></td>
-          </tr>
-          <tr>
-            <td>Database error.</td>
-            <td><i>15 mins</i></td>
-          </tr>
-        </table>
+        <h2>Idea Data</h2>
+        
+			<?php
+			session_start();
+			include 'config.php';
+			if (isset($_POST['Department']))
+			{			
+				$selectedDepartment = $_POST['Department'];
+				$querydep = ("SELECT COUNT(*) as total FROM Posts WHERE Department='$selectedDepartment'");
+				$resultdep = mysqli_query($conn, $querydep);
+				$rowdep = mysqli_fetch_assoc($resultdep);
+				$totalDepPosts = $rowdep['total'];
+				
+				$querytotal = ("SELECT COUNT(*) as totals FROM Posts");
+				$resulttotal = mysqli_query($conn, $querytotal);
+				$rowtotal = mysqli_fetch_assoc($resulttotal);
+				$totalPosts = $rowtotal['totals'];
+				
+				$totalpercent = ($totalDepPosts / $totalPosts) * 100;
+				
+				$queryContributors = ("SELECT COUNT(DISTINCT UserID) AS totaled FROM Posts");
+				$resultContributors = mysqli_query($conn, $queryContributors);
+				$rowContributors = mysqli_fetch_assoc($resultContributors);
+				$totalContributors = $rowContributors['totaled'];
+				
+				echo '<table class="w3-table w3-striped w3-white style=\"width:100%\" ">
+				<tr>
+					<th>Department</th>
+					<th>Ideas</th>
+					<th>Percentage of Total</th>
+					<th>Total Contributors</th>
+				</tr>';
+				echo '<td>' . $selectedDepartment . '</td>';
+				echo '<td>' . $totalDepPosts . '</td>';
+				echo '<td>' . $totalpercent . '%</td>';
+				echo '<td>' . $totalContributors . '</td>';
+				echo '</tr>
+				</table>';
+			}
+			
+		?>
       </div>
     </div>
   </div>
