@@ -8,14 +8,15 @@ if(!isset($_SESSION['login_user']))
     header("location: login.php?YouAreNotLoggedIn");
 }
 
-   if (isset($_GET['pageno'])) {
+   if (isset($_GET['pageno']))
+        {
             $pageno = $_GET['pageno'];
+
         } else {
             $pageno = 1;
         }
         $no_of_records_per_page = 5;
         $offset = ($pageno-1) * $no_of_records_per_page;
-
 
 
 
@@ -142,26 +143,21 @@ if(!isset($_SESSION['login_user']))
 
 
 
-                while ($row = mysqli_fetch_array($data))
-                {
+                while ($row = mysqli_fetch_array($data)) {
 
-                if($row["isAnonymous"] === 0)
-                {
-                    $row["isAnonymous"] = "No";
-                } else
-                {
-                    $row["isAnonymous"] = "Yes";
-                }
+                    if ($row["isAnonymous"] === 0) {
+                        $row["isAnonymous"] = "No";
+                    } else {
+                        $row["isAnonymous"] = "Yes";
+                    }
 
-                  if($row["isUploadedDocuments"] === 0)
-                {
-                    $row["isUploadedDocuments"] = "No";
-                } else
-                {
-                    $row["isUploadedDocuments"] = "Yes";
-                }
+                    if ($row["isUploadedDocuments"] === 0) {
+                        $row["isUploadedDocuments"] = "No";
+                    } else {
+                        $row["isUploadedDocuments"] = "Yes";
+                    }
 
-                echo '<table class="w3-table w3-striped w3-white style=\"width:100%\" ">
+                    echo '<table class="w3-table w3-striped w3-white style=\"width:100%\" ">
             <tr>
                 <th>Post ID</th>
                 <th>Department</th>
@@ -176,24 +172,23 @@ if(!isset($_SESSION['login_user']))
                 <th>Upvotes</th>
             </tr>';
 
-                foreach($sql as $total_pages_sql) {
-                  ?>
-                <tr>
-                 <td><?php echo $row['PostID']; ?> </td>
-                 <td><?php echo $row['Title']; ?> </td>
-                 <td><?php echo $row['Department']; ?> </td>
-                 <td><?php echo $row['Category1ID']; ?> </td>
-                 <td><?php echo $row['Category2ID']; ?> </td>
-                 <td><?php echo $row['Category3ID']; ?> </td>
-                 <td><?php echo $row['isAnonymous']; ?> </td>
-                 <td><?php echo $row['Downvotes']; ?> </td>
-                 <td><?php echo $row['Upvotes']; ?> </td>
-
-
-                </tr>
-                <?php
-                    }
-                };
+                    foreach ($sql as $total_pages_sql) {
+                        ?>
+                        <tr>
+                            <td><?php echo $row['PostID']; ?> </td>
+                            <td><?php echo $row['Title']; ?> </td>
+                            <td><?php echo $row['Department']; ?> </td>
+                            <td><?php echo $row['Category1ID']; ?> </td>
+                            <td><?php echo $row['Category2ID']; ?> </td>
+                            <td><?php echo $row['Category3ID']; ?> </td>
+                            <td><?php echo $row['isAnonymous']; ?> </td>
+                            <td><?php echo $row['Downvotes']; ?> </td>
+                            <td><?php echo $row['Upvotes']; ?> </td>
+                            }
+                        </tr>
+                        <?php
+                    };
+                }
              ?>
 
              </table>
