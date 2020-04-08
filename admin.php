@@ -761,6 +761,39 @@ if($level < 5 )
     </div>
   </div>
   
+  
+	<!-- Download CSV -->
+
+  <div class="w3-panel">
+    <div class="w3-row-padding-16 w3-padding">
+      <div class="w3-col w3-center">
+        <h2><center>Download Tables</center></h2>
+		<form method="POST">
+        <select id="Download" style="width:50%" name="Download">
+		<option>Accounts</option>
+		<option>Categories</option>
+		<option>Comments</option>
+		<option>Documents</option>
+		<option>Posts</option>
+        </select> 
+        <br></br>
+		<button type="submit" class="w3-button w3-greenwich w3-hover-dark-gray" name="Download">Download</button>
+		<?php
+			session_start();
+			include "config.php";
+			$conn;
+			if (isset($_POST['Download'])){
+				$queryDownload = ("SELECT * INTO OUTFILE `c:/mydata.csv` FIELDS TERMINATED BY `,` OPTIONALLY ENCLOSED BY `'` LINES TERMINATED BY `\n` FROM Accounts");
+				$resultDownload = mysqli_query($conn, $queryDownload);
+			}
+			?>
+        </form>
+		
+        </div>
+      </div>
+      </div>
+    </div>
+  
 
      <br></br>
      <br></br>
