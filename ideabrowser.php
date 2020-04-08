@@ -126,17 +126,15 @@ if(!isset($_SESSION['login_user']))
 
 			</p>
             <div class="w3-panel">
-                    <div class="w3-panel w3-border-bottom">
+                    <div class="w3-row-padding w3-padding-16">
 					<div class="flex-container">
-					<div class="w3-panel">
-					    </div>
-					        <div class="w3-panel">
-					        <div class="row"
+
 
              <?php
                 $total_pages_sql = "SELECT COUNT(*) FROM Posts";
                 $sql = mysqli_query($conn, $total_pages_sql);
                 $total_rows = mysqli_fetch_array($result)[0];
+                $total_pages = ceil($total_rows / $no_of_records_per_page);
                 $total_pages = ceil($total_rows / $no_of_records_per_page);
 
                 $sql = "SELECT * FROM Posts LIMIT $no_of_records_per_page OFFSET $offset";
@@ -163,48 +161,49 @@ if(!isset($_SESSION['login_user']))
                     $row["isUploadedDocuments"] = "Yes";
                 }
 
-				echo '<div class="column">'. $row["Titles"] .'</h1>';
-                echo 'Body: <h2>'. $row["Body"] .'</h2>';
-                echo '<p>isUploadedDocuments: '. $row["isUploadedDocuments"] .'</p>';
-                echo '<p> Title: <Views>'. $row["Views"] .'</p>';
-                echo '<p> IDs:'. $row["Category1ID"]; echo $row["Category2ID"]; echo $row["Category3ID"] .'</p>';
-                echo 'Department: <h3>'. $row["Department"] .'</h3>';
-                echo 'Downvotes: <p>'. $row["Downvotes"] .'</p>';
-                echo 'Upvotes: <p>'. $row["Upvotes"] .'</p>';
-                echo 'isAnonymous: <p>'. $row["isAnonymous"] .'</p>'. "</div>";
+                echo '<table class="w3-table w3-striped w3-white style=\"width:100%\" ">
+            <tr>
+                <th>Post ID</th>
+                <th>Department</th>
+                <th>Idea Title</th>
+                <th>Views</th>
+                <th>ID Funding</th>
+                <th>ID Students</th>
+                <th>ID Accessibility</th>
+                <th>ID Complaint</th>
+                <th>Anonymous</th>
+                <th>Downvotes</th>
+                <th>Upvotes</th>
+            </tr>';
 
-                }
+                foreach($sql as $total_pages_sql) {
+                  ?>
+                <tr>
+                 <td><?php echo $row['PostID']; ?> </td>
+                 <td><?php echo $row['Title']; ?> </td>
+                 <td><?php echo $row['Department']; ?> </td>
+                 <td><?php echo $row['Category1ID']; ?> </td>
+                 <td><?php echo $row['Category2ID']; ?> </td>
+                 <td><?php echo $row['Category3ID']; ?> </td>
+                 <td><?php echo $row['isAnonymous']; ?> </td>
+                 <td><?php echo $row['Downvotes']; ?> </td>
+                 <td><?php echo $row['Upvotes']; ?> </td>
+
+
+                </tr>
+                <?php
+                    }
+                };
              ?>
 
-							</div>
-						</div>
-					</div>
-				</div>
-				<p class="w3-center">
-				</p>
-
-
-				<fieldset></fieldset><fieldset></fieldset><fieldset></fieldset>
-
-				<fieldset></fieldset><fieldset></fieldset><fieldset></fieldset>
-
-				<br/>
-
-				<script>
-                function w3_open()
-                {
-                document.getElementById("mySidebar").style.display = "block";
-                }
-
-                function w3_close()
-                {
-                document.getElementById("mySidebar").style.display = "none";
-                }
-				</script>
+             </table>
+            </div>
+        </div>
+    </div>
 
 
 			<ul class="w3-center pagination">
-                <li><a href="?pageno=1" class= "w3-button">First</a></li>
+			    <li><a href="?pageno=1" class= "w3-button">First</a></li>
                 <li><a href="?pageno=<?php echo $total_pages; ?>" class="w3-button">Last</a></li>
                 <li class="w3-button w3-center <?php if($pageno <= 1){ echo 'disabled'; } ?>">
                 <a href="<?php if($pageno <= 1){ echo '#'; } else { echo "?pageno=".($pageno - 1); } ?>">Back</a>
@@ -214,6 +213,9 @@ if(!isset($_SESSION['login_user']))
             <a href="<?php if($pageno >= $total_pages){ echo '#'; } else { echo "?pageno=".($pageno + 1); } ?>">Next</a>
             </li>
 
+            <br></br>
+            <br></br>
+            <br></br>
 
 
 			<div class="footer w3-dark-gray">
