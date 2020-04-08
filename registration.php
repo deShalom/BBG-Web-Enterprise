@@ -1,5 +1,58 @@
 ﻿<?php
     include "config.php";
+
+    $message = "";
+
+	if (isset($_POST['registrationBtn']))
+    {
+		$username = mysqli_real_escape_string($conn, $_POST['username']);
+		$email = mysqli_real_escape_string($conn ,$_POST['email']);
+		$password = mysqli_real_escape_string($conn ,$_POST['password']);
+		$Confirmpassword = mysqli_real_escape_string($conn ,$_POST['confirm-password']);
+		$Department = mysqli_real_escape_string($conn ,$_POST['ResDept']);
+
+        if($username == "" || $email == "" || $password !== $Confirmpassword || $Department == "")
+        {
+            $messages = "Check Fields" ;
+        }  else
+        {
+               $mysqli->query = ("SELECT * FROM Accounts WHERE Email= '$email'");
+               if($mysqli->num_rows > 0)
+               {
+                     $message = "Email already in database";
+               }
+               else
+               {
+                    $token = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890!$/()';
+			        $token = str_shuffle($token);
+			        $token = Substr($token, 0, 15);
+
+			        $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+
+                    $query = "INSERT INTO Accounts (Username, Password, Email, Department, Level, isConfirmed, token)
+					VALUES('$username', '$hashPassword', '$email', '$Department', 0, 0, '$token')";
+
+                    if($query) {
+                         ini_set("SMTP", 'n3plcpnl0054.prod.ams3.secureserver.net');
+                        ini_set("sendmail_from", "noreply@daredicing.com");
+
+                           $to = $email;
+                           $subject = "Email Verification";
+                           $message = "Hello, User. Thank for signing up on daredicing.com, you will recieve an email shortly.
+                            <a href=\"http://daredicing.com/confirmemail.php?email=$email&token=$token\">Click Here</a><p> Best of luck from BigBoiGames Ltd";
+                           $header = "From: noreply@daredicing.com";
+                           $headers .= "MIME-Version: 1.0" . "\r\n";
+                           $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+                           mail($to, $subject, $message, $headers);
+
+                           header("location: login.php");
+                        mysqli_query($conn, $query);
+                    }
+                    }
+            }
+    };
+
 ?>
 
 <!DOCTYPE html>
@@ -80,13 +133,13 @@
         </div>
 
         <!-- This divider will hold the log-in box -->
-        <form action="Regs.php" method="post" class="w3-display-middle w3-margin-right w3-container w3-card-4 w3-dark-grey" onsubmit="return validateForm();">
+        <form action="registration.php" method="post" class="w3-display-middle w3-margin-right w3-container w3-card-4 w3-dark-grey" onsubmit="return validateForm();">
             <h2 class="w3-center">Create an account</h2>
 
 			 <?php
-              if(isset($_SESSION['messages']))
+              if($message != "")
               {
-                  echo $_SESSION['messages'];
+                  echo $message;
               }
         ?>
               <script>
@@ -151,7 +204,7 @@
                 </select></p>
 			 </fieldset>
 
-				<button class="w3-button w3-dark-gray w3-margin-top" name="registrationBtn" value="Registration">Submit</button>
+				<button class="w3-center w3-button w3-dark-gray w3-margin-top" name="registrationBtn" value="Registration">Submit</button>
         </form>
 		</div>
 	</div>
