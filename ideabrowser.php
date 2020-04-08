@@ -125,6 +125,13 @@ if(!isset($_SESSION['login_user']))
 				<label for="fname">Submitted Ideas</label><br />
 
 			</p>
+            <div class="w3-panel">
+                    <div class="w3-panel w3-border-bottom">
+					<div class="flex-container">
+					<div class="w3-panel">
+					    </div>
+					        <div class="w3-panel">
+					        <div class="row"
 
              <?php
                 $total_pages_sql = "SELECT COUNT(*) FROM Posts";
@@ -156,39 +163,46 @@ if(!isset($_SESSION['login_user']))
                     $row["isUploadedDocuments"] = "Yes";
                 }
 
-                ?>
-                <div class="w3-panel">
-				<div class="w3-panel">
-					<div class="flex-container">
-						<div class="w3-panel">
-						</div>
-						<div class="w3-panel">
-							<div class="row" style=border-style:3px solid black></div>
-								<div class="w3-center">
-									<p> <?php echo $row["Titles"]; ?> </p>
-                                    <p> <?php echo $row["Body"]; ?></p>
-                                    <p> <?php echo $row["isUploadedDocuments"]; ?></p>
-                                    <p>Views: <?php echo $row["Views"]; ?></p>
-                                    <p>IDs: <?php echo $row["Category1ID"]; echo $row["Category2ID"]; echo $row["Category3ID"]; ?></p>
-                                    <p>Department: <?php echo $row["Department"]; ?></p>
-                                    <p>Downvotes: <?php echo $row["Downvotes"]; ?></p>
-                                    <p>Upvotes: <?php echo $row["Upvotes"]; ?></p>
-                                    <p>isAnonymous: <?php echo $row["isAnonymous"]; ?></p>
-								</div>
-								</div>
+									 echo '<div class="column">'. $row["Titles"] .'</h1>';
+                                     echo 'Body: <h2>'. $row["Body"] .'</h2>';
+                                     echo '<p>isUploadedDocuments: '. $row["isUploadedDocuments"] .'</p>';
+                                    echo '<p> Title: <Views>'. $row["Views"] .'</p>';
+                                    echo '<p> IDs:'. $row["Category1ID"]; echo $row["Category2ID"]; echo $row["Category3ID"] .'</p>';
+                                    echo 'Department: <h3>'. $row["Department"] .'</h3>';
+                                     echo 'Downvotes: <p>'. $row["Downvotes"] .'</p>';
+                                    echo 'Upvotes: <p>'. $row["Upvotes"] .'</p>';
+                                     echo 'isAnonymous: <p>'. $row["isAnonymous"] .'</p>'. "</div>";
+                        ?>
 							</div>
 						</div>
 					</div>
 				</div>
 				<p class="w3-center">
 				</p>
+
+				<fieldset></fieldset><fieldset></fieldset><fieldset></fieldset>
+
+				<br/>
+
+				    <script>
+                function w3_open()
+                {
+                document.getElementById("mySidebar").style.display = "block";
+                }
+
+                function w3_close()
+                {
+                document.getElementById("mySidebar").style.display = "none";
+                }
+				    </script>
                 <?php
                 }
                 ?>
 
 
 			<ul class="w3-center pagination">
-                <li><a href="?pageno=1" class= "">First</a></li>
+                <li><a href="?pageno=1" class= "w3-button">First</a></li>
+                <li><a href="?pageno=<?php echo $total_pages; ?>" class="w3-button">Last</a></li>
                 <li class="w3-button w3-center <?php if($pageno <= 1){ echo 'disabled'; } ?>">
                 <a href="<?php if($pageno <= 1){ echo '#'; } else { echo "?pageno=".($pageno - 1); } ?>">Back</a>
             </li>
@@ -196,26 +210,11 @@ if(!isset($_SESSION['login_user']))
             <li class="w3-button w3-center <?php if($pageno >= $total_pages){ echo 'disabled'; } ?>">
             <a href="<?php if($pageno >= $total_pages){ echo '#'; } else { echo "?pageno=".($pageno + 1); } ?>">Next</a>
             </li>
-            <li><a href="?pageno=<?php echo $total_pages; ?>">Last</a></li>
 
-            </ul>
-				<br />
-				<!--Fieldset for Terms and Conditions; made sure that it is a "required" attribute as said in CW spec-->
-				<!-- Side bar header -->
-				<!-- Button Scripts -->
-				<script>
-            function w3_open() {
-            document.getElementById("mySidebar").style.display = "block";
-            }
 
-            function w3_close() {
-            document.getElementById("mySidebar").style.display = "none";
-            }
-				</script>
-			</div>
 
 			<div class="footer w3-dark-gray">
-				<p><span style='border-bottom:2px white solid;'>Other useful links!</p></span>
+				<p><span style='border-bottom:1px white solid;'>Other useful links!</p></span>
 				<i class="fab fa-snapchat-ghost w3-margin-right"></i>
 				<i class="fab fa-twitter w3-margin-right"></i>
 				<i class="fab fa-facebook-f w3-margin-right"></i>
