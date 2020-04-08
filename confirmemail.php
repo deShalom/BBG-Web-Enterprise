@@ -3,22 +3,22 @@
 
 if(!isset($_GET['email']) || !isset($_GET['token']))
 {
-	header('Location: /registation.php');
+	header('Location: /registration.php');
 	exit();
 }
 else {
 	$email = mysqli_real_escape_string($conn, $_GET['email']);
-	$Token = mysqli_real_escape_string($conn, $_GET['token']);
+	$token = mysqli_real_escape_string($conn, $_GET['token']);
 
-	$query = ("SELECT ID FROM Accounts WHERE Email = '$email' and token='$token' AND isConfirmed=0");
+	$query = "SELECT ID FROM Accounts WHERE Email = '$email' and token='$token' AND isConfirmed=0";
 
-	if($sql->num_rows > 0)
+	if($query->num_rows > 0)
 	{
-		$query = ("UPDATE Accounts SET isConfirmed=1 AND token=''");
-		redirect();
+		$query = ("UPDATE Accounts SET  token='' AND isConfirmed=1");
+		echo "Your account is now verified.";
 	} else
 	{
-		redirect();
+		echo "something went wrong";
 	}
 }
 

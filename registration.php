@@ -16,8 +16,8 @@
             $messages = "Check Fields" ;
         }  else
         {
-               $mysqli->query = ("SELECT * FROM Accounts WHERE Email= '$email'");
-               if($mysqli->num_rows > 0)
+               $query = ("SELECT * FROM Accounts WHERE Email= '$email'");
+               if($query->num_rows > 0)
                {
                      $message = "Email already in database";
                }
@@ -34,11 +34,11 @@
 
                     if($query) {
                          ini_set("SMTP", 'n3plcpnl0054.prod.ams3.secureserver.net');
-                        ini_set("sendmail_from", "noreply@daredicing.com");
+                         ini_set("sendmail_from", "noreply@daredicing.com");
 
                            $to = $email;
                            $subject = "Email Verification";
-                           $message = "Hello, User. Thank for signing up on daredicing.com, you will recieve an email shortly.
+                           $message = "Hello, $username. Thank for signing up on daredicing.com, you will recieve an email shortly.
                             <a href=\"http://daredicing.com/confirmemail.php?email=$email&token=$token\">Click Here</a><p> Best of luck from BigBoiGames Ltd";
                            $header = "From: noreply@daredicing.com";
                            $headers .= "MIME-Version: 1.0" . "\r\n";
@@ -46,7 +46,7 @@
 
                            mail($to, $subject, $message, $headers);
 
-                           header("location: login.php");
+                           header("location: registrationcomplete.php");
                         mysqli_query($conn, $query);
                     }
                     }
@@ -193,7 +193,7 @@
 			<fieldset>
 				<p class="w3-center">
                 <select id="Department" name="ResDept" class="w3-dropdown-click" required>
-                <?php>
+                <?php
               $departmentQuery = "SELECT Department, COUNT(*) FROM Accounts GROUP BY Department HAVING COUNT(*) > 0 ORDER BY Department ASC";
                     $resultDepartment = mysqli_query($conn, $departmentQuery);
                     while($rowDepartment=mysqli_fetch_array($resultDepartment))
