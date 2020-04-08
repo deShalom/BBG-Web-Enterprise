@@ -8,16 +8,8 @@
 		$password = mysqli_real_escape_string($conn, $_POST['password']);
 		$Confirmpassword = mysqli_real_escape_string($conn, $_POST['confirm-password']);
 		$Department = mysqli_real_escape_string($conn, $_POST['ResDept']);
-		
-		if (empty($username)) { array_push($errors, "Username is required"); }
-		if (empty($email)) { array_push($errors, "Email is required"); }
-		if (empty($password)) { array_push($errors, "Password is required"); }
 
-		if ($password != $Confirmpassword) {
-			array_push($errors, "The two passwords do not match");
-		}
 
-		if (count($errors) == 0) {
 			$Token = 'qwertyuiopasdfghjklzxcvbnm1234567890!$/()';
 			$Token = str_shuffle($Token);
 			$Token = Substr($Token, 0, 15);
@@ -28,33 +20,37 @@
 			$query = "INSERT INTO Accounts (Username, Password, Email, Department, Level, isConfirmed, token) 
 					  VALUES('$username', '$hashPassword', '$email', '$Department', 0, 0, '$Token')";
 			mysqli_query($conn, $query);
-			
-			
-			include_once "PHPMailer/PHPMailer.php";
-			
-			$mail = new PHPMailer();
-			$mail->SetFrom('Noreply@DareDicing.com');
-			$mail->addAddress($email, $username);
-			$mail->isHTML(TRUE);
-			$mail->Subject = 'Sign Up Link';
-			$mail->Body = "Hello, $username. Thank for signing up on daredicing.com, you will recieve an email shortly.
-			<a href='HTTP://http://daredicing.com/confirmemail.php?email=$email&token$Token'> </a>
-			";
-			
-			if($mail->send())
-			{
-				$errors = "You have signed up on daredicing.com. You will recieve an email now.";
-			}
-			else
-			{
-				$errors = "Something went wrong please try again.";
-			}
-			
-			header("Location: /login.php");
-			exit();
-		}
-	}
-	
-	
 
+            include PHPMailer\PHPMailer\PHPMailer;
+            include PHPMailer\PHPMailer\SMTP;
+
+            require 'phpmailer/vendor/autoload.php';
+
+        //Create a new PHPMailer instance
+        $mail = new PHPMailer;
+
+        //Tell PHPMailer to use SMTP
+        $mail->isSMTP();
+        $mail->SMTPAutoTLS = true;
+        $mail->SMTPAuto = true;
+        $mail->Host = 'smtp.daredicing.com';
+        $mail->Port = 465;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $mail->Username = 'noreply@daredicing.com';
+        $mail->Password = 'fyC7~4}v@dCG';
+        $mail->setFrom('noreply@daredicing.com', 'admin');
+        $mail->addAddress($email, $username);
+        $mail->Subject = 'Account Verification';
+        $mail->AltBody = 'Verification Email';
+        $mail->Body = "Hello, Nero. Thank for signing up on daredicing.com, you will recieve an email shortly.
+                    <a href='http://daredicing.com/confirmemail.php?email=$email&token=$token'> </a>
+
+                    By of luck from BigBoiGames Ltd";
+
+        if (!$mail->send()) {
+            echo 'Mailer Error: '. $mail->ErrorInfo;
+        } else {
+            echo 'Message sent!';
+        }
+            }
 ?>

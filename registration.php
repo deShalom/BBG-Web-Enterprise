@@ -1,6 +1,7 @@
 ﻿<?php
     include "config.php";
 ?>
+
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -79,17 +80,36 @@
         </div>
 
         <!-- This divider will hold the log-in box -->
-        <form action="Regs.php" method="post" class="w3-display-middle w3-margin-right w3-container w3-card-4 w3-dark-grey">
+        <form action="Regs.php" method="post" class="w3-display-middle w3-margin-right w3-container w3-card-4 w3-dark-grey" onsubmit="return validateForm();">
             <h2 class="w3-center">Create an account</h2>
 
-			<?php  if (count($errors) > 0) : ?>
-			<div class="error">
-				<?php foreach ($errors as $error) : ?>
-				<p><?php echo $error ?></p>
-				<?php endforeach ?>
-			    </div>
-			<?php  endif ?>
+			 <?php
+              if(isset($_SESSION['messages']))
+              {
+                  echo $_SESSION['messages'];
+              }
+        ?>
+              <script>
+                function validateForm()
+                {
+                    const passcode = document.getElementById('password').value;
+                    const conpass = document.getElementById('confirm-password').value;
+                    let valid = true;
 
+                    if (conpass !== passcode)
+                    {
+                    alert("Passwords dont match");
+                    valid = false;
+                    }
+
+                if (valid === true)
+                    {
+                    return true;
+                    }
+                    return false;
+
+                }
+            </script>
 
             <!-- Username input field -->
             <p class="w3-center">
@@ -121,16 +141,16 @@
 				<p class="w3-center">
                 <select id="Department" name="ResDept" class="w3-dropdown-click" required>
                 <?php>
-                    $departmentQuery = "SELECT Department, COUNT(*) FROM Accounts GROUP BY Department HAVING COUNT(*) > 0 ORDER BY Department ASC";
+              $departmentQuery = "SELECT Department, COUNT(*) FROM Accounts GROUP BY Department HAVING COUNT(*) > 0 ORDER BY Department ASC";
                     $resultDepartment = mysqli_query($conn, $departmentQuery);
                     while($rowDepartment=mysqli_fetch_array($resultDepartment))
                     {
                          echo '<option>' . $rowDepartment['Department'] . '</option>';
                     }
-                ?>
+                ?> 
+                </select></p>
+			 </fieldset>
 
-                    </select></p>
-			 </fieldset>				
 				<button class="w3-button w3-dark-gray w3-margin-top" name="registrationBtn" value="Registration">Submit</button>
         </form>
 		</div>
