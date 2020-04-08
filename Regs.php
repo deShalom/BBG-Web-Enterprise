@@ -1,6 +1,12 @@
 <?php
 	session_start();
 	include "config.php";
+    include PHPMailer\PHPMailer\PHPMailer;
+    include PHPMailer\PHPMailer\SMTP;
+    include PHPMailer\PHPMailer\Exception;
+
+    // Load Composer's autoloader
+    require 'phpmailer/vendor/autoload.php';
 
 	if (isset($_POST['registrationBtn'])) {
 		$username = mysqli_real_escape_string($conn, $_POST['username']);
@@ -21,36 +27,35 @@
 					  VALUES('$username', '$hashPassword', '$email', '$Department', 0, 0, '$Token')";
 			mysqli_query($conn, $query);
 
-            include PHPMailer\PHPMailer\PHPMailer;
-            include PHPMailer\PHPMailer\SMTP;
+            $mail = new PHPMailer(true);
 
-            require 'phpmailer/vendor/autoload.php';
+            ///SMPT SETTINGS
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+            $mail->isSMTP();
+            $mail->Host = 'n3plcpnl0054.prod.ams3.secureserver.net';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'noreply@daredicing.com';
+            $mail->Password   = 'fyC7~4}v@dCG';
+            $mail->SMTPSecure = 'PHPMailer::ENCRYPTION_STARTTLS';
+            $mail->Port       = 587 ;
 
-        //Create a new PHPMailer instance
-        $mail = new PHPMailer;
+            $mail->SetFrom('Noreply@DareDicing.com', 'Noreply');
+            $mail->addAddress($email, $username);
+            $mail->isHTML(true);
+            $mail->Subject = 'Sign Up Link';
+            $mail->Body = "Hello, $username. Thank for signing up on daredicing.com, you will recieve an email shortly.
+            <a href='http://daredicing.com/confirmemail.php?email=$email&token=$Token'> </a>
 
-        //Tell PHPMailer to use SMTP
-        $mail->isSMTP();
-        $mail->SMTPAutoTLS = true;
-        $mail->SMTPAuto = true;
-        $mail->Host = 'smtp.daredicing.com';
-        $mail->Port = 465;
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-        $mail->Username = 'noreply@daredicing.com';
-        $mail->Password = 'fyC7~4}v@dCG';
-        $mail->setFrom('noreply@daredicing.com', 'admin');
-        $mail->addAddress($email, $username);
-        $mail->Subject = 'Account Verification';
-        $mail->AltBody = 'Verification Email';
-        $mail->Body = "Hello, Nero. Thank for signing up on daredicing.com, you will recieve an email shortly.
-                    <a href='http://daredicing.com/confirmemail.php?email=$email&token=$token'> </a>
+            Best of luck from BigBoiGames Ltd";
 
-                    By of luck from BigBoiGames Ltd";
-
-        if (!$mail->send()) {
-            echo 'Mailer Error: '. $mail->ErrorInfo;
-        } else {
-            echo 'Message sent!';
-        }
+            if($mail->send())
+            {
+                alert("You have signed up on daredicing.com. You will recieve an email now.");
+                header("Location: /login.php");
+                exit();
+            }
+            else
+            {
+                alert("Something went wrong: {$mail->ErrorInfo}");
             }
 ?>
