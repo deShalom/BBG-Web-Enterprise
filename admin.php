@@ -533,7 +533,7 @@ if($level < 5 )
 
 <div class="w3-panel">
     <div class="w3-row-padding w3-padding-16">
-    	<div class="topnav w3-col w3-center">
+    	<div class="w3-col w3-center">
 		    <h2>Exception Reports</h2>
 			<br>
 			<h3>Ideas Without Comments</h3>
@@ -632,7 +632,24 @@ if($level < 5 )
       </div>
     </div>
   </div>
+  
+  <!-- Date close -->
 
+	<div class="w3-panel">
+    	<div class="w3-row-padding-16 w3-padding-16">
+    		<div class="topnav w3-col w3-center">
+            <h2>Date Disable/Closure</h2>
+			<form action="" method="post">
+					
+						<center><input type="Date" style="width:50%" name="Date"/></center>
+						<br>
+						<button class="w3-button w3-greenwich w3-hover-dark-gray"id="SubmitDate"><i class="fa fa-ban"></i> Disable Ideas From Date</button>
+						<button class="w3-button w3-greenwich w3-hover-dark-gray"id="SubmitDate"><i class="fa fa-times-circle"></i> Close Website From Date</button>
+			</form>
+			</div>
+    </div>
+  </div>
+  
 
      <br></br>
      <br></br>
