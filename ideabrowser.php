@@ -163,16 +163,19 @@ if(!isset($_SESSION['login_user']))
                     $row["isUploadedDocuments"] = "Yes";
                 }
 
-									 echo '<div class="column">'. $row["Titles"] .'</h1>';
-                                     echo 'Body: <h2>'. $row["Body"] .'</h2>';
-                                     echo '<p>isUploadedDocuments: '. $row["isUploadedDocuments"] .'</p>';
-                                    echo '<p> Title: <Views>'. $row["Views"] .'</p>';
-                                    echo '<p> IDs:'. $row["Category1ID"]; echo $row["Category2ID"]; echo $row["Category3ID"] .'</p>';
-                                    echo 'Department: <h3>'. $row["Department"] .'</h3>';
-                                     echo 'Downvotes: <p>'. $row["Downvotes"] .'</p>';
-                                    echo 'Upvotes: <p>'. $row["Upvotes"] .'</p>';
-                                     echo 'isAnonymous: <p>'. $row["isAnonymous"] .'</p>'. "</div>";
-                        ?>
+				echo '<div class="column">'. $row["Titles"] .'</h1>';
+                echo 'Body: <h2>'. $row["Body"] .'</h2>';
+                echo '<p>isUploadedDocuments: '. $row["isUploadedDocuments"] .'</p>';
+                echo '<p> Title: <Views>'. $row["Views"] .'</p>';
+                echo '<p> IDs:'. $row["Category1ID"]; echo $row["Category2ID"]; echo $row["Category3ID"] .'</p>';
+                echo 'Department: <h3>'. $row["Department"] .'</h3>';
+                echo 'Downvotes: <p>'. $row["Downvotes"] .'</p>';
+                echo 'Upvotes: <p>'. $row["Upvotes"] .'</p>';
+                echo 'isAnonymous: <p>'. $row["isAnonymous"] .'</p>'. "</div>";
+
+                }
+             ?>
+
 							</div>
 						</div>
 					</div>
@@ -180,11 +183,14 @@ if(!isset($_SESSION['login_user']))
 				<p class="w3-center">
 				</p>
 
+
+				<fieldset></fieldset><fieldset></fieldset><fieldset></fieldset>
+
 				<fieldset></fieldset><fieldset></fieldset><fieldset></fieldset>
 
 				<br/>
 
-				    <script>
+				<script>
                 function w3_open()
                 {
                 document.getElementById("mySidebar").style.display = "block";
@@ -194,10 +200,7 @@ if(!isset($_SESSION['login_user']))
                 {
                 document.getElementById("mySidebar").style.display = "none";
                 }
-				    </script>
-                <?php
-                }
-                ?>
+				</script>
 
 
 			<ul class="w3-center pagination">
