@@ -641,11 +641,122 @@ if($level < 5 )
             <h2>Date Disable/Closure</h2>
 			<form action="" method="post">
 					
-						<center><input type="Date" style="width:50%" name="Date"/></center>
+						<center><input type="Date" style="width:50%" name="DateBar"/></center>
 						<br>
-						<button class="w3-button w3-greenwich w3-hover-dark-gray"id="SubmitDate"><i class="fa fa-ban"></i> Disable Ideas From Date</button>
-						<button class="w3-button w3-greenwich w3-hover-dark-gray"id="SubmitDate"><i class="fa fa-times-circle"></i> Close Website From Date</button>
+						<button class="w3-button w3-greenwich w3-hover-dark-gray"name="DisableIdeas"><i class="fa fa-calendar-day"></i> Disable Ideas From Date</button>
+						<button class="w3-button w3-greenwich w3-hover-dark-gray"name="CloseDate"><i class="fa fa-calendar-times"></i> Close Website From Date</button>
+						<br></br>
+						<button class="w3-button w3-greenwich w3-hover-dark-gray"name="RemoveDateIdeas"><i class="fa fa-calendar-minus"></i> Remove Current Idea Date</button>
+						<button class="w3-button w3-greenwich w3-hover-dark-gray"name="RemoveDateClose"><i class="fa fa-calendar-alt"></i> Remove Current Close Date</button>
+<?php
+			session_start();
+			include "config.php";
+			$conn;
+			
+			if (isset($_POST['DisableIdeas'])) {
+				
+				if (!empty($_REQUEST['DateBar'])){
+					
+					$queryCheck = ("SELECT EnteredDate FROM Dates WHERE DisableOrClose = 0");
+					$resultCheck = mysqli_query($conn, $queryCheck);
+					$rowsCheck = mysqli_num_rows($resultCheck);
+					if ($rowsCheck == 0){
+						$dateEntered = strtotime($_REQUEST['DateBar']);
+						$dateEntered = date('Y-m-d H:i:s', $dateEntered); //now you can save in DB
+						$enteredDate = mysqli_real_escape_string($conn, $dateEntered);
+						$queryDate = ("INSERT INTO Dates (EnteredDate, DisableOrClose) VALUES ('$dateEntered','0')");
+						$resultDate = mysqli_query($conn, $queryDate);
+						$message = "Your date has been added";
+						echo "<script type='text/javascript'>alert('$message');</script>";
+					}
+					else{
+						$error = "<br>There is already a Disable Date";
+						echo $error;
+					}
+		
+				}
+				else{
+					$error = "<br>You did not enter a Date";
+                echo $error;
+				}
+				
+				
+			}
+			
+			if (isset($_POST['RemoveDateIdeas'])){
+				
+				$queryCheck = ("SELECT EnteredDate FROM Dates WHERE DisableOrClose = 0");
+				$resultCheck = mysqli_query($conn, $queryCheck);
+				$rowsCheck = mysqli_num_rows($resultCheck);
+				if ($rowsCheck == 1){
+					$queryRemove = ("Delete FROM Dates WHERE DisableOrClose=0");
+					$resultRemove = mysqli_query($conn, $queryRemove);
+					$message = "Previous Date has been removed";
+					echo "<script type='text/javascript'>alert('$message');</script>";
+				}else{
+					$error = "<br>There is no Disable Date to remove";
+					echo $error;
+				}
+			}
+			
+			
+			if (isset($_POST['CloseDate'])) {
+				
+					if (!empty($_REQUEST['DateBar'])){
+						
+						$queryCheck = ("SELECT EnteredDate FROM Dates WHERE DisableOrClose = 1");
+						$resultCheck = mysqli_query($conn, $queryCheck);
+						$rowsCheck = mysqli_num_rows($resultCheck);
+						if ($rowsCheck == 0){
+							$dateEntered = strtotime($_REQUEST['DateBar']);
+							$dateEntered = date('Y-m-d H:i:s', $dateEntered); //now you can save in DB
+							$enteredDate = mysqli_real_escape_string($conn, $dateEntered);
+							$queryDate = ("INSERT INTO Dates (EnteredDate, DisableOrClose) VALUES ('$dateEntered','1')");
+							$resultDate = mysqli_query($conn, $queryDate);
+							$message = "Your date has been added";
+							echo "<script type='text/javascript'>alert('$message');</script>";
+						}
+						else{
+						$error = "<br>There is already a Close Date";
+						echo $error;
+						
+					}
+					
+					}
+					else{
+						$error = "<br>You did not enter a Date";
+						echo $error;
+			}
+			
+			}
+			
+			if (isset($_POST['RemoveDateClose'])){
+				
+				$queryCheck = ("SELECT EnteredDate FROM Dates WHERE DisableOrClose = 1");
+				$resultCheck = mysqli_query($conn, $queryCheck);
+				$rowsCheck = mysqli_num_rows($resultCheck);
+				if ($rowsCheck == 1){
+					$queryRemove = ("Delete FROM Dates WHERE DisableOrClose=1");
+					$resultRemove = mysqli_query($conn, $queryRemove);
+					$message = "Previous Date has been removed";
+					echo "<script type='text/javascript'>alert('$message');</script>";
+				}else{
+					$error = "<br>There is no Remove Date to remove";
+					echo $error;
+				}
+			}			
+
+
+
+
+
+			
+            mysqli_close($conn); // Closing Connection
+			
+			?>
+			
 			</form>
+
 			</div>
     </div>
   </div>
