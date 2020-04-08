@@ -91,7 +91,7 @@ include('authenticate.php'); // Includes Login Script
             <br />
             <br />
         <div>
-            <a href="Registration.html" button class="w3-button w3-dark-gray w3-display-bottommiddle w3-margin-bottom" >Create an account!</a>
+            <a href="Registration.php" button class="w3-button w3-dark-gray w3-display-bottommiddle w3-margin-bottom" >Create an account!</a>
         </div>
 
     </form>
