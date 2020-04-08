@@ -462,7 +462,7 @@ if($level < 5 )
   <div class="w3-panel">
     <div class="w3-row-padding-16 w3-padding">
       <div class="w3-third">
-        <h2>Department</h2>
+        <h2><center>Department</center></h2>
         <div class="search-box" style="width:100%" alt="Search Box">
 		<form method="POST">
         <select id="Department" style="width:100%" name="Department">
@@ -484,7 +484,7 @@ if($level < 5 )
         </div>
       </div>
       <div class="w3-twothird">
-        <h2>Idea Data</h2>
+        <h2><center>Idea Data</center></h2>
         
 			<?php
 			session_start();
@@ -504,7 +504,7 @@ if($level < 5 )
 				
 				$totalpercent = ($totalDepPosts / $totalPosts) * 100;
 				
-				$queryContributors = ("SELECT COUNT(DISTINCT UserID) AS totaled FROM Posts");
+				$queryContributors = ("SELECT COUNT(DISTINCT UserID) AS totaled FROM Posts WHERE Department ='$selectedDepartment'");
 				$resultContributors = mysqli_query($conn, $queryContributors);
 				$rowContributors = mysqli_fetch_assoc($resultContributors);
 				$totalContributors = $rowContributors['totaled'];
@@ -529,37 +529,110 @@ if($level < 5 )
     </div>
   </div>
 
-<!-- Category Analysis -->
+<!-- Exception Report Analysis -->
 
-  <div class="w3-panel">
-    <div class="w3-row-padding-16 w3-padding">
-      <div class="w3-third">
-        <h2>Category</h2>
-        <div class="search-box" style="width:100%" alt="Search Box">
-        <select id="Category" style="width:100%" name="Categories" multiple="multiple">
-        <option value="0" selected="selected">Select Category</option>
-        </select> 
-        
-        <br></br>
-        <button class="w3-button w3-greenwich w3-hover-dark-gray"id="FilterCategory">Search</button>
-        
-        </div>
-      </div>
-      <div class="w3-twothird">
-        <h2>Data</h2>
-        <table class="w3-table w3-striped w3-white">
-          <tr>
-            <td>New record, over 90 views.</td>
-            <td><i>10 mins</i></td>
-          </tr>
-          <tr>
-            <td>Database error.</td>
-            <td><i>15 mins</i></td>
-          </tr>
-        </table>
+<div class="w3-panel">
+    <div class="w3-row-padding w3-padding-16">
+    	<div class="topnav w3-col w3-center">
+		    <h2>Exception Reports</h2>
+			<br>
+			<h3>Ideas Without Comments</h3>
+<?php
+			session_start();
+			include 'config.php';		
+			$queryComment = ("SELECT DISTINCT Posts.PostID, Posts.Title, Posts.Department, Accounts.Username FROM ((Posts INNER JOIN Accounts ON Posts.UserID = Accounts.UserID) INNER JOIN Comments ON Posts.UserID != Comments.UserID)");
+			$resultComment = mysqli_query($conn, $queryComment);
+			$rowComment = mysqli_fetch_assoc($resultComment);
+			
+			echo '<table class="w3-table w3-striped w3-white style=\"width:100%\" ">
+			<tr>
+				<th>IdeaID</th>
+				<th>Idea Title</th>
+				<th>Department</th>
+				<th>Idea Contributor</th>
+			</tr>';
+			foreach($resultComment as $rowComment){
+				?>
+				<tr>
+					<td><?php echo $rowComment['PostID']; ?> </td>
+					<td><?php echo $rowComment['Title']; ?> </td>
+					<td><?php echo $rowComment['Department']; ?> </td>
+					<td><?php echo $rowComment['Username']; ?> </td>
+				</tr>
+				<?php
+			};
+			?>
+			</table>
+			
+			<p>&zwnj;</p>
+			<h3>Anonymous Ideas</h3>
+<?php
+			session_start();
+			include 'config.php';		
+			$queryAnonymous = ("SELECT Posts.PostID, Posts.Title, Posts.Department, Accounts.Username FROM Posts INNER JOIN Accounts ON Posts.UserID = Accounts.UserID WHERE Posts.isAnonymous = '1'");
+			$resultAnonymous = mysqli_query($conn, $queryAnonymous);
+			$rowAnonymous = mysqli_fetch_assoc($resultAnonymous);
+			
+			echo '<table class="w3-table w3-striped w3-white style=\"width:100%\" ">
+			<tr>
+				<th>IdeaID</th>
+				<th>Idea Title</th>
+				<th>Department</th>
+				<th>Idea Contributor</th>
+				<th>Anonymous Post</th>
+			</tr>';
+			foreach($resultAnonymous as $rowAnonymous){
+				?>
+				<tr>
+					<td><?php echo $rowAnonymous['PostID']; ?> </td>
+					<td><?php echo $rowAnonymous['Title']; ?> </td>
+					<td><?php echo $rowAnonymous['Department']; ?> </td>
+					<td><?php echo $rowAnonymous['Username']; ?> </td>
+					<td>Yes</td>
+				</tr>
+				<?php
+			};
+			?>
+			</table>
+			
+			
+			<p>&zwnj;</p>
+			<h3>Anonymous Comments</h3>
+<?php
+			session_start();
+			include 'config.php';		
+			$queryAnonComments = ("SELECT Comments.CommentID, Comments.Body, Comments.PostID, Posts.Title, Accounts.Username FROM Comments INNER JOIN Accounts ON Comments.UserID = Accounts.UserID INNER JOIN Posts ON Comments.PostID = Posts.PostID WHERE Posts.isAnonymous = '1'");
+			$resultAnonComments = mysqli_query($conn, $queryAnonComments);
+			$rowAnonComments = mysqli_fetch_assoc($resultAnonComments);
+			
+			echo '<table class="w3-table w3-striped w3-white style=\"width:100%\" ">
+			<tr>
+				<th>CommentID</th>
+				<th>Comment</th>
+				<th>PostID</th>
+				<th>Post Title</th>
+				<th>Username</th>
+				<th>Anonymous Post</th>
+			</tr>';
+			foreach($resultAnonComments as $rowAnonComments){
+				?>
+				<tr>
+					<td><?php echo $rowAnonComments['CommentID']; ?> </td>
+					<td><?php echo $rowAnonComments['Body']; ?> </td>
+					<td><?php echo $rowAnonComments['PostID']; ?> </td>
+					<td><?php echo $rowAnonComments['Title']; ?> </td>
+					<td><?php echo $rowAnonComments['Username']; ?> </td>
+					<td>Yes</td>
+				</tr>
+				<?php
+			};
+			?>
+			</table>
+			
       </div>
     </div>
   </div>
+
 
      <br></br>
      <br></br>
