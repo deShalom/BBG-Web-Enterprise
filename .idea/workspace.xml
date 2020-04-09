@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b9d955f8-728e-4a29-bec4-e86a566c3758" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ideabrowser.php" beforeDir="false" afterPath="$PROJECT_DIR$/ideabrowser.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/indiv.php" beforeDir="false" afterPath="$PROJECT_DIR$/indiv.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authenticate.php" beforeDir="false" afterPath="$PROJECT_DIR$/authenticate.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/confirmemail.php" beforeDir="false" afterPath="$PROJECT_DIR$/confirmemail.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +58,7 @@
       <updated>1586379399212</updated>
       <workItem from="1586379402567" duration="8798000" />
       <workItem from="1586408306477" duration="2647000" />
-      <workItem from="1586437488269" duration="3219000" />
+      <workItem from="1586437488269" duration="8373000" />
     </task>
     <servers />
   </component>
@@ -83,5 +82,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="661" y="344" key="com.intellij.ide.util.TipDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586437488698" />
+    <state x="616" y="240" key="run.anything.popup" timestamp="1586444212347">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="616" y="240" key="run.anything.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586444212347" />
   </component>
 </project>
