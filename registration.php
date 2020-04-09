@@ -46,7 +46,7 @@
 
                            mail($to, $subject, $message, $headers);
 
-                           header("location: registrationcomplete.php");
+                           header("location: evar.php");
                         mysqli_query($conn, $query);
                     }
                     }

@@ -13,7 +13,9 @@ $host = "localhost";
 $username = "localhost";
 $password = "v*&Q^Qx12Hcu";
 $dbName = "Greenwich";
- 
+
+$date = date_default_timezone_set('Europe/London');
+
 /* Attempt to connect to MySQL database */
 $conn = mysqli_connect($host, $username, $password, $dbName);
   

@@ -10,8 +10,8 @@
 		if(mysqli_num_rows($result) > 0)
 		{
 			mysqli_query($conn, "UPDATE Accounts SET token='', isConfirmed=1 WHERE Email='$email'");
-			echo "working";
-			//header("location: verified.php");
+
+			header("location: verified.php");
 		} else
 		{
 			header("location: unverified.php");

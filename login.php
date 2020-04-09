@@ -1,5 +1,7 @@
 ﻿<?php
 include('authenticate.php'); // Includes Login Script
+
+ 
 ?>
 
 <!DOCTYPE html>
@@ -80,7 +82,6 @@ include('authenticate.php'); // Includes Login Script
             <i class="fas fa-user"></i>
             <input class="w3-input w3-border w3-center" type="text" name="username" placeholder="Username" id="name" required>
         </p>
-
         <!-- Password input field -->
         <p class="w3-center">
             <label>Password</label>

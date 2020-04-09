@@ -281,14 +281,29 @@ if(!isset($_SESSION['login_user']))
 				{
 					if(isset($_SESSION['CanDelete'])){
 						$removeCat = ("DELETE FROM Categories WHERE CategoryName='$theCategory'");
+						$getCATIDquery = "SELECT CategoryID FROM Categories WHERE CategoryName='$theCategory'";
+						$resultCATID = mysqli_query($conn, $getCATIDquery);
+						$rowCATID=mysqli_fetch_array($resultCATID);
+						$gotCatID = $rowCATID['CategoryID'];
 						
-						if(mysqli_query($conn, $removeCat)){
+						$doesCatHavePostsQuery = "SELECT DISTINCT COUNT(*) AS total FROM Posts WHERE Category1ID IN (SELECT Category1ID FROM Posts WHERE Category1ID ='$gotCatID' OR Category2ID ='$gotCatID' OR Category3ID ='$gotCatID')";
+						$resultdoesCatHavePosts = mysqli_query($conn, $doesCatHavePostsQuery);
+						$rowdoesCatHavePosts=mysqli_fetch_array($resultdoesCatHavePosts);
+						$hasposts = $rowdoesCatHavePosts['total'];
+						if ($hasposts < 1){
+							if(mysqli_query($conn, $removeCat)){
 							$message = "You have successfully deleted " . $theCategory;
 								
-						}
-						else{
+							}
+							else{
 							$message = "SQL failed to delete " . $theCategory;
+							}
+						}else{
+							$message = "Cannot delete " . $theCategory . " as it has atleast 1 post.";
 						}
+						
+						
+						
 					
 					}
 					else {
