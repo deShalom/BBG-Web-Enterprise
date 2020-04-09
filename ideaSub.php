@@ -69,10 +69,15 @@ if (isset($_POST['submitidea'])){ // If submit button is pressed
                         $fileNameNew = uniqid('', true).$userID.".".$fileActualExt; // This creates a unique name for each file and adds the extention back (which is now in lower case).
                         $fileDestination = $target_dir.$fileNameNew;
                         move_uploaded_file($fileTempName, $fileDestination); // Function which uploads the file using the temporary space and our final file destination.
-    
-                        $updateDoctable = ("INSERT INTO Documents ('FileType', 'PostID', 'UserID', 'FileName') VALUES ('$fileActualExt', '$postID', '$userID', '$fileNameNew') WHERE $postID = "); //HELP // HELP how to get post id?
+
+                        $grablatestpostID = ("SELECT TOP 1 PostID FROM Posts ORDER BY PostID DESC"); // query to grab the latest postID
+                        $resultlastpostID = mysqli_query($conn, $grablatestpostID);                 // running the query through the conn string
+                        $latestpostID = $resultlastpostID + 1;                                     // adding +1 to latest postID so we can create a new one artifically for the postID column in Docs table
+                                                                            // scuffed way of doing it; what if more than one person uploads at the same exact time? unlikely but new postIDs would be same
+
+                        $updateDoctable = ("INSERT INTO Documents ('FileType', 'PostID', 'UserID', 'FileName') VALUES ('$fileActualExt', '$latestpostID', '$userID', '$fileNameNew')"); 
                         mysqli_query($conn, $updateDoctable); // updates Documents table in line with the updated post
-    
+                            
                         header("Location: index.php?DocUploadSuccess"); // If all goes well, we are take to the Index page with "UploadSuccess" written in the address bar.              
                     }
                     else
