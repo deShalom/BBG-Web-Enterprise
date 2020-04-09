@@ -1,31 +1,52 @@
 <?php
-	include('authenticate.php'); // Includes Login Script
+	session_start();
+	
+	if(!isset($_SESSION['login_user']))
+	{           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
+		header("location: login.php?YouAreNotLoggedIn");
+	}
+	
+	$level = intval($_SESSION['level_user']);
+	if ($level < -4){
+		header("location: banned.php");
+	}
+	
 	include 'config.php';
 	$date = date('Y-m-d H:i:s'); //now you can save in DB
-	$query = "SELECT LastLoggedIn, Username FROM Accounts WHERE Username = '$username'";
+	$query = "SELECT LastLoggedIn, Username FROM Accounts WHERE Username = '$UseName'";
 	//SELECT LastLoggedIn, Username FROM Accounts WHERE LastLoggedIn =  "$timedate"
 	echo "Nero";
+	echo "$UseName";
+	echo "$lOogaBooga";
 	$result = mysqli_query($conn, $query);
-	$row = mysqli_fetch_assoc($result);
+	$row = mysqli_fetch_array($result);
+	echo $row["Username"];
 	echo "Nero1";
 	$UseName = $row["Username"];
-	$timedate = $row['LostLoggedIn'];
+	$lOogaBooga = $row['LostLoggedIn'];
 	
 	echo "Nero2";
 	$messages = '';
 	
 	echo "Nero3";
+	
 	if(mysqli_num_rows($result) > 0)
 	{
-		echo "Nero4";
-		$messages .= "Welcome New User";
+		
+		while  ($row = mysqli_fetch_array($result))
+		{
+			$messages .= "Welcome New User";
+			echo "Nero4";
+		}
+		else
+		{
+			$
+		}
+		
+		
 		
 	}
-	else
-	{
-		echo "Nero5";
-		$messages .= "Welcome $UseName, Last Login was: $timedate";
-	}
+	
 ?>
 
 
@@ -120,7 +141,7 @@
 		<p class="w3-margin-right w3-margin-left" style="color:#ffffff"><i class="fas fa-check w3-margin-right" style="color:#ffffff"></i><?php echo $messages?> </p>
 	</div>
 	
-	<button class="sB w3-display-middle w3-button" style="background-color:#060360; color:#ffffff"><a href="http://daredicing.com/login.php"><i class="fas fa-sign-out-alt"></i>Click Here</button></a>
+	<button class="sB w3-display-middle w3-button" style="background-color:#060360; color:#ffffff"><a href="http://daredicing.com/index.php"><i class="fas fa-sign-out-alt"></i>Click Here</button></a>
 	
 	<script>
         function w3_open() {
@@ -134,11 +155,11 @@
 </div>
 
 <div class="footer w3-dark-gray">
-	<p><span style='border-bottom:2px white solid;'>Other useful links!</p></span>
-	<i class="fab fa-snapchat-ghost w3-margin-right"></i>
-	<i class="fab fa-twitter w3-margin-right"></i>
-	<i class="fab fa-facebook-f w3-margin-right"></i>
-	<i class="fab fa-instagram w3-margin-right"></i>
-</div>
+				<p><span style='border-bottom:2px white solid;'>Other useful links!</p></span>
+           <a href="https://www.snapchat.com/add/uniofgreenwich" target="_blank"><i class="fab fa-snapchat-ghost w3-margin-right"></i></a>
+           <a href="https://twitter.com/UniofGreenwich" target="_blank"><i class="fab fa-twitter w3-margin-right"></i></a>
+           <a href="https://www.facebook.com/uniofgreenwich/" target="_blank"><i class="fab fa-facebook-f w3-margin-right"></i></a>
+           <a href="https://www.instagram.com/uniofgreenwich/?hl=en" target="_blank"><i class="fab fa-instagram w3-margin-right"></i></a>
+			</div>
 </body>
 </html>

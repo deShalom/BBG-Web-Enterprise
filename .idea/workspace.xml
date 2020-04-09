@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b9d955f8-728e-4a29-bec4-e86a566c3758" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qacoor.php" beforeDir="false" afterPath="$PROJECT_DIR$/qacoor.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authenticate.php" beforeDir="false" afterPath="$PROJECT_DIR$/authenticate.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ideabrowser.php" beforeDir="false" afterPath="$PROJECT_DIR$/ideabrowser.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/welcome.php" beforeDir="false" afterPath="$PROJECT_DIR$/welcome.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,6 +71,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="667" y="110" key="#PHP/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586379559982" />
+    <state width="254" height="195" key="DatabaseViewActions_Filter" timestamp="1586461801804">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="254" height="195" key="DatabaseViewActions_Filter/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586461801804" />
     <state x="795" y="443" key="NewPhpFileDialog" timestamp="1586380568717">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

@@ -5,11 +5,6 @@ $error=''; // Variable To Store Error Message
 include_once 'config.php'; // db connection string
 include 'Browser.php';
 
-
-
-
-
-
 if (isset($_POST['loginbtn'])) 
 {
     if (empty($_POST['username']) || empty($_POST['password'])) 
@@ -22,7 +17,7 @@ if (isset($_POST['loginbtn']))
         $password = mysqli_real_escape_string($conn, $_POST['password']);
         // SQL query to fetch information of registerd users and finds user match.
         //AND Password='$password'--->
-        $authquery = ("SELECT UserID, Username, Password, LastLoggedIn  Level FROM Accounts WHERE Username='$username'");
+        $authquery = ("SELECT UserID, Username, Password, LastLoggedIn Level FROM Accounts WHERE Username='$username'");
         $result = mysqli_query($conn, $authquery);
         $rows = mysqli_num_rows($result);
     
@@ -31,17 +26,18 @@ if (isset($_POST['loginbtn']))
             while ($row = mysqli_fetch_array($result))
             {
 
-                if (password_verify ($password , $row['Password']))
+                if (password_verify ($password,$row['Password']))
                 {
+	                $_SESSION['login_user'] = $username; // Initializing Session
+	                $_SESSION['userID'] = $row['UserID'];
+	                $_SESSION['level_user'] = $row['Level'];
+                	
 		                $date = date('Y-m-d H:i:s'); //now you can save in DB
 		                $updateTime = "UPDATE Accounts SET LastLoggedIn = '$date' WHERE username = '$username'";
 		                mysqli_query($conn, $updateTime);
 		                
 		                $_SESSION['LastLogIn'] = $row['LastLoggedIn'];
-		                $_SESSION['login_user'] = $username; // Initializing Session
-		                $_SESSION['userID'] = $row['UserID'];
-		                $_SESSION['level_user'] = $row['Level'];
-						
+
 						$browser = new Browser();
 						$browsername = $browser->getBrowser();
  
