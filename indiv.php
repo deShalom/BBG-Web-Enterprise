@@ -25,13 +25,14 @@
     $category2Name = mysqli_query($conn, "SELECT CategoryName FROM Categories WHERE CategoryID = $category2ID;");
     $category3Name = mysqli_query($conn, "SELECT CategoryName FROM Categories WHERE CategoryID = $category3ID;");
 
-    $commentsData = mysqli_query($conn, "SELECT Body FROM Comments WHERE PostID=$postID");
+    $commentsData = mysqli_query($conn, "SELECT UserID, Body FROM Comments WHERE PostID=$postID");
     $userID = $post['UserID'];
     $userData = mysqli_query($conn, "SELECT Username FROM Accounts WHERE UserID=$userID");
     $user = mysqli_fetch_array($userData);
     $LoggedInUserID=$_SESSION['userID'];
     $upvotes = mysqli_query($conn, "SELECT COUNT(DISTINCT userID) as Up FROM Votes WHERE PostID = $postID AND VoteType = 1");
-    $downvotes = mysqli_query($conn, "SELECT COUNT(DISTINCT userID) AS Down FROM Votes WHERE PostID = $postID AND VoteType = 0") 
+    $downvotes = mysqli_query($conn, "SELECT COUNT(DISTINCT userID) AS Down FROM Votes WHERE PostID = $postID AND VoteType = 0")
+
 ?>
 
 <!DOCTYPE html>
@@ -192,55 +193,43 @@
                         </p>
                     </div>
 
-                <div>
-                <?php
-                    while($comment = mysqli_fetch_array($commentsData)) {
-                ?>
-                    <!-- Make the front end for this -->
-                    <?= $comment; ?>
-                <?php
-                    }
-                ?>
-                </div>
+               
 
-                <form action="/comment.php" id="usrform" method="post">
-                    <div>
-                        <input type='hidden' name='UserID' value='Anonymous'>
-                        <input type='hidden' name='PostID' value='postID'>
-                        <textarea name="messages"></textarea>
-                        <button type="w3-button submit" name="submitpost">Comment</button>
-                    </div>
-                </form>
+               
                 <form action="/thumbsup.php?id=<?= $postID ?>" id="thumbufrm"method="post">
                 <button type="w3-button submit" name="thumbsUp" value="upvote">Thumbs Up</button>
                 </form>
                 <form action="/thumbsdown.php?id=<?= $postID ?>" id="thumbdfrm"method="post">
                 <button type="w3-button submit" name="thumbsDown" value="downvote">Thumbs Down</button>
                 </form>
-                <?php 
-              
                 
-                function downvote(){
-                    $checkifvoted = "SELECT UserID FROM Votes WHERE PostID = $postID;";
-                    $resultcheckvoted = mysqli_query($conn, $checkifvoted);
-                    $votedrows = mysqli_num_rows($resultcheckvoted);
-                    if ($votedrows == 1)
-                    {
-                    $upvInsert = "INSERT INTO Votes (PostID, UserID, VoteType) VALUES ($postID, $LoggedInUserID, 'Down');";
-                    }else{
-                    $upvInsert = "UPDATE Votes SET VoteType = 'Down' WHERE (PostID=$postID AND UserID=$LoggedInUserID);";
-                    }
-                    if(mysqli_query($conn,$upvInsert)){
-                        echo "vote recorded!";
-                    } else{
-                        echo "ERROR: Could not execute $sql. " . mysqli_error($conn);
-                    }
-                }
-
-                ?>
 
                 </div>
             </div>
+            <form action="/comment.php" id="usrform" method="post">
+                    <div>
+                        <input type='hidden' name='UserID' value='Anonymous'>
+                        <input type='hidden' name='PostID' value='postID'>
+                        <textarea name="messages"></textarea><br>
+                        <input type='checkbox' id='anoncheck' name='anoncheck' value='Anon'>
+                        <label for="anoncheck"> Post Anonymously</label><br>
+                        <button type="w3-button submit" name="submitpost">Comment</button>
+                    </div>
+                </form>
+                <div>
+                    <h3>Comments</h3>
+                <p>
+                <?php
+                    while($comment = mysqli_fetch_assoc($commentsData)) {
+                $commentuserID= $comment['UserID'];
+                $getusername= mysqli_query($conn,"SELECT Username FROM Accounts WHERE UserID=$commentuserID");
+                   $username = mysqli_fetch_assoc($getusername);
+                    echo ("Posted by ".$username['Username']."<br>");
+                    echo ($comment['Body']."<br><br>");
+               
+                    }
+                ?></p>
+                </div>
         </div>
     </fieldset>
 
