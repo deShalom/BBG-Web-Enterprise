@@ -1,25 +1,19 @@
- <?php
-session_start();
-include "config.php";
+<?php
+	session_start();
+	include "config.php";
 
+	if(!isset($_SESSION['login_user']))
+	{           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
+		header("location: login.php?YouAreNotLoggedIn");
+	}
 
-if(!isset($_SESSION['login_user']))
-{           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
-    header("location: login.php?YouAreNotLoggedIn");
-}
-
-   if (isset($_GET['pageno']))
-        {
-            $pageno = $_GET['pageno'];
-
-        } else {
-            $pageno = 1;
-        }
-        $no_of_records_per_page = 5;
-        $offset = ($pageno-1) * $no_of_records_per_page;
-
-
-
+	if (isset($_GET['pageno']))
+	{
+		$pageno = $_GET['pageno'];
+	} else {
+		$pageno = 1;
+	}
+	$offset = ($pageno-1) * 5;
 ?>
 
 <!DOCTYPE html>
@@ -62,7 +56,11 @@ if(!isset($_SESSION['login_user']))
 		.bI {
 			width: 100%;
 		}
-	@media only screen and (max-width:800px) {
+        p.solid {
+            border-style: solid colour: ;
+        }
+
+        @media only screen and (max-width:800px) {
 	  /* For tablets: */
 	  .main {
 		width: 80%;
@@ -94,19 +92,15 @@ if(!isset($_SESSION['login_user']))
 </style>
 
 <body>
+	<!-- Navigation Bar (Within Header) -->
+	<div class="w3-padding-8">
+		<div class="w3-bar w3-dark-gray">
+			<button class="w3-right w3-button w3-dark-gray w3-margin-top  w3-bar-item" name="logout" ><a href="logout.php">Logout</a></button>
+		</div>
+	</div>
 
-
-
-    <!-- Navigation Bar (Within Header) -->
-    <div class="w3-padding-8">
-        <div class="w3-bar w3-dark-gray">
-            <button class="w3-right w3-button w3-dark-gray w3-margin-top  w3-bar-item" name="logout" ><a href="logout.php">Logout</a></button>
-        </div>
-    </div>
-
-    <!-- Page Content -->
+	<!-- Page Content -->
 	<div class="page w3-content" style="max-width:1500px">
-
 		<div class="w3-white w3-border-bottom">
 			<button class="w3-button w3-white w3-xlarge" name= "contentbar" onclick="w3_open()">☰</button>
 			<img src="Images/uog-logo.png" style="margin-bottom: 10px; margin-top: 10px;">
@@ -124,101 +118,68 @@ if(!isset($_SESSION['login_user']))
 		<fieldset>
 			<p class="w3-center">
 				<label for="fname">Submitted Ideas</label><br />
-
 			</p>
-            <div class="w3-panel">
-                    <div class="w3-row-padding w3-padding-16">
+			<div class="w3-panel">
+				<div class="w3-row-padding w3-padding-16">
 					<div class="flex-container">
+						<?php
+							$total_pages_sql = "SELECT COUNT(*) AS numPages FROM Posts";
+							$queryResult = mysqli_query($conn, $total_pages_sql);
+							$total_rows = mysqli_fetch_array($queryResult);
+							$total_pages = ceil($total_rows['numPages'] / 5);
 
+							$sql = "SELECT * FROM Posts LIMIT 5 OFFSET $offset";
+							$data = mysqli_query($conn,$sql);
 
-             <?php
-                $total_pages_sql = "SELECT COUNT(*) FROM Posts";
-                $sql = mysqli_query($conn, $total_pages_sql);
-                $total_rows = mysqli_fetch_array($result)[0];
-                $total_pages = ceil($total_rows / $no_of_records_per_page);
-                $total_pages = ceil($total_rows / $no_of_records_per_page);
+							while ($row = mysqli_fetch_array($data))
+							{
+                                $userID = $row['UserID'];
+                                $userData = mysqli_query($conn, "SELECT Username FROM Accounts WHERE UserID=$userID");
+                                $user = mysqli_fetch_array($userData);
 
-                $sql = "SELECT * FROM Posts LIMIT $no_of_records_per_page OFFSET $offset";
-                $data = mysqli_query($conn,$sql);
-
-
-
-                while ($row = mysqli_fetch_array($data)) {
-
-                    if ($row["isAnonymous"] === 0) {
-                        $row["isAnonymous"] = "No";
-                    } else {
-                        $row["isAnonymous"] = "Yes";
-                    }
-
-                    if ($row["isUploadedDocuments"] === 0) {
-                        $row["isUploadedDocuments"] = "No";
-                    } else {
-                        $row["isUploadedDocuments"] = "Yes";
-                    }
-
-                    echo '<table class="w3-table w3-striped w3-white style=\"width:100%\" ">
-            <tr>
-                <th>Post ID</th>
-                <th>Department</th>
-                <th>Idea Title</th>
-                <th>Views</th>
-                <th>ID Funding</th>
-                <th>ID Students</th>
-                <th>ID Accessibility</th>
-                <th>ID Complaint</th>
-                <th>Anonymous</th>
-                <th>Downvotes</th>
-                <th>Upvotes</th>
-            </tr>';
-
-                    foreach ($sql as $total_pages_sql) {
-                        ?>
-                        <tr>
-                            <td><?php echo $row['PostID']; ?> </td>
-                            <td><?php echo $row['Title']; ?> </td>
-                            <td><?php echo $row['Department']; ?> </td>
-                            <td><?php echo $row['Category1ID']; ?> </td>
-                            <td><?php echo $row['Category2ID']; ?> </td>
-                            <td><?php echo $row['Category3ID']; ?> </td>
-                            <td><?php echo $row['isAnonymous']; ?> </td>
-                            <td><?php echo $row['Downvotes']; ?> </td>
-                            <td><?php echo $row['Upvotes']; ?> </td>
-                            }
-                        </tr>
-                        <?php
-                    };
-                }
-             ?>
-
-             </table>
-            </div>
+								if ($row["isUploadedDocuments"] === 0) {
+									$row["isUploadedDocuments"] = "No";
+								} else {
+									$row["isUploadedDocuments"] = "Yes";
+								}
+						?>
+								<div class="column" onclick="window.location.replace('indiv.php?id=<?= $row['PostID']; ?>')">
+									<p>Title: <?= $row["Title"] ?></p>
+									<p>UploadedDocuments: <?= $row["isUploadedDocuments"] ?></p>
+									<p> Body: <?= $row["Body"] ?> </p>
+									<p> IDs: <?= $row["Category1ID"] ?> </p>
+									<p> IDs: <?= $row["Category2ID"] ?> </p>
+									<p> IDs: <?= $row["Category3ID"] ?> </p>
+									<p>Department: <?= $row["Department"] ?> </p>
+									<p>Downvotes: <?= $row["Downvotes"] ?> </p>
+									<p>Upvotes: <?= $row["Upvotes"] ?> </p>
+                                    <p> isAnonymous: <?= $row["isAnonymous"] == 1 ? "Yes" : $user['Username']; ?></p>
+								</div>
+						<?php
+							};
+						?>
+					</div>
         </div>
-    </div>
-
-
-			<ul class="w3-center pagination">
-			    <li><a href="?pageno=1" class= "w3-button">First</a></li>
-                <li><a href="?pageno=<?php echo $total_pages; ?>" class="w3-button">Last</a></li>
-                <li class="w3-button w3-center <?php if($pageno <= 1){ echo 'disabled'; } ?>">
-                <a href="<?php if($pageno <= 1){ echo '#'; } else { echo "?pageno=".($pageno - 1); } ?>">Back</a>
-            </li>
-
-            <li class="w3-button w3-center <?php if($pageno >= $total_pages){ echo 'disabled'; } ?>">
-            <a href="<?php if($pageno >= $total_pages){ echo '#'; } else { echo "?pageno=".($pageno + 1); } ?>">Next</a>
-            </li>
-
-            <br></br>
-            <br></br>
-            <br></br>
-
-
-			<div class="footer w3-dark-gray">
-				<p><span style='border-bottom:1px white solid;'>Other useful links!</p></span>
-				<i class="fab fa-snapchat-ghost w3-margin-right"></i>
-				<i class="fab fa-twitter w3-margin-right"></i>
-				<i class="fab fa-facebook-f w3-margin-right"></i>
-				<i class="fab fa-instagram w3-margin-right"></i>
 			</div>
-</body>
+
+		<ul class="w3-center pagination">
+			<a href="?pageno=1" class= "w3-button">First</a>
+			<a href="?pageno=<?= $total_pages; ?>" class="w3-button">Last</a>
+			<li class="w3-button w3-center <?php if($pageno <= 1){ echo 'disabled'; } ?>">
+				<a href="<?php if($pageno <= 1){ echo '#'; } else { echo "?pageno=".($pageno - 1); } ?>">Back</a>
+			</li>
+
+			<li class="w3-button w3-center <?php if($pageno >= $total_pages){ echo 'disabled'; } ?>">
+				<a href="<?php if($pageno >= $total_pages){ echo '#'; } else { echo "?pageno=".($pageno + 1); } ?>">Next</a>
+			</li>
+		</ul>
+
+		<div class="footer w3-dark-gray">
+			<p><span style='border-bottom:1px white solid;'>Other useful links!</p></span>
+			<i class="fab fa-snapchat-ghost w3-margin-right"></i>
+			<i class="fab fa-twitter w3-margin-right"></i>
+			<i class="fab fa-facebook-f w3-margin-right"></i>
+			<i class="fab fa-instagram w3-margin-right"></i>
+		</div>
+	</body>
 </html>
