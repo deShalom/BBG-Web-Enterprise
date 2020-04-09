@@ -247,12 +247,16 @@ if(!isset($_SESSION['login_user']))
 						
 							echo "The " . $giveme . " Category has been selected. You may now delete!";
 							
+							
 					}
+					$_SESSION['CanDelete'] = '1';
+					unset($_SESSION['CanAdd']);
 				}
 				else 
 				{
 					$_SESSION['searchedCategory'] = $giveme;
-					$_SESSION['CanDelete'] = '1';
+					$_SESSION['CanAdd'] = '1';
+					$_SESSION['CanDelete'];
 					echo $giveme . " does not exist. You may now add it!";
 				}
 				mysqli_close($conn); // Closing Connection
@@ -275,15 +279,23 @@ if(!isset($_SESSION['login_user']))
 				$theCategory = $_SESSION['searchedCategory'];
 				if (isset($_SESSION['searchedCategory']))
 				{
-					$removeCat = ("DELETE FROM Categories WHERE CategoryName='$theCategory'");
-					if(mysqli_query($conn, $removeCat)){
-						$message = "You have successfully deleted " . $theCategory;
+					if(isset($_SESSION['CanDelete'])){
+						$removeCat = ("DELETE FROM Categories WHERE CategoryName='$theCategory'");
+						
+						if(mysqli_query($conn, $removeCat)){
+							$message = "You have successfully deleted " . $theCategory;
 								
+						}
+						else{
+							$message = "SQL failed to delete " . $theCategory;
+						}
+					
 					}
-					else{
-					$message = "SQL failed to delete " . $theCategory;
+					else {
+						$message = "You cannot delete non existing categories";
 					}
 					unset($_SESSION['searchedCategory']);
+					unset($_SESSION['CanDelete']);
 					
 				}
 				else{
@@ -306,7 +318,7 @@ if(!isset($_SESSION['login_user']))
 			{
 				
 				$theCategory = $_SESSION['searchedCategory'];
-				if (isset($_SESSION['CanDelete']))
+				if (isset($_SESSION['CanAdd']))
 				{
 					$addCAT = ("INSERT INTO Categories (CategoryName) VALUES ('$theCategory')");
 					if(mysqli_query($conn, $addCAT)){
@@ -317,11 +329,11 @@ if(!isset($_SESSION['login_user']))
 					$message = "SQL failed to add the " . $theCategory;
 					}
 					unset($_SESSION['searchedCategory']);
-					unset($_SESSION['CanDelete']);
+					unset($_SESSION['CanAdd']);
 					
 				}
 				else{
-					$message = "You have not searched a Category";
+					$message = "You have entered existing Category";
 				}
 				echo "<script type='text/javascript'>alert('$message');</script>";
 			}
