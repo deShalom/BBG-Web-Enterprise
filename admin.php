@@ -601,7 +601,7 @@ if($level < 5 )
 <?php
 			session_start();
 			include 'config.php';		
-			$queryAnonComments = ("SELECT Comments.CommentID, Comments.Body, Comments.PostID, Posts.Title, Accounts.Username FROM Comments INNER JOIN Accounts ON Comments.UserID = Accounts.UserID INNER JOIN Posts ON Comments.PostID = Posts.PostID WHERE Posts.isAnonymous = '1'");
+			$queryAnonComments = ("SELECT Comments.CommentID, Comments.Body, Comments.PostID, Posts.Title, Accounts.Username FROM Comments INNER JOIN Accounts ON Comments.UserID = Accounts.UserID INNER JOIN Posts ON Comments.PostID = Posts.PostID WHERE Comments.isAnonymous = '1'");
 			$resultAnonComments = mysqli_query($conn, $queryAnonComments);
 			$rowAnonComments = mysqli_fetch_assoc($resultAnonComments);
 			
@@ -612,7 +612,7 @@ if($level < 5 )
 				<th>PostID</th>
 				<th>Post Title</th>
 				<th>Username</th>
-				<th>Anonymous Post</th>
+				<th>Anonymous Comment</th>
 			</tr>';
 			foreach($resultAnonComments as $rowAnonComments){
 				?>
@@ -768,25 +768,20 @@ if($level < 5 )
     <div class="w3-row-padding-16 w3-padding">
       <div class="w3-col w3-center">
         <h2><center>Download Tables</center></h2>
-		<form method="POST">
-        <select id="Download" style="width:50%" name="Download">
-		<option>Accounts</option>
-		<option>Categories</option>
-		<option>Comments</option>
-		<option>Documents</option>
-		<option>Posts</option>
-        </select> 
-        <br></br>
-		<button type="submit" class="w3-button w3-greenwich w3-hover-dark-gray" name="Download">Download</button>
+		<form method="POST" action="export.php">
+        <select id="TABLE_NAME" style="width:50%" name="TABLE_NAME">
 		<?php
 			session_start();
-			include "config.php";
-			$conn;
-			if (isset($_POST['Download'])){
-				$queryDownload = ("SELECT * INTO OUTFILE `c:/mydata.csv` FIELDS TERMINATED BY `,` OPTIONALLY ENCLOSED BY `'` LINES TERMINATED BY `\n` FROM Accounts");
-				$resultDownload = mysqli_query($conn, $queryDownload);
+			include 'config.php';
+			$getTablesQuery = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'";
+			$resultgetTables = mysqli_query($conn, $getTablesQuery);
+			while($rowgetTables=mysqli_fetch_array($resultgetTables)){
+				echo '<option>' . $rowgetTables['TABLE_NAME'] . '</option>';
 			}
-			?>
+		?>
+        </select> 
+        <br></br>
+		<input type="submit" class="w3-button w3-greenwich w3-hover-dark-gray" value="Download" name="Download"></button>
         </form>
 		
         </div>
