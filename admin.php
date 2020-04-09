@@ -540,7 +540,7 @@ if($level < 5 )
 <?php
 			session_start();
 			include 'config.php';		
-			$queryComment = ("SELECT DISTINCT Posts.PostID, Posts.Title, Posts.Department, Accounts.Username FROM ((Posts INNER JOIN Accounts ON Posts.UserID = Accounts.UserID) INNER JOIN Comments ON Posts.UserID != Comments.UserID)");
+			$queryComment = ("SELECT DISTINCT Posts.PostID, Posts.Title, Posts.Department, Accounts.Username FROM Posts INNER JOIN Accounts ON Posts.UserID = Accounts.UserID WHERE Posts.PostID NOT IN (SELECT Comments.PostID FROM Comments)");
 			$resultComment = mysqli_query($conn, $queryComment);
 			$rowComment = mysqli_fetch_assoc($resultComment);
 			
