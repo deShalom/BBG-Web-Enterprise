@@ -1,31 +1,21 @@
 <?php
-    session_start();
-    include "config.php";
-    
-	if(!isset($_SESSION['login_user']))
-	{           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
-		header("location: login.php?YouAreNotLoggedIn");
-	}
+session_start();
+include "config.php";
 
-	$level = intval($_SESSION['level_user']);
-	if ($level < -4){
-		header("location: banned.php");
-	}
-    
+if (!isset($_SESSION['login_user'])) {           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
+    header("location: login.php?YouAreNotLoggedIn");
 }
 
-    $postID = $_GET["id"];
-    mysqli_query($conn, "UPDATE Posts SET Views=Views+1 WHERE PostID=$postID");
-    $postData = mysqli_query($conn, "SELECT Title, Body, PostID, UserID, Category1ID, Category2ID, Category3ID, Upvotes, Downvotes, Department, isAnonymous FROM Posts WHERE PostID=$postID");
-    $post = mysqli_fetch_array($postData);
-    $category1ID = $postData['Category1ID'];
-    $category2ID = $postData['Category2ID'];
-    $category3ID = $postData['Category3ID'];
-    $categoryData = mysqli_query($conn, "SELECT CategoryName FROM Categories WHERE CategoryID IN [ $category1ID, $category2ID, $category3ID ]");
-    $commentsData = mysqli_query($conn, "SELECT Body FROM Comments WHERE PostID=$postID");
-    $userID = $post['UserID'];
-    $userData = mysqli_query($conn, "SELECT Username FROM Accounts WHERE UserID=$userID");
-    $user = mysqli_fetch_array($userData);
+$level = intval($_SESSION['level_user']);
+if ($level < -4) {
+    header("location: banned.php");
+}
+	$postID = $_GET["id"];
+	mysqli_query($conn, "UPDATE Posts SET Views=Views+1 WHERE PostID=$postID");
+	$userID = $row['UserID'];
+	$userData = mysqli_query($conn, "SELECT Username FROM Accounts WHERE UserID=$userID");
+	$user = mysqli_fetch_array($userData);
+ 
 
 ?>
 
@@ -34,7 +24,7 @@
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title> GRE: Comment page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--This is the link to our CSS!-->
@@ -43,23 +33,28 @@
 </head>
 
 <style>
-    .page{
+    .page {
         align-content: center;
     }
-    html{
-        width:100%;
-        height:100%;
+
+    html {
+        width: 100%;
+        height: 100%;
     }
-    body{
-        width:100%;
-        height:100%;
+
+    body {
+        width: 100%;
+        height: 100%;
     }
+
     .navB {
 
     }
+
     .navR {
 
     }
+
     .footer {
         position: fixed;
         left: 0;
@@ -68,20 +63,24 @@
         color: white;
         text-align: center;
     }
+
     .bI {
         width: 100%;
     }
-    @media only screen and (max-width:800px) {
+
+    @media only screen and (max-width: 800px) {
         /* For tablets: */
         .main {
             width: 80%;
             padding: 0;
         }
+
         .right {
             width: 100%;
         }
     }
-    @media only screen and (max-width:500px) {
+
+    @media only screen and (max-width: 500px) {
         /* For mobile phones: */
         .menu, .main, .right, .flex-container, .bI, .hT {
             width: 100%;
@@ -89,6 +88,7 @@
 
         }
     }
+
     .column {
         float: left;
         width: 33.33%;
@@ -105,12 +105,11 @@
 <body>
 
 
-
 <!-- Navigation Bar (Within Header) -->
 <div class="w3-padding-8">
     <div class="w3-bar w3-dark-gray">
         <div class="w3-right w3-bar-item w3-button">Logout</div>
-        <button class="w3-button w3-dark-gray w3-margin-top" name="logout" ><a href="logout.php">LOGOUT HERE</a></button>
+        <button class="w3-button w3-dark-gray w3-margin-top" name="logout"><a href="logout.php">LOGOUT HERE</a></button>
     </div>
 </div>
 
@@ -133,76 +132,61 @@
 
     <div class="w3-container">
         <!-- This  is the field for the idea's title -->
-        <p class="w3-center"><u><?= $post["Title"]; ?></u></p>
+        <p class="w3-center"><u><?= $row["Title"]; ?></u></p>
         <!-- This  is the field for the idea's text -->
         <p class="w3-center w3-border">Idea's example text here!</p>
-    </div>
-
-    <fieldset>
-        <p class="w3-center">
-            <label for="fname">Submitted Ideas</label><br />
-
-        </p>
-        <div class="w3-panel">
-            <div class="w3-row-padding w3-padding-16">
-                <div class="flex-container">
-                    <div class="column ">
-                        <p>Title: <?= $post["Title"]; ?></p>
-
-                        <p> Body: <?= $post["Body"]; ?></p>
-
-                        <p>Department: <?= $post["Department"]; ?></p>
-
-                        <!--- Show upvotes and downvotes--->
-                        <p>Downvotes: <?= $post["Downvotes"]; ?></p>
-                        <p>Upvotes: <?= $post["Upvotes"]; ?></p>
-
-                        <!--- if not show username--->
-                        <p> isAnonymous: <?= $post["isAnonymous"] == 1 ? "Yes" : $user['Username']; ?></p>
-                        <?php
-                            while($category = mysqli_fetch_array($categoryData)) {
-                        ?>
-                            <p><?= $category ?>
-                        <?php
-                            }
-                        ?>
-                    </div>
-
-                <div>
-                <?php
-                    while($comment = mysqli_fetch_array($commentsData)) {
-                ?>
-                    <!-- Make the front end for this -->
-                    <?= $comment; ?>
-                <?php
-                    }
-                ?>
+        
+        <p class="w3-center w3-container" style="margin-top:20px; margin-bottom:20px;">
+            <div class="row">
+	            <?php
+		            $sql = "SELECT * FROM Posts LIMIT 5 OFFSET $offset";
+		            $data = mysqli_query($conn,$sql);
+		
+		            while ($row = mysqli_fetch_array($data))
+		            {
+		            $userID = $row['UserID'];
+		            $userData = mysqli_query($conn, "SELECT Username FROM Accounts WHERE UserID=$userID");
+		            $user = mysqli_fetch_array($userData);
+		
+		            if ($row["isUploadedDocuments"] === 0) {
+			            $row["isUploadedDocuments"] = "No";
+		            } else {
+			            $row["isUploadedDocuments"] = "Yes";
+		            }
+	            ?>
+                <div class="row"
+                <p>Title: <?= $row["Title"] ?></p>
+                <p>UploadedDocuments: <?= $row["isUploadedDocuments"] ?></p>
+                <p> Body: <?= $row["Body"] ?> </p>
+                <p> IDs: <?= $row["Category1ID"] ?> </p>
+                <p> IDs: <?= $row["Category2ID"] ?> </p>
+                <p> IDs: <?= $row["Category3ID"] ?> </p>
+                <p>Department: <?= $row["Department"] ?> </p>
+                <p>Downvotes: <?= $row["Downvotes"] ?> </p>
+                <p>Upvotes: <?= $row["Upvotes"] ?> </p>
+                <p> isAnonymous: <?= $row["isAnonymous"] == 1 ? "Yes" : $user['Username']; ?></p>
                 </div>
-
-                <form action="/comment.php" id="usrform" method="post">
-                    <div>
-                        <input type='hidden' name='UserID' value='Anonymous'>
-                        <input type='hidden' name='PostID' value='postID'>
-                        <textarea name="messages"></textarea>
-                        <button type="w3-button submit" name="submitpost">Comment</button>
-                    </div>
-                </form>
+	            <?php
+		        };
+	            ?>
+    
+                <div class="row">
+    
+    
                 </div>
             </div>
         </div>
-    </fieldset>
 
 
+<script>
+    function w3_open() {
+        document.getElementById("mySidebar").style.display = "block";
+    }
 
-    <script>
-        function w3_open() {
-            document.getElementById("mySidebar").style.display = "block";
-        }
-
-        function w3_close() {
-            document.getElementById("mySidebar").style.display = "none";
-        }
-    </script>
+    function w3_close() {
+        document.getElementById("mySidebar").style.display = "none";
+    }
+</script>
 </div>
 
 <div class="footer w3-dark-gray">

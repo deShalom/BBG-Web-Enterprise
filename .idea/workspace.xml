@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b9d955f8-728e-4a29-bec4-e86a566c3758" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/confirmemail.php" beforeDir="false" afterPath="$PROJECT_DIR$/confirmemail.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ideabrowser.php" beforeDir="false" afterPath="$PROJECT_DIR$/ideabrowser.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/indiv.php" beforeDir="false" afterPath="$PROJECT_DIR$/indiv.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,8 +42,10 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.PHP" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -55,7 +58,8 @@
       <option name="presentableId" value="Default" />
       <updated>1586379399212</updated>
       <workItem from="1586379402567" duration="8798000" />
-      <workItem from="1586408306477" duration="2436000" />
+      <workItem from="1586408306477" duration="2647000" />
+      <workItem from="1586437488269" duration="3219000" />
     </task>
     <servers />
   </component>
@@ -71,9 +75,13 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="795" y="443" key="NewPhpFileDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586380568717" />
-    <state x="661" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1586408308892">
+    <state x="461" y="162" key="SettingsEditor" timestamp="1586438717021">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="661" y="344" key="com.intellij.ide.util.TipDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586408308892" />
+    <state x="461" y="162" key="SettingsEditor/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586438717021" />
+    <state x="661" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1586437488698">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="661" y="344" key="com.intellij.ide.util.TipDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586437488698" />
   </component>
 </project>
