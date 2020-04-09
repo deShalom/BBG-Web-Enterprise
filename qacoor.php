@@ -62,6 +62,28 @@ if(!isset($_SESSION['login_user']))
 		mysqli_free_result($commentResults);
 	}
 	
+	
+	$pageName = basename($_SERVER['PHP_SELF']);
+	$queryupdateViews = ("SELECT PageName, Views FROM Pages WHERE PageName = '$pageName'");
+	$resultupdateViews = mysqli_query($conn, $queryupdateViews);
+	$rowsupdateViews = mysqli_num_rows($resultupdateViews);
+    
+	if ($rowsupdateViews == 1)
+	{
+		while ($rowupdateViews = mysqli_fetch_array($resultupdateViews))
+		{
+			$addonreview = $rowupdateViews['Views'] + 1;
+			$queryViewAdd = "UPDATE Pages SET Views = '$addonreview' WHERE PageName = '$pageName'";
+			$resultToInsertView = mysqli_query($conn, $queryViewAdd);
+			
+
+
+		}
+	}else{
+		$queryEnterPage = ("Insert into Pages (PageName, Views) VALUES ('$pageName','1')");
+		$resultEnterPage = mysqli_query($conn, $queryEnterPage);
+	}
+	
 	mysqli_close($conn);
 	
 ?>

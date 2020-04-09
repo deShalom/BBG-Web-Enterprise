@@ -20,6 +20,50 @@
 		$pageno = 1;
 	}
 	$offset = ($pageno-1) * 5;
+	
+	
+	$date_now = date("Y-m-d");
+	$datequery = ("SELECT EnteredDate, DisableOrClose FROM Dates WHERE DisableOrClose = '1'");
+	$resultdate = mysqli_query($conn, $datequery);
+	$rowsdate = mysqli_num_rows($resultdate);
+    if ($rowsdate > 0) 
+    {            
+		while($rowsdate = mysqli_fetch_assoc($resultdate)) {
+					
+			$gotDate = $rowsdate['EnteredDate'];
+		}
+		
+		if ($date_now > $gotDate){
+				header("location: siteclosed.php");
+		} else{
+			
+		}
+	}
+	else 
+    {
+	}
+
+$pageName = basename($_SERVER['PHP_SELF']);
+	$queryupdateViews = ("SELECT PageName, Views FROM Pages WHERE PageName = '$pageName'");
+	$resultupdateViews = mysqli_query($conn, $queryupdateViews);
+	$rowsupdateViews = mysqli_num_rows($resultupdateViews);
+    
+	if ($rowsupdateViews == 1)
+	{
+		while ($rowupdateViews = mysqli_fetch_array($resultupdateViews))
+		{
+			$addonreview = $rowupdateViews['Views'] + 1;
+			$queryViewAdd = "UPDATE Pages SET Views = '$addonreview' WHERE PageName = '$pageName'";
+			$resultToInsertView = mysqli_query($conn, $queryViewAdd);
+			
+
+
+		}
+	}else{
+		$queryEnterPage = ("Insert into Pages (PageName, Views) VALUES ('$pageName','1')");
+		$resultEnterPage = mysqli_query($conn, $queryEnterPage);
+	}
+
 ?>
 
 <!DOCTYPE html>

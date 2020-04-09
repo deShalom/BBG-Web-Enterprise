@@ -1,6 +1,4 @@
 ﻿<?php
-include'config.php';
-
 $pageName = basename($_SERVER['PHP_SELF']);
 	$queryupdateViews = ("SELECT PageName, Views FROM Pages WHERE PageName = '$pageName'");
 	$resultupdateViews = mysqli_query($conn, $queryupdateViews);
@@ -21,28 +19,14 @@ $pageName = basename($_SERVER['PHP_SELF']);
 		$queryEnterPage = ("Insert into Pages (PageName, Views) VALUES ('$pageName','1')");
 		$resultEnterPage = mysqli_query($conn, $queryEnterPage);
 	}
-	
-	$datequery = ("SELECT EnteredDate, DisableOrClose FROM Dates WHERE DisableOrClose = '1'");
-	$resultdate = mysqli_query($conn, $datequery);
-	$rowsdate = mysqli_num_rows($resultdate);
-    if ($rowsdate > 0) 
-    {            
-		while($rowsdate = mysqli_fetch_assoc($resultdate)) {
-					
-			$gotDate = $rowsdate['EnteredDate'];
-		}
-	}
-	
-	
 ?>
-
 <!DOCTYPE html>
 
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title> GRE: Closed</title>
+    <title> GRE: Banned</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--This is the link to our CSS!-->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -134,13 +118,11 @@ $pageName = basename($_SERVER['PHP_SELF']);
 
         <!-- Banned user content -->
         <div class="w3-display-middle" style="background-color:#060360;">
-            <p class="w3-margin-right w3-margin-left" style="color:#ffffff"><i class="far fa-window-close w3-margin-right" style="color:#ffffff"></i>Improvement idea submission is no longer open, the site is now closed.</p>
-			<div class="flex-container">
-			<div><p class="w3-center" style="color:#ffffff">As of:</p></div>
-			 <!-- Echo date here please -->
-			<div><p class="w3-center" style="color:#ffffff"><?php echo $gotDate; ?></p></div>
-			</div>
+            <p class="w3-margin-right w3-margin-left" style="color:#ffffff"><i class="fas fa-user-slash w3-center" style="color:#ffffff"></i>You've been banned</p>
         </div>
+
+        <!-- Banned user content -->
+        <button class="sB w3-display-middle w3-button" style="background-color:#060360; color:#ffffff"><i class="fas fa-sign-out-alt"></i>Sign out</button>
 
         <script>
             function w3_open() {
