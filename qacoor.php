@@ -182,7 +182,7 @@ if(!isset($_SESSION['login_user']))
                         </h3>
                     </div>
                     <div class="w3-clear"></div>
-                    <h4>Total Accounts in Department</h4>
+                    <h4>Total Accounts</h4>
                 </div>
             </div>
 
@@ -223,7 +223,7 @@ if(!isset($_SESSION['login_user']))
 	<div class="w3-panel">
     	<div class="w3-row-padding w3-padding-16">
     		<div class="topnav w3-col w3-center">
-            <h2>User Lookup</h2>
+            <h2>Category Lookup</h2>
 			<form action="" method="post">
     			<input type="text" placeholder="Enter A Category.." style="width:50%" name="searchedCategory"/>
                 <button class="w3-button w3-greenwich w3-hover-dark-gray"id="SearchUser"><i class="fa fa-search"></i></button>
@@ -233,36 +233,103 @@ if(!isset($_SESSION['login_user']))
 			include "config.php";
 			$conn;
 			if (!empty($_POST['searchedCategory'])) {
-				$searchedCategory = mysqli_real_escape_string($conn, $_POST['searchedCategory']);
+				$giveme = $_POST['searchedCategory'];
 				//$searchedUser = $_REQUEST['enteredUsername']; 
-				$authsearchedCategory = ("SELECT CategoryName FROM Categories WHERE CategoryName='$searchedCategory'");
+				$authsearchedCategory = ("SELECT CategoryName FROM Categories WHERE CategoryName='$giveme'");
 				$resultsearchedCategory = mysqli_query($conn, $authsearchedCategory);
 				$rowssearchedCategory = mysqli_num_rows($resultsearchedCategory);
 				
 
-            if ($rowssearchedCategory == 1) 
-            {
-				while($rowsearchedCategory = mysqli_fetch_assoc($resultsearchedCategory)) {
-					$_SESSION['searchedCategory'] = $rowsearchedCategory['searchedCategory'];
-					echo "<table style='width:100%'>
-					<tr>
-						<th>Category</th>
-					</tr>";
-					echo "<tr>";
-						echo "<td>" . $rowsearchedCategory['searchedCategory'] . "</td>";
-					echo "</table>";
+				if ($rowssearchedCategory == 1) 
+				{
+					$_SESSION['searchedCategory'] = $giveme;
+					while($rowsearchedCategory = mysqli_fetch_assoc($resultsearchedCategory)) {
+						
+							echo "The " . $giveme . " Category has been selected. You may now delete!";
+							
+					}
 				}
-			}
-			else 
-            {
-                $error = "$_POST['searchedCategory'] does not exist";
-                echo $error;
-            }
-            mysqli_close($conn); // Closing Connection
+				else 
+				{
+					$_SESSION['searchedCategory'] = $giveme;
+					$_SESSION['CanDelete'] = '1';
+					echo $giveme . " does not exist. You may now add it!";
+				}
+				mysqli_close($conn); // Closing Connection
 			}
 			?>
   			</div>
 		</div>
+		
+		</div>
+		
+            <div class="w3-half w3-padding-16 w3-center">
+			<form method="POST" action="">		
+            <button type="submit" class="w3-button w3-greenwich w3-hover-dark-gray w3-center" name="buttonDelete"><i class="fa fa-backspace"></i> Delete</button>
+			<?php
+			session_start();
+			include 'config.php';
+			if (isset($_POST['buttonDelete']))
+			{
+				
+				$theCategory = $_SESSION['searchedCategory'];
+				if (isset($_SESSION['searchedCategory']))
+				{
+					$removeCat = ("DELETE FROM Categories WHERE CategoryName='$theCategory'");
+					if(mysqli_query($conn, $removeCat)){
+						$message = "You have successfully deleted " . $theCategory;
+								
+					}
+					else{
+					$message = "SQL failed to delete " . $theCategory;
+					}
+					unset($_SESSION['searchedCategory']);
+					
+				}
+				else{
+					$message = "You have not searched a Category";
+				}
+				echo "<script type='text/javascript'>alert('$message');</script>";
+			}
+			?>
+			</form>
+			
+            </div>
+			
+			<div class="w3-half w3-padding-16 w3-center">
+			<form method="POST" action="">		
+            <button type="submit" class="w3-button w3-greenwich w3-hover-dark-gray w3-center" name="buttonAdd"><i class="fa fa-plus"></i> Add</button>
+			<?php
+			session_start();
+			include 'config.php';
+			if (isset($_POST['buttonAdd']))
+			{
+				
+				$theCategory = $_SESSION['searchedCategory'];
+				if (isset($_SESSION['CanDelete']))
+				{
+					$addCAT = ("INSERT INTO Categories (CategoryName) VALUES ('$theCategory')");
+					if(mysqli_query($conn, $addCAT)){
+						$message = "You have successfully added the " . $theCategory;
+								
+					}
+					else{
+					$message = "SQL failed to add the " . $theCategory;
+					}
+					unset($_SESSION['searchedCategory']);
+					unset($_SESSION['CanDelete']);
+					
+				}
+				else{
+					$message = "You have not searched a Category";
+				}
+				echo "<script type='text/javascript'>alert('$message');</script>";
+			}
+			?>
+			</form>
+			
+            </div>
+			
 	</div>
 
 
@@ -309,7 +376,7 @@ if(!isset($_SESSION['login_user']))
 				$rowCategoriesID = mysqli_fetch_assoc($resultCategoriesID);
 				$totalCategoriesID = $rowCategoriesID['CategoryID'];
 				
-				$queryCategories = ("SELECT DISTINCT COUNT(*) FROM Posts WHERE Category1ID IN (SELECT Category1ID FROM Posts WHERE Category1ID ='$totalCategoriesID' OR Category2ID ='$totalCategoriesID' OR Category3ID ='$totalCategoriesID')");
+				$queryCategories = ("SELECT DISTINCT COUNT(*) AS total FROM Posts WHERE Category1ID IN (SELECT Category1ID FROM Posts WHERE Category1ID ='$totalCategoriesID' OR Category2ID ='$totalCategoriesID' OR Category3ID ='$totalCategoriesID')");
 				$resultCategories = mysqli_query($conn, $queryCategories);
 				$rowCategories = mysqli_fetch_assoc($resultCategories);
 				$totalCategories = $rowCategories['total'];
@@ -322,7 +389,7 @@ if(!isset($_SESSION['login_user']))
 					<th>Category</th>
 					<th>Times Used</th>
 				</tr>';
-				echo '<td>' . $totalCategoriesID . '</td>';
+				echo '<td>' . $selectedCategory . '</td>';
 				echo '<td>' . $totalCategories . '</td>';
 				echo '</tr>
 				</table>';
@@ -332,6 +399,16 @@ if(!isset($_SESSION['login_user']))
       </div>
     </div>
   </div>
+  
+  <script>
+            function w3_open() {
+            document.getElementById("mySidebar").style.display = "block";
+            }
+
+            function w3_close() {
+            document.getElementById("mySidebar").style.display = "none";
+            }
+				</script>
 
         <div class="footer w3-dark-gray">
             <p><span style='border-bottom:2px white solid;'>Other useful links!</p></span>
