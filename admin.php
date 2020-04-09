@@ -57,7 +57,27 @@ if($level < 5 )
 		mysqli_free_result($commentResults);
 	}
 	
+	$pageName = basename($_SERVER['PHP_SELF']);
+	$queryupdateViews = ("SELECT PageName, Views FROM Pages WHERE PageName = '$pageName'");
+	$resultupdateViews = mysqli_query($conn, $queryupdateViews);
+	$rowsupdateViews = mysqli_num_rows($resultupdateViews);
+    
+	if ($rowsupdateViews == 1)
+	{
+		while ($rowupdateViews = mysqli_fetch_array($resultupdateViews))
+		{
+			$addoneview = $rowBrowserInsert['Views'] + 1;
+			$queryViewAdd = "UPDATE Pages SET NumberOfUses = '$addoneview' WHERE BrowserName = '$pageName'";
+			$resultToInsertView = mysqli_query($conn, $queryViewAdd);
+			
 
+
+		}
+	}else{
+		$queryEnterPage = ("Insert into Pages (PageName, Views) VALUES ('$pageName','1')");
+		$resultEnterPage = mysqli_query($conn, $queryEnterPage);
+	}
+	
 	
 
 	mysqli_close($conn);
@@ -793,43 +813,94 @@ if($level < 5 )
 
 	  <!-- "Most" Viewed pages -->
 	  	    <div class="w3-third">
-	<div class="w3-col w3-center">
+	<div class="w3-col w3-center" style="width:100%">
 	<h2><center>Most viewed pages</center></h2>
 		  <!--Table-->
-	<table>
-	  <th>Page name</th>
+	<table class="w3-table w3-striped w3-white" style="width:100%">
+	<tr>
+	  <th>Page</th>
+	  <th>Views</th>
+	  </tr>
+	  		<?php
+			session_start();
+			include 'config.php';
+			$getPageQuery = "SELECT * FROM Pages ORDER BY Views DESC";
+			$resultgetPageQuery = mysqli_query($conn, $getPageQuery);
+			while($rowgetPageQuery=mysqli_fetch_array($resultgetPageQuery)){
+				echo '<tr><td>' . $rowgetPageQuery['PageName'] . '</td><td>' . $rowgetPageQuery['Views'] . '</td></tr>';
+			}
+			echo '</table>';
+					
+			
+		?>
 	</table>
 	</div>
 	</div>
 
 	  <!-- "Most" Active users -->
 	  	    <div class="w3-third">
-	<div class="w3-col w3-center">
+	<div class="w3-col w3-center" style="width:100%">
 	<h2><center>Most active users</center></h2>
 			  <!--Table-->
-	<table>
-		  <th>User name</th>
+<table class="w3-table w3-striped w3-white" style="width:100%">
+	<tr>
+		<th>User Name</th>
+		<th>Posts</th>
+	</tr>
+		<?php
+			session_start();
+			include 'config.php';
+			$getMostPostsQuery = "SELECT DISTINCT Accounts.Username, COUNT(Posts.UserID) AS NUM FROM Posts LEFT JOIN Accounts ON Posts.UserID = Accounts.UserID GROUP BY Posts.UserID ORDER BY NUM DESC";
+			$resultgetMostPostsQuery = mysqli_query($conn, $getMostPostsQuery);
+			while($rowgetMostPostsQuery=mysqli_fetch_array($resultgetMostPostsQuery)){
+				echo '<tr><td>' . $rowgetMostPostsQuery['Username'] . '</td><td>' . $rowgetMostPostsQuery['NUM'] . '</td></tr>';
+			}
+			echo '</table>';
+			
+			
+			
+			
+			
+			
+			
+		?>
 	</table>
 	</div>
 	</div>
 
 		  <!-- "Most" Used browsers -->
 		  	    <div class="w3-third">
-	<div class="w3-col w3-center">
+	<div class="w3-col w3-center" style="width:100%">
 	<h2><center>Most used browsers</center></h2>
 			  <!--Table-->
-	<table>
-		<th>Browser name</th>
+	<table class="w3-table w3-striped w3-white" style="width:100%">
+	<tr>
+		<th>Browser Name</th>
+		<th>Uses</th>
+	</tr>
+		<?php
+			session_start();
+			include 'config.php';
+			$getBrowserQuery = "SELECT * FROM Browser ORDER BY NumberOfUses DESC";
+			$resultgetBrowserQuery = mysqli_query($conn, $getBrowserQuery);
+			while($rowgetBrowserQuery=mysqli_fetch_array($resultgetBrowserQuery)){
+				echo '<tr><td>' . $rowgetBrowserQuery['BrowserName'] . '</td><td>' . $rowgetBrowserQuery['NumberOfUses'] . '</td></tr>';
+			}
+			echo '</table>';
+			
+			
+			
+			
+			
+			
+			
+		?>
 	</table>
 	</div>
 	</div>
 
 	</div>
-	</div>
 
-  </div>
-
-  </div>
 
 				<!--Fieldset for Terms and Conditions; made sure that it is a "required" attribute as said in CW spec-->
 				<!-- Side bar header -->

@@ -47,16 +47,20 @@ if (isset($_POST['loginbtn']))
     
 						if ($rowsBrowserInsert == 1)
 						{
-							while ($rowBrowserInsert = mysqli_fetch_array($result))
+							while ($rowBrowserInsert = mysqli_fetch_array($resultBrowserInsert))
 							{
 								$addone = $rowBrowserInsert['NumberOfUses'] + 1;
 								$queryBrowserAdd = "UPDATE Browser SET NumberOfUses = '$addone' WHERE BrowserName = '$browsername'";
+								$resultToInsertBrowser = mysqli_query($conn, $queryBrowserAdd);
+
+
 							}
 						}
 						else
 						{
 							$queryInsertWholeBrowser = "Insert into Browser (BrowserName, NumberOfUses) VALUES ('$browsername','1')";
 							$resultBrowserInsert = mysqli_query($conn, $queryInsertWholeBrowser);
+							$resultBrowserInsertPOO = mysqli_query($conn, $queryInsertWholeBrowserPOO);
 						}
 		
 						
