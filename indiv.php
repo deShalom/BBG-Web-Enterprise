@@ -1,22 +1,37 @@
 <?php
-session_start();
-include "config.php";
+    session_start();
+    include "config.php";
+    
+	if(!isset($_SESSION['login_user']))
+	{           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
+		header("location: login.php?YouAreNotLoggedIn");
+	}
 
-if (!isset($_SESSION['login_user'])) {           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
-    header("location: login.php?YouAreNotLoggedIn");
-}
+    $postID = $_GET["id"];
 
-$level = intval($_SESSION['level_user']);
-if ($level < -4) {
-    header("location: banned.php");
-}
-	$postID = $_GET["id"];
-	mysqli_query($conn, "UPDATE Posts SET Views=Views+1 WHERE PostID=$postID");
-	$userID = $row['UserID'];
-	$userData = mysqli_query($conn, "SELECT Username FROM Accounts WHERE UserID=$userID");
-	$user = mysqli_fetch_array($userData);
- 
+    mysqli_query($conn, "UPDATE Posts SET Views=Views+1 WHERE PostID=$postID");
+   
+    $postData = mysqli_query($conn, "SELECT Title, Body, PostID, UserID, Category1ID, Category2ID, Category3ID, Upvotes, Downvotes, Department, isAnonymous FROM Posts WHERE PostID=$postID");
+    
+    $post = mysqli_fetch_array($postData);
+    $category1ID = $post['Category1ID'];
+    $category2ID = $post['Category2ID'];
+    $category3ID = $post['Category3ID'];
+    $anon = $post['isAnonymous'];
 
+ //   $categoryData = mysqli_query($conn, "SELECT CategoryName, CategoryID FROM Categories WHERE CategoryID IN (SELECT CategoryID FROM Categories WHERE CategoryID ='$category1ID' OR CategoryID ='$category2ID' OR CategoryID ='$category3ID')");
+  
+    $category1Name = mysqli_query($conn, "SELECT CategoryName FROM Categories WHERE CategoryID = $category1ID;");
+    $category2Name = mysqli_query($conn, "SELECT CategoryName FROM Categories WHERE CategoryID = $category2ID;");
+    $category3Name = mysqli_query($conn, "SELECT CategoryName FROM Categories WHERE CategoryID = $category3ID;");
+
+    $commentsData = mysqli_query($conn, "SELECT Body FROM Comments WHERE PostID=$postID");
+    $userID = $post['UserID'];
+    $userData = mysqli_query($conn, "SELECT Username FROM Accounts WHERE UserID=$userID");
+    $user = mysqli_fetch_array($userData);
+    $LoggedInUserID=$_SESSION['userID'];
+    $upvotes = mysqli_query($conn, "SELECT COUNT(DISTINCT userID) as Up FROM Votes WHERE PostID = $postID AND VoteType = 1");
+    $downvotes = mysqli_query($conn, "SELECT COUNT(DISTINCT userID) AS Down FROM Votes WHERE PostID = $postID AND VoteType = 0") 
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +39,7 @@ if ($level < -4) {
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <title> GRE: Comment page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--This is the link to our CSS!-->
@@ -33,28 +48,23 @@ if ($level < -4) {
 </head>
 
 <style>
-    .page {
+    .page{
         align-content: center;
     }
-
-    html {
-        width: 100%;
-        height: 100%;
+    html{
+        width:100%;
+        height:100%;
     }
-
-    body {
-        width: 100%;
-        height: 100%;
+    body{
+        width:100%;
+        height:100%;
     }
-
     .navB {
 
     }
-
     .navR {
 
     }
-
     .footer {
         position: fixed;
         left: 0;
@@ -63,24 +73,20 @@ if ($level < -4) {
         color: white;
         text-align: center;
     }
-
     .bI {
         width: 100%;
     }
-
-    @media only screen and (max-width: 800px) {
+    @media only screen and (max-width:800px) {
         /* For tablets: */
         .main {
             width: 80%;
             padding: 0;
         }
-
         .right {
             width: 100%;
         }
     }
-
-    @media only screen and (max-width: 500px) {
+    @media only screen and (max-width:500px) {
         /* For mobile phones: */
         .menu, .main, .right, .flex-container, .bI, .hT {
             width: 100%;
@@ -88,7 +94,6 @@ if ($level < -4) {
 
         }
     }
-
     .column {
         float: left;
         width: 33.33%;
@@ -105,11 +110,12 @@ if ($level < -4) {
 <body>
 
 
+
 <!-- Navigation Bar (Within Header) -->
 <div class="w3-padding-8">
     <div class="w3-bar w3-dark-gray">
         <div class="w3-right w3-bar-item w3-button">Logout</div>
-        <button class="w3-button w3-dark-gray w3-margin-top" name="logout"><a href="logout.php">LOGOUT HERE</a></button>
+        <button class="w3-button w3-dark-gray w3-margin-top" name="logout" ><a href="logout.php">LOGOUT HERE</a></button>
     </div>
 </div>
 
@@ -132,61 +138,123 @@ if ($level < -4) {
 
     <div class="w3-container">
         <!-- This  is the field for the idea's title -->
-        <p class="w3-center"><u><?= $row["Title"]; ?></u></p>
+        <p class="w3-center"><u><?= $post["Title"]; ?></u></p>
         <!-- This  is the field for the idea's text -->
         <p class="w3-center w3-border">Idea's example text here!</p>
-        
-        <p class="w3-center w3-container" style="margin-top:20px; margin-bottom:20px;">
-            <div class="row">
-	            <?php
-		            $sql = "SELECT * FROM Posts LIMIT 5 OFFSET $offset";
-		            $data = mysqli_query($conn,$sql);
-		
-		            while ($row = mysqli_fetch_array($data))
-		            {
-		            $userID = $row['UserID'];
-		            $userData = mysqli_query($conn, "SELECT Username FROM Accounts WHERE UserID=$userID");
-		            $user = mysqli_fetch_array($userData);
-		
-		            if ($row["isUploadedDocuments"] === 0) {
-			            $row["isUploadedDocuments"] = "No";
-		            } else {
-			            $row["isUploadedDocuments"] = "Yes";
-		            }
-	            ?>
-                <div class="row"
-                <p>Title: <?= $row["Title"] ?></p>
-                <p>UploadedDocuments: <?= $row["isUploadedDocuments"] ?></p>
-                <p> Body: <?= $row["Body"] ?> </p>
-                <p> IDs: <?= $row["Category1ID"] ?> </p>
-                <p> IDs: <?= $row["Category2ID"] ?> </p>
-                <p> IDs: <?= $row["Category3ID"] ?> </p>
-                <p>Department: <?= $row["Department"] ?> </p>
-                <p>Downvotes: <?= $row["Downvotes"] ?> </p>
-                <p>Upvotes: <?= $row["Upvotes"] ?> </p>
-                <p> isAnonymous: <?= $row["isAnonymous"] == 1 ? "Yes" : $user['Username']; ?></p>
+    </div>
+
+    <fieldset>
+        <p class="w3-center">
+            <label for="fname">Ideas</label><br />
+
+        </p>
+        <div class="w3-panel">
+            <div class="w3-row-padding w3-padding-16">
+                <div class="flex-container">
+                    <div class="column ">
+                        <p>Title: <?= $post["Title"]; ?></p>
+
+                        <p> Body: <?= $post["Body"]; ?></p>
+
+                        <p>Department: <?= $post["Department"]; ?></p>
+
+                        <!--- Show upvotes and downvotes--->
+                        <p>Downvotes: <?php while($row = mysqli_fetch_assoc($downvotes)){
+                            echo ($row['Down']);
+                        } 
+                        
+                        ?>
+                        </p>
+                        <p>Upvotes: <?php  while($row = mysqli_fetch_assoc($upvotes)){
+                            echo ($row['Up']);
+                        } 
+                        ?>
+                        </p>
+
+                        <!--- if not show username--->
+                        <p> Posted by: <?= $anon == 1 ? "Anon" : $user['Username']; ?></p>
+                        <p>
+                            Categories: 
+                        <?php
+                        if (isset($category1ID)){
+                        while ($row = mysqli_fetch_assoc($category1Name)){
+                             echo ($row['CategoryName']." | ");
+                            }}
+                        if (isset($category2ID)){
+                        while ($row = mysqli_fetch_assoc($category2Name)){
+                             echo ($row['CategoryName']. " | ");
+                            }}
+                            if (isset($category3ID)){
+                        while ($row = mysqli_fetch_assoc($category3Name)){
+                             echo ($row['CategoryName']);
+                        }}
+                        ?>
+                        </p>
+                    </div>
+
+                <div>
+                <?php
+                    while($comment = mysqli_fetch_array($commentsData)) {
+                ?>
+                    <!-- Make the front end for this -->
+                    <?= $comment; ?>
+                <?php
+                    }
+                ?>
                 </div>
-	            <?php
-		        };
-	            ?>
-    
-                <div class="row">
-    
-    
+
+                <form action="/comment.php" id="usrform" method="post">
+                    <div>
+                        <input type='hidden' name='UserID' value='Anonymous'>
+                        <input type='hidden' name='PostID' value='postID'>
+                        <textarea name="messages"></textarea>
+                        <button type="w3-button submit" name="submitpost">Comment</button>
+                    </div>
+                </form>
+                <form action="/thumbsup.php?id=<?= $postID ?>" id="thumbufrm"method="post">
+                <button type="w3-button submit" name="thumbsUp" value="upvote">Thumbs Up</button>
+                </form>
+                <form action="/thumbsdown.php?id=<?= $postID ?>" id="thumbdfrm"method="post">
+                <button type="w3-button submit" name="thumbsDown" value="downvote">Thumbs Down</button>
+                </form>
+                <?php 
+              
+                
+                function downvote(){
+                    $checkifvoted = "SELECT UserID FROM Votes WHERE PostID = $postID;";
+                    $resultcheckvoted = mysqli_query($conn, $checkifvoted);
+                    $votedrows = mysqli_num_rows($resultcheckvoted);
+                    if ($votedrows == 1)
+                    {
+                    $upvInsert = "INSERT INTO Votes (PostID, UserID, VoteType) VALUES ($postID, $LoggedInUserID, 'Down');";
+                    }else{
+                    $upvInsert = "UPDATE Votes SET VoteType = 'Down' WHERE (PostID=$postID AND UserID=$LoggedInUserID);";
+                    }
+                    if(mysqli_query($conn,$upvInsert)){
+                        echo "vote recorded!";
+                    } else{
+                        echo "ERROR: Could not execute $sql. " . mysqli_error($conn);
+                    }
+                }
+
+                ?>
+
                 </div>
             </div>
         </div>
+    </fieldset>
 
 
-<script>
-    function w3_open() {
-        document.getElementById("mySidebar").style.display = "block";
-    }
 
-    function w3_close() {
-        document.getElementById("mySidebar").style.display = "none";
-    }
-</script>
+    <script>
+        function w3_open() {
+            document.getElementById("mySidebar").style.display = "block";
+        }
+
+        function w3_close() {
+            document.getElementById("mySidebar").style.display = "none";
+        }
+    </script>
 </div>
 
 <div class="footer w3-dark-gray">
