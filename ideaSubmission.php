@@ -5,12 +5,6 @@ if(!isset($_SESSION['login_user']))
 {           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
     header("location: login.php?YouAreNotLoggedIn");
 }
-
-	$level = intval($_SESSION['level_user']);
-	if ($level < -4){
-		header("location: banned.php");
-	}
-
 ?>
 
 <!DOCTYPE html>
@@ -117,20 +111,37 @@ if(!isset($_SESSION['login_user']))
             <br />
             <!--Fieldset including a dropdown menu to select a Category-->
             <fieldset>
-                <p class="w3-center">
-                    <label for="IdeaCategory">Choose a Category:</label>
-                    <select id="IdeaCategory" name="category" class="w3-dropdown-click">
-                        <option value="cat1">category1</option>
-                        <option value="cat2">cat2</option>
-                        <option value="cat3">cat3</option>
-                        <option value="cat4">cat4</option>
-                    </select>
+                <p class="w3-center">                    
                     <label for="IdeaDept">Choose a Department:</label>
-                    <select id="IdeaDept" name="department" class="w3-dropdown-click">
-                        <option value="cat1">Department1</option>
-                        <option value="cat2">Dept2</option>
-                        <option value="cat3">Dept3</option>
-                        <option value="cat4">Dept4</option>
+                    <select id="department" name="department" class="w3-dropdown-click">
+                        <option value="cat1">Archaeology</option>
+                        <option value="cat2">Computing</option>
+                        <option value="cat3">Humanities</option>
+                        <option value="cat4">Languages</option>
+                        <option value="cat5">Mathematics</option>
+                        <option value="cat6">Science</option>
+                    </select>
+                    <label for="IdeaCategory">Choose 3 Categories:</label>
+                    <select id="category1" name="category1" class="w3-dropdown-click">
+                        <option value="1">Funding</option>
+                        <option value="2">Students</option>
+                        <option value="3">Accessiblilty</option>
+                        <option value="4">Complaint</option>
+                        <option value="5">Staff</option>
+                    </select>
+                    <select id="category2" name="category2" class="w3-dropdown-click">
+                        <option value="1">Funding</option>
+                        <option value="2">Students</option>
+                        <option value="3">Accessiblilty</option>
+                        <option value="4">Complaint</option>
+                        <option value="5">Staff</option>
+                    </select>
+                    <select id="category3" name="category3" class="w3-dropdown-click">
+                        <option value="1">Funding</option>
+                        <option value="2">Students</option>
+                        <option value="3">Accessiblilty</option>
+                        <option value="4">Complaint</option>
+                        <option value="5">Staff</option>
                     </select>
                 </p>
             </fieldset>
@@ -171,7 +182,7 @@ if(!isset($_SESSION['login_user']))
             <!--Fieldset allowing the user to upload multiple files as well as Submit their idea; again if some required fields are empty, pop ups will show-->
             <fieldset>
                 <p class="w3-left-align">Select files to upload and upload your idea:</p>
-                <input type="file" name="fileToUpload" id="fileToUpload" multiple>
+                <input type="file" name="fileToUpload[]" id="fileToUpload[]" multiple>
                 <input type="submit" value="Submit Your Idea" name="submitidea">
             </fieldset>
             <br />

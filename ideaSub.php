@@ -116,17 +116,4 @@ else
 }
 
 
-
-
-     // everything within these curly brackets happens upon the "submitidea" button press 
-
-    // my own notes:
-    // does the table "Categories" really need to exist? There's no other information on Categories except
-    // the name, wouldn't it be easier to just have it as a unique column in table "Posts"?
-
-    // For uploads, would it be easier to make a folder act as a target directory for documents? Rather than creating a table.
-
-    // Does anyone understand how to use Prepared Statements instead of copying "mysql_real_escape_string" infront of every variable? :) shits confusing 
-
-
 ?>
