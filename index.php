@@ -1,16 +1,16 @@
-﻿<?php
-session_start();
+﻿<?php 
+Session_start();
+include_once 'config.php';
+ //   include_once 'session.php';
+$sqlgettop = "SELECT Title, Department, Body, Upvotes, Downvotes FROM Posts ORDER BY Upvotes DESC;";
+$result = mysqli_query($conn, $sqlgettop);
 
-if(!isset($_SESSION['login_user']))
-{           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
-    header("location: login.php?YouAreNotLoggedIn");
-}
+$resultCheck = mysqli_num_rows($result);
 
-	$level = intval($_SESSION['level_user']);
-	if ($level < -4){
-		header("location: banned.php");
-	}
+
+
 ?>
+
 
 <!DOCTYPE html>
 
@@ -110,7 +110,7 @@ if(!isset($_SESSION['login_user']))
 			<button onclick="w3_close()" class="w3-bar-item w3-large">Close &times;</button>
 			<a href="ideaSubmission.php" class="w3-bar-item w3-button">Idea Sub</a>
 			<a href="#" class="w3-bar-item w3-button">Link 2</a>
-			<a href="ideabrowser.php" class="w3-bar-item w3-button">Idea Browser</a>
+			<a href="#" class="w3-bar-item w3-button">Link 3</a>
 			<a href="registration.php" class="w3-bar-item w3-button">Link Reg</a>
 		</div>
 
@@ -128,15 +128,26 @@ if(!isset($_SESSION['login_user']))
 						</div>
 						<div class="w3-panel">
 							<div class="row">
-								<div class="column">
-									<p> poo</p>
-								</div>
-								<div class="column">
-									<p> poo</p>
-								</div>
-								<div class="column">
-									<p> poo</p>
-								</div>
+								
+									 <?php 
+									 $num=0;
+									if ($resultCheck>0){
+										
+										while ($row = mysqli_fetch_assoc($result)){
+											$ovlVotes = $row['Upvotes']-$row['Downvotes'];
+											echo '<div class=column><h1>'.$row['Title'].'</h1>';
+											echo '<h3>Department: '.$row['Department'].'</h3>';
+											echo '<h4>'.$row['Body'].'</h4><br>';
+											echo " Rating: +";
+											echo $ovlVotes.'<br>'."</div>";
+											$num++;
+											if ($num>2){
+												die();
+											}
+										}
+									}?>
+								
+								
 							</div>
 							
 
@@ -166,10 +177,10 @@ if(!isset($_SESSION['login_user']))
 
 			<div class="footer w3-dark-gray">
 				<p><span style='border-bottom:2px white solid;'>Other useful links!</p></span>
-           <a href="https://www.snapchat.com/add/uniofgreenwich" target="_blank"><i class="fab fa-snapchat-ghost w3-margin-right"></i></a>
-           <a href="https://twitter.com/UniofGreenwich" target="_blank"><i class="fab fa-twitter w3-margin-right"></i></a>
-           <a href="https://www.facebook.com/uniofgreenwich/" target="_blank"><i class="fab fa-facebook-f w3-margin-right"></i></a>
-           <a href="https://www.instagram.com/uniofgreenwich/?hl=en" target="_blank"><i class="fab fa-instagram w3-margin-right"></i></a>
+				<i class="fab fa-snapchat-ghost w3-margin-right"><a href="https://www.snapchat.com/add/uniofgreenwich" target="_blank"></i></a>
+				<i class="fab fa-twitter w3-margin-right"><a href="https://twitter.com/UniofGreenwich" target="_blank"></i></a>
+				<i class="fab fa-facebook-f w3-margin-right"><a href="https://www.facebook.com/uniofgreenwich/" target="_blank"></i></a>
+				<i class="fab fa-instagram w3-margin-right"><a href="https://www.instagram.com/uniofgreenwich/?hl=en" target="_blank"></i></a>
 			</div>
 </body>
 </html>
