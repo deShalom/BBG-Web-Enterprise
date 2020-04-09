@@ -57,6 +57,12 @@ if($level < 5 )
 		mysqli_free_result($commentResults);
 	}
 	
+	
+	echo $_SERVER['HTTP_USER_AGENT'] . "\n\n";
+
+$browser = get_browser(null, true);
+print_r($browser);
+	
 	mysqli_close($conn);
 
 ?>
@@ -66,7 +72,7 @@ if($level < 5 )
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title> GRE: Home page</title>
+    <title> GRE: Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--This is the link to our CSS!-->
     <link rel="stylesheet" href="https://daredicing.com/css.css">
@@ -92,12 +98,8 @@ if($level < 5 )
 
 		}
 		.footer {
-	  position: fixed;
-	  left: 0;
-	  bottom: 0;
-	  width: 100%;
-	  color: white;
-	  text-align: center;
+  grid-row-start: 2;
+  grid-row-end: 3;
 	}
 		.bI {
 			width: 100%;
@@ -789,12 +791,48 @@ if($level < 5 )
       </div>
     </div>
   
+  <!-- "Most" Analytics -->
+  <div class="w3-row-padding w3-margin-bottom w3-padding-16">
 
-     <br></br>
-     <br></br>
-     <br></br>
+	  <!-- "Most" Viewed pages -->
+	  	    <div class="w3-third">
+	<div class="w3-col w3-center">
+	<h2><center>Most viewed pages</center></h2>
+		  <!--Table-->
+	<table>
+	  <th>Page name</th>
+	</table>
+	</div>
+	</div>
 
+	  <!-- "Most" Active users -->
+	  	    <div class="w3-third">
+	<div class="w3-col w3-center">
+	<h2><center>Most active users</center></h2>
+			  <!--Table-->
+	<table>
+		  <th>User name</th>
+	</table>
+	</div>
+	</div>
 
+		  <!-- "Most" Used browsers -->
+		  	    <div class="w3-third">
+	<div class="w3-col w3-center">
+	<h2><center>Most used browsers</center></h2>
+			  <!--Table-->
+	<table>
+		<th>Browser name</th>
+	</table>
+	</div>
+	</div>
+
+	</div>
+	</div>
+
+  </div>
+
+  </div>
 
 				<!--Fieldset for Terms and Conditions; made sure that it is a "required" attribute as said in CW spec-->
 				<!-- Side bar header -->
@@ -810,12 +848,12 @@ if($level < 5 )
 				</script>
 			</div>
 
-			<div class="footer w3-dark-gray">
+			<div class="footer w3-dark-gray w3-center">
 				<p><span style='border-bottom:2px white solid;'>Other useful links!</p></span>
 		   <a href="https://www.snapchat.com/add/uniofgreenwich" target="_blank"><i class="fab fa-snapchat-ghost w3-margin-right"></i></a>
            <a href="https://twitter.com/UniofGreenwich" target="_blank"><i class="fab fa-twitter w3-margin-right"></i></a>
            <a href="https://www.facebook.com/uniofgreenwich/" target="_blank"><i class="fab fa-facebook-f w3-margin-right"></i></a>
-           <a href="https://www.instagram.com/uniofgreenwich/?hl=en" target="_blank"><i class="fab fa-instagram w3-margin-right"></i></a>
+           <a href="https://www.instagram.com/uniofgreenwich/?hl=en" target="_blank"><i class="fab fa-instagram w3-margin-right w3-margin-bottom"></i></a>
 			</div>
 </body>
 </html>
