@@ -66,8 +66,8 @@ if($level < 5 )
 	{
 		while ($rowupdateViews = mysqli_fetch_array($resultupdateViews))
 		{
-			$addoneview = $rowBrowserInsert['Views'] + 1;
-			$queryViewAdd = "UPDATE Pages SET NumberOfUses = '$addoneview' WHERE BrowserName = '$pageName'";
+			$addonreview = $rowupdateViews['Views'] + 1;
+			$queryViewAdd = "UPDATE Pages SET Views = '$addonreview' WHERE PageName = '$pageName'";
 			$resultToInsertView = mysqli_query($conn, $queryViewAdd);
 			
 
