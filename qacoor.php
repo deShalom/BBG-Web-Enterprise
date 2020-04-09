@@ -28,7 +28,7 @@ if(!isset($_SESSION['login_user']))
 		}
 		
 		if ($date_now > $gotDate){
-				header("location: closedate.php");
+				header("location: siteclosed.php");
 		} else{
 			
 		}
@@ -37,7 +37,32 @@ if(!isset($_SESSION['login_user']))
     {
 	}
 	
-	mysqli_close($conn); // Closing Connection
+// opens a connection to the DB via the config file
+	$loadAccounts = "SELECT Username FROM Accounts";
+	$accountResults = mysqli_query($conn, $loadAccounts);
+	
+	if ($accountResults){
+		$accountRow = mysqli_num_rows($accountResults);
+		mysqli_free_result($accountResults);
+	}
+	
+	$loadIdeas = "SELECT PostID FROM Posts";
+	$ideaResults = mysqli_query($conn, $loadIdeas);
+	
+	if ($ideaResults){
+		$ideaRow = mysqli_num_rows($ideaResults);
+		mysqli_free_result($ideaResults);
+	}
+	
+	$loadComments = "SELECT CommentID FROM Comments";
+	$commentResults = mysqli_query($conn, $loadComments);
+	
+	if ($commentResults){
+		$commentRow = mysqli_num_rows($commentResults);
+		mysqli_free_result($commentResults);
+	}
+	
+	mysqli_close($conn);
 	
 ?>
 
@@ -192,42 +217,121 @@ if(!isset($_SESSION['login_user']))
             </div>
         </div>
 
-        <!-- User look up -->
-        <div class="topnav w3-col w3-center">
+
+<!-- Search Analysis -->
+
+	<div class="w3-panel">
+    	<div class="w3-row-padding w3-padding-16">
+    		<div class="topnav w3-col w3-center">
             <h2>User Lookup</h2>
-            <form action="" method="post">
-                <input type="text" placeholder="Search Username.." style="width:50%" name="enteredUsername" />
-                <button class="w3-button w3-greenwich w3-hover-dark-gray" id="SearchUser"><i class="fa fa-search"></i></button>
-            </form>
+			<form action="" method="post">
+    			<input type="text" placeholder="Enter A Category.." style="width:50%" name="searchedCategory"/>
+                <button class="w3-button w3-greenwich w3-hover-dark-gray"id="SearchUser"><i class="fa fa-search"></i></button>
+			</form>
+			<?php
+			session_start();
+			include "config.php";
+			$conn;
+			if (!empty($_POST['searchedCategory'])) {
+				$searchedCategory = mysqli_real_escape_string($conn, $_POST['searchedCategory']);
+				//$searchedUser = $_REQUEST['enteredUsername']; 
+				$authsearchedCategory = ("SELECT CategoryName FROM Categories WHERE CategoryName='$searchedCategory'");
+				$resultsearchedCategory = mysqli_query($conn, $authsearchedCategory);
+				$rowssearchedCategory = mysqli_num_rows($resultsearchedCategory);
+				
 
-            <script>
-                function w3_open() {
-                    document.getElementById("mySidebar").style.display = "block";
-                }
+            if ($rowssearchedCategory == 1) 
+            {
+				while($rowsearchedCategory = mysqli_fetch_assoc($resultsearchedCategory)) {
+					$_SESSION['searchedCategory'] = $rowsearchedCategory['searchedCategory'];
+					echo "<table style='width:100%'>
+					<tr>
+						<th>Category</th>
+					</tr>";
+					echo "<tr>";
+						echo "<td>" . $rowsearchedCategory['searchedCategory'] . "</td>";
+					echo "</table>";
+				}
+			}
+			else 
+            {
+                $error = "$_POST['searchedCategory'] does not exist";
+                echo $error;
+            }
+            mysqli_close($conn); // Closing Connection
+			}
+			?>
+  			</div>
+		</div>
+	</div>
 
-                function w3_close() {
-                    document.getElementById("mySidebar").style.display = "none";
-                }
-            </script>
+
+
+
+<!-- Categories Analysis -->
+
+  <div class="w3-panel">
+    <div class="w3-row-padding-16 w3-padding">
+      <div class="w3-third">
+        <h2><center>Categories</center></h2>
+        <div class="search-box" style="width:100%" alt="Search Box">
+		<form method="POST">
+        <select id="Categories" style="width:100%" name="Categories">
+		<?php
+			session_start();
+			include 'config.php';
+			$departmentQuery = "SELECT CategoryName, COUNT(*) FROM Categories GROUP BY CategoryName HAVING COUNT(*) > 0 ORDER BY CategoryName ASC";
+			$resultDepartment = mysqli_query($conn, $departmentQuery);
+			while($rowDepartment=mysqli_fetch_array($resultDepartment)){
+				echo '<option>' . $rowDepartment['CategoryName'] . '</option>';
+			}
+		?>
+        </select> 
+        
+        <br></br>
+		<button type="submit" class="w3-button w3-greenwich w3-hover-dark-gray" name="FilterDepartment">Search</button>
+        </form>
+		
         </div>
+      </div>
+      <div class="w3-twothird">
+        <h2><center>Category Data</center></h2>
+        
+			<?php
+			session_start();
+			include 'config.php';
+			if (isset($_POST['Categories']))
+			{			
+				$selectedCategory = $_POST['Categories'];
+				
+				$queryCategoriesID = ("SELECT CategoryID FROM Categories WHERE CategoryName='$selectedCategory'");
+				$resultCategoriesID = mysqli_query($conn, $queryCategoriesID);
+				$rowCategoriesID = mysqli_fetch_assoc($resultCategoriesID);
+				$totalCategoriesID = $rowCategoriesID['CategoryID'];
+				
+				$queryCategories = ("SELECT DISTINCT COUNT(*) FROM Posts WHERE Category1ID IN (SELECT Category1ID FROM Posts WHERE Category1ID ='$totalCategoriesID' OR Category2ID ='$totalCategoriesID' OR Category3ID ='$totalCategoriesID')");
+				$resultCategories = mysqli_query($conn, $queryCategories);
+				$rowCategories = mysqli_fetch_assoc($resultCategories);
+				$totalCategories = $rowCategories['total'];
 
-        <!-- Ban look up-->
-        <div class="w3-panel">
-            <div class="w3-row-padding-16 w3-padding">
-                <div class="w3-third">
-                    <h2>Reported posts</h2>
-                    <div class="search-box" style="width:100%" alt="Search Box">
-                        <select id="Reportedposts" style="width:100%" name="Reportedposts" multiple="multiple">
-                            <option value="0" selected="selected">Select Post</option>
-                        </select>
-
-                        <br></br>
-                        <button class="w3-button w3-greenwich w3-hover-dark-gray" id="FilterCategory">Search</button>
-
-                    </div>
-                </div>
-            </div>
-        </div>
+				
+				
+				
+				echo '<table class="w3-table w3-striped w3-white style=\"width:100%\" ">
+				<tr>
+					<th>Category</th>
+					<th>Times Used</th>
+				</tr>';
+				echo '<td>' . $totalCategoriesID . '</td>';
+				echo '<td>' . $totalCategories . '</td>';
+				echo '</tr>
+				</table>';
+			}
+			
+		?>
+      </div>
+    </div>
+  </div>
 
         <div class="footer w3-dark-gray">
             <p><span style='border-bottom:2px white solid;'>Other useful links!</p></span>
