@@ -7,6 +7,12 @@
 		header("location: login.php?YouAreNotLoggedIn");
 	}
 
+    $level = intval($_SESSION['level_user']);
+	if ($level < -4){
+		header("location: banned.php");
+
+	}
+
 	if (isset($_GET['pageno']))
 	{
 		$pageno = $_GET['pageno'];

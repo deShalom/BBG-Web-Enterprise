@@ -7,8 +7,14 @@
 		header("location: login.php?YouAreNotLoggedIn");
 	}
 
-    $postID = $_GET["id"];
+	$level = intval($_SESSION['level_user']);
+	if ($level < -4){
+		header("location: banned.php");
+	}
+    
+}
 
+    $postID = $_GET["id"];
     mysqli_query($conn, "UPDATE Posts SET Views=Views+1 WHERE PostID=$postID");
     $postData = mysqli_query($conn, "SELECT Title, Body, PostID, UserID, Category1ID, Category2ID, Category3ID, Upvotes, Downvotes, Department, isAnonymous FROM Posts WHERE PostID=$postID");
     $post = mysqli_fetch_array($postData);

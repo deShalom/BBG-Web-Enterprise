@@ -5,6 +5,12 @@ if(!isset($_SESSION['login_user']))
 {           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
     header("location: login.php?YouAreNotLoggedIn");
 }
+
+	$level = intval($_SESSION['level_user']);
+	if ($level < -4){
+		header("location: banned.php");
+	}
+
 ?>
 
 <!DOCTYPE html>
