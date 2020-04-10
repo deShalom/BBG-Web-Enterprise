@@ -113,6 +113,7 @@ $pageName = basename($_SERVER['PHP_SELF']);
     <title>GRE: Registration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--This is the link to our CSS!-->
+    <link rel="stylesheet" href="https://daredicing.com/css.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
 </head>
@@ -184,7 +185,7 @@ $pageName = basename($_SERVER['PHP_SELF']);
         </div>
 
         <!-- This divider will hold the log-in box -->
-        <form action="registration.php" method="post" class="w3-display-middle w3-margin-right w3-container w3-card-4 w3-dark-grey" onsubmit="return validateForm();">
+        <form action="registration.php" method="post" class="w3-display-middle w3-margin-right w3-container w3-card-4 w3-greenwich" onsubmit="return validateForm();">
             <h2 class="w3-center">Create an account</h2>
 
 			 <?php
@@ -255,7 +256,7 @@ $pageName = basename($_SERVER['PHP_SELF']);
                 </select></p>
 			 </fieldset>
 
-				<button class="w3-center w3-button w3-dark-gray w3-margin-top" name="registrationBtn" value="Registration">Submit</button>
+				<button class="w3-center w3-button greenwich w3-hover-dark-gray w3-margin-top" name="registrationBtn" value="Registration">Submit</button>
         </form>
 		</div>
 	</div>

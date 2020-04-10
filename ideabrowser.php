@@ -189,17 +189,29 @@ $pageName = basename($_SERVER['PHP_SELF']);
 									$row["isUploadedDocuments"] = "Yes";
 								}
 						?>
-								<div class="column" onclick="window.location.replace('indiv.php?id=<?= $row['PostID']; ?>')">
-									<p>Title: <?= $row["Title"] ?></p>
-									<p>UploadedDocuments: <?= $row["isUploadedDocuments"] ?></p>
-									<p> Body: <?= $row["Body"] ?> </p>
-									<p> IDs: <?= $row["Category1ID"] ?> </p>
-									<p> IDs: <?= $row["Category2ID"] ?> </p>
-									<p> IDs: <?= $row["Category3ID"] ?> </p>
-									<p>Department: <?= $row["Department"] ?> </p>
-									<p>Downvotes: <?= $row["Downvotes"] ?> </p>
-									<p>Upvotes: <?= $row["Upvotes"] ?> </p>
-                                    <p> isAnonymous: <?= $row["isAnonymous"] == 1 ? "Yes" : $user['Username']; ?></p>
+								<table style = 100% onclick="window.location.replace('indiv.php?id=<?= $row['PostID']; ?>')">
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>UploadedDocuments:</th>
+                                        <th> Body: <?= $row["Body"] ?> </th>
+                                        <th> IDs: <?= $row["Category1ID"] ?> </th>
+                                        <th> IDs: <?= $row["Category2ID"] ?> </th>
+                                        <th> IDs: <?= $row["Category3ID"] ?> </th>
+                                        <th>Department: <?= $row["Department"] ?> </th>
+                                        <th>Downvotes: <?= $row["Downvotes"] ?> </th>
+                                        <th>Upvotes: <?= $row["Upvotes"] ?> </th>
+                                        <th> isAnonymous: <?= $row["isAnonymous"] == 1 ? "Yes" : $user['Username']; ?></th>
+                                    </tr>
+                                    <tr>
+                                        <td><?= $row["Title"] ?></td>
+                                        <td><?= $row["isUploadedDocuments"] ?></td>';
+                                        <td>50</td>
+                                        <td>Smith</td>
+                                        <td>50</td>
+                                        <td>Smith</td>
+                                        <td>50</td>
+                                    </tr>
+                            </table>
 								</div>
 						<?php
 							};
