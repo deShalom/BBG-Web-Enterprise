@@ -122,7 +122,7 @@ if(!isset($_SESSION['login_user']))
                         <option value="cat6">Science</option>
                     </select>
                     <label for="IdeaCategory">Choose 3 Categories:</label>
-                    <select id="category1" name="category1" class="w3-dropdown-click">
+                    <select id="category1" name="category1" class="w3-dropdown-click">                        
                         <option value="1">Funding</option>
                         <option value="2">Students</option>
                         <option value="3">Accessiblilty</option>
@@ -130,6 +130,7 @@ if(!isset($_SESSION['login_user']))
                         <option value="5">Staff</option>
                     </select>
                     <select id="category2" name="category2" class="w3-dropdown-click">
+                        <option value="0">Not Applicable</option>
                         <option value="1">Funding</option>
                         <option value="2">Students</option>
                         <option value="3">Accessiblilty</option>
@@ -137,6 +138,7 @@ if(!isset($_SESSION['login_user']))
                         <option value="5">Staff</option>
                     </select>
                     <select id="category3" name="category3" class="w3-dropdown-click">
+                        <option value="0">Not Applicable</option>
                         <option value="1">Funding</option>
                         <option value="2">Students</option>
                         <option value="3">Accessiblilty</option>
@@ -182,7 +184,7 @@ if(!isset($_SESSION['login_user']))
             <!--Fieldset allowing the user to upload multiple files as well as Submit their idea; again if some required fields are empty, pop ups will show-->
             <fieldset>
                 <p class="w3-left-align">Select files to upload and upload your idea:</p>
-                <input type="file" name="fileToUpload[]" id="fileToUpload[]" multiple>
+                <input type="file" name="fileToUpload[]" id="fileToUpload[]" value="" multiple>
                 <input type="submit" value="Submit Your Idea" name="submitidea">
             </fieldset>
             <br />
