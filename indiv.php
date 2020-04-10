@@ -29,7 +29,6 @@ $LoggedInUserID=$_SESSION['userID'];
     $userID = $post['UserID'];
     $userData = mysqli_query($conn, "SELECT Username FROM Accounts WHERE UserID=$userID");
     $user = mysqli_fetch_array($userData);
-    $LoggedInUserID=$_SESSION['userID'];
     $upvotes = mysqli_query($conn, "SELECT COUNT(DISTINCT userID) as Up FROM Votes WHERE PostID = $postID AND VoteType = 1");
     $downvotes = mysqli_query($conn, "SELECT COUNT(DISTINCT userID) AS Down FROM Votes WHERE PostID = $postID AND VoteType = 0")
 
@@ -234,9 +233,11 @@ $LoggedInUserID=$_SESSION['userID'];
                    }
                     echo ($comment['Body']."<br>");
                if ($LoggedInUserID == $commentuserID){
-                   $href = '<a href="deletecomment.php?id='.$postID.'&commentid='.$commentID.'">Delete Comment</a><br><br>';
+                   $href = '<a href="deletecomment.php?id='.$postID.'&commentid='.$commentID.'">Delete Comment (Cannot be undone)</a><br>';
                    echo($href);
-               }else{?><br><?}
+               }
+                    $href2='<a href="reportcomment.php?id='.$postID.'&commentid='.$commentID.'">Report Comment</a><br><br>';
+                    echo($href2);
                     }
                 ?></p>
                 </div>
