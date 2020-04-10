@@ -5,6 +5,42 @@ if(!isset($_SESSION['login_user']))
 {           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
     header("location: login.php?YouAreNotLoggedIn");
 }
+
+$level = intval($_SESSION['level_user']);
+	if ($level < -4){
+		header("location: banned.php");
+
+	}
+$level = intval($_SESSION['level_user']);
+	if ($level = -3){
+		header("location: index.php?YouAreBlockedFromPosting");
+
+	}
+
+	$date_now = date("Y-m-d");
+	$datequery = ("SELECT EnteredDate, DisableOrClose FROM Dates WHERE DisableOrClose = '0'");
+	$resultdate = mysqli_query($conn, $datequery);
+	$rowsdate = mysqli_num_rows($resultdate);
+    if ($rowsdate > 0) 
+    {            
+		while($rowsdate = mysqli_fetch_assoc($resultdate)) {
+					
+			$gotDate = $rowsdate['EnteredDate'];
+		}
+		
+		if ($date_now > $gotDate){
+				header("location: subclosed.php");
+		} else{
+			
+		}
+	}
+	else 
+    {
+	}
+
+
+
+
 ?>
 
 <!DOCTYPE html>
