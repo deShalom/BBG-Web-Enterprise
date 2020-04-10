@@ -12,118 +12,117 @@ if(!isset($_SESSION['login_user']))
 // opens a connection to the DB via the config file
     include 'config.php';
     
-// Creating variables allowing us to use the functionality of our other php pages (in this case, minaly ideaSubmission.php)
+
+$userID = $_SESSION['userID']; // Grabs the userID from the sessions.
+
+$phpFileUploadErrors = array(     // creating array to store the different error messages
+0 => 'There is no error, file uploaded with success!',
+1 => 'Upload exceededs max filesize.',
+2 => 'Exceeds Max_File_Size that was specified in HTML form.',
+3 => 'Upload was only partially completed.',
+4 => 'No File uploaded.',
+5 => 'Missing Temporary folder.',
+6 => 'Failed to write to disk.',
+7 => 'PHP extension stopped the file upload.',
+);
+
+function reArrayFiles($file_post){ // function to help with rearranging the file details into a neat order
+
+    $file_ary = array(); // creates an array
+    $file_count = count($file_post['name']); // counts the number of "name"  rows in arrays
+    $file_keys = array_keys($file_post); // set and sorts by keys
+
+    for ($i=0; $i < $file_count; $i++) { //nearly sets up array with all file info
+        foreach ($file_keys as $key){
+            $file_ary[$i][$key] = $file_post[$key][$i];
+        }
+    }
+    return $file_ary;
+}
+
+$target_dir = ('uploadedDocs/'); // target directory
+
+if (isset($_POST['submitidea'])){ // if submit button is pressed
+
+    // Creating variables allowing us to use the functionality of our other php pages (in this case, minaly ideaSubmission.php)
     $category1 = $_POST['category1'];
     $category2 = $_POST['category2'];
     $category3 = $_POST['category3'];
     $problem = mysqli_real_escape_string($conn, $_POST['problem']);
     $idea = mysqli_real_escape_string($conn, $_POST['idea']);
-// Creating a boolean variable to let us know if a post has documents attached. With FALSE as default.
+    // Creating a boolean variable to let us know if a post has documents attached. With FALSE as default.
     $docupload = '0';
     $posttitle = mysqli_real_escape_string($conn, $_POST['posttitle']);
     $ideadept = $_POST['department'];
 
     // if anon checkbox is ticked, it is set to 1; if not, set to 0.
-if(isset($_POST['anon']))
-{
-    $anon = "1";
+    if(isset($_POST['anon'])){
+        $anon = "1";
+    }
+    else{
+        $anon = "0";
+    }    
+    
+    $updatePost = "INSERT INTO Posts (Department, Title, Body, Category1ID, Category2ID, Category3ID, isUploadedDocuments, UserID, isAnonymous, ProblemTxt) VALUES ('$ideadept', '$posttitle', '$problem', '$category1', '$category2', '$category3', '$docupload', '$userID', '$anon', '$idea');";
+    if(mysqli_query($conn, $updatePost)){ // runs the query and checks if it runs fine
+        header("Location: index.php?NoDocsUploadedPostUpdated"); // takes us back to Index with a success msg for this specific event     
+    }
+    else{
+        echo "faked it";
+    }
 }
-else
+
+if(isset($_FILES['fileToUpload'])) // if document upload is submitted
 {
-    $anon = "0";
-}    
-
-$userID = $_SESSION['userID']; // Grabs the userID from the sessions.
-
-$file = $_FILES['fileToUpload']; // allows us to shortcut setting file variables.
-
-if (isset($_POST['submitidea']))   // If submit button is pressed
-{
-
-} // if submit button is not pressed; nothing will happen. Don't even need the "else" but hey.
-else
-{
-    
-}
-    
-    
-    
-    
-    if(isset($_FILES['fileToUpload'])){ // checks if filetoupload has been submitted
-        $file_array = $_FILES['fileToUpload']; // create an array to hold the files 
-        for ($i=0; $i < count($file_array); $i++) { // for loop, so we can go through the entire array 1 by 1
-
-            $fileName = $file['name'];           // Using "$file" to save time.
-            $fileTempName = $file['tmp_name'];  // Variables assigned to super globals allowing us to utilise the file details.
-            $fileSize = $file['size'];         // $_Files helps us get all the information from the file that we want to upload. - I also use $file for each other variable to shorten the process
-            $fileError = $file['error'];      // Same shit as above but instead of writing out $_FILES infront of each variable, I set it to $file for conveniences sake, as shown above.
-            $fileType = $file['type'];       // this pops up in the file information when uploading it.
-    
-            $allowed = array('jpg','pdf','png','doc','gif','jpeg','tif'); // allowed extentions
-            $fileExt = explode('.',$file_array[$i][$fileName]); // This seperates the file name and the file extention (its type)(whatever is before and after the ".")
-            $fileActualExt = strtolower(end($fileExt)); // This takes the extention of the file, which could be in capital letters, such as JPEG or w/e and makes it all lower case
-                                                        // by grabbing it from the last place in the created array above (via the use of explode) and setting it to lowercase.
-            $target_dir = ('uploadedDocs/'); // target directory
-    
-            $docupload = "1"; // documents have been selected, docupload set to 1 so we can update our db accordingly.            
-    
-            if (in_array($fileActualExt, $allowed)) // if actual extention of file is found in the "allowed" array, proceed to upload.
-            {                
-                if($fileError === 0){ // checks if file error is 0; if so, moves on.
-
-                    if ($fileSize < 1000000) // checks file size
-                    {
-                        $fileNameNew = uniqid('', true).$userID.".".$fileActualExt; // This creates a unique name for each file and adds the extention back (which is now in lower case).
-                        $fileDestination = $target_dir.$fileNameNew;
-                        move_uploaded_file($file_array[$i][$fileTempName], 'uploadedDocs/'.$file_array[$i][$fileDestination]); // Function which uploads the file using the temporary space and our final file destination.
-
-                        $grablatestpostID = "SELECT TOP 1 PostID FROM Posts ORDER BY 'PostID' DESC"; // query to grab the latest postID
-                        $resultlastpostID = mysqli_query($conn, $grablatestpostID);                 // running the query through the conn string
-                        $latestpostID = $resultlastpostID + 1;                                     // adding +1 to latest postID so we can create a new one artifically for the postID column in Docs table
-                                                                            // scuffed way of doing it; what if more than one person uploads at the same exact time? unlikely but new postIDs would be same
-
-                        $updateDoctable = "INSERT INTO Documents (FileType, PostID, UserID, FileName) VALUES ('$fileActualExt', '$latestpostID', '$userID', '$fileNameNew')";
-                        mysqli_query($conn, $updateDoctable); // updates Documents table in line with the updated post
-
-                        header("Location: index.php?DocUploadSuccess"); // If all goes well, we are take to the Index page with "UploadSuccess" written in the address bar.
-                    }
-                    else
-                    {
-                        echo "The file you are trying to upload is too big!";
-                    }
-
-                }
-                else // if there was a file error, it will spit out this message.
-                {
-                   echo "There was an error with the upload of your files. Please try again.";
-                }              
+    $docupload = "1";
+    $file_array = reArrayFiles($_FILES['fileToUpload']); // rearranged the array for file information
+    for ($i=0; $i < count($file_array); $i++) {  // for loop for each uploaded file
+        if($file_array[$i]['error']){ // if an error occurs handler
+            if($file_array[$i]['error'] = '4'){ // this is a unique handler as if a doc hasnt been select, it will run this
+                echo "No docs have been uploaded!";
+                // The Query below doesn't wanna work and throws me into the "else"; help.
+                //$updatePost = "INSERT INTO Posts (Department, Title, Body, Category1ID, Category2ID, Category3ID, isUploadedDocuments, UserID, isAnonymous, ProblemTxt) VALUES ('$ideadept', '$posttitle', '$problem', '$category1', '$category2', '$category3', '$docupload', '$userID', '$anon', '$idea');";
+                    //if(mysqli_query($conn, $updatePost)){ // runs the query and checks if it runs fine
+                        //header("Location: index.php?NoDocsUploadedPostUpdated"); // takes us back to Index with a success msg for this specific event     
+                    //}
+                    //else{
+                        //echo "query doesn't go through"; // if query doesnt go through
+                    //}
             }
-            else 
-            {
-                echo "You are trying to upload a file type we do not support!";                 
-            } 
-    
+            else{ // if any other error occurs, it will be displayed.
+                echo $file_array[$i]['name'].' - '.$phpFileUploadErrors[$file_array[$i]['error']];
+            }
         }
-            // once the loop is done, it will update the Posts table.
-        $updatepostsquery = "INSERT INTO Posts (Department, Title, Body, Category1ID, Category2ID, Category3ID, ProblemTxt, isUploadedDocuments, UserID, isAnonymous) VALUES ('$ideadept', '$posttitle', '$problem', '$category1', '$category2', '$category3', '$idea', '$docupload','$userID', '$anon')";
-        // updates the Posts table to insert Post information
-        mysqli_query($conn, $updatepostsquery); // executes the query to update Posts table with some Docs being uploaded
-    
+        else{ // if no errors, proceed with this block.
+            $allowed = array('png','pdf'); // allowed extensions.
+            $file_ext = explode('.',$file_array[$i]['name']); // exploding file names to obtain actual extension
+            $file_ext = end($file_ext); // grabbing the last(end) bit of the exploded file name
+            $fileNameNew = uniqid('', true).".".$file_ext; // creating a unique name for each file
+                                    
+            if(!in_array($file_ext, $allowed)){ // if extension is invalid error handler
+                echo $userID.".".$fileNameNew."- Invalid File Extension."; // echos out msg if extension isn't allowed
+            }
+            else{ // if extension is allowed, proceed with this block.
+                move_uploaded_file($file_array[$i]['tmp_name'], "uploadedDocs/".$fileNameNew); // moves files to upload directory WORKS
+                echo $fileNameNew.' - '.$phpFileUploadErrors[$file_array[$i]['error']]; // echo out the new file name as well as any additional errors.
+                $selectPostID = "SELECT PostID FROM Posts ORDER BY PostID DESC LIMIT 1;"; // sql query to grab latest PostID
+                $resultPostID = mysqli_query($conn, $selectPostID); // runs the query                
+                $row = mysqli_fetch_assoc($resultPostID); // fetches the data and assigns it to $row as an array
+                $newPostID = $row['PostID'] + 1; // adds 1 to latest PostID so I can update Document table
+                $updateDocTable = "INSERT INTO Documents (FileType, PostID, UserID, FileName) VALUES ('$file_ext', '$newPostID', '$userID','$fileNameNew');";
+                // sql statement to insert data into Documents table
+                if(mysqli_query($conn, $updateDocTable)){ // if statement runs fine, run this block.
+                    echo "New Document record created!";
+                }
+                else{ // if statement did not run, run this block.
+                    echo "error of somekind";
+                }
+            }
+        }
     }
-    else // if button to submit documents has not been pressed
-    {
-        $updatepostsquery = "INSERT INTO Posts (Department, Title, Body, Category1ID, Category2ID, Category3ID, ProblemTxt, isUploadedDocuments, UserID, isAnonymous) VALUES ('$ideadept', '$posttitle', '$problem', '$category1', '$category2', '$category3', '$idea', '$docupload','$userID', '$anon')";
-                                // updates the Posts table to insert Post information
-        mysqli_query($conn, $updatepostsquery); // executes the query to update Posts table with some Docs being uploaded
-
-        // test to upload new category; tested and works
-        // $updateCat = "INSERT INTO Categories (CategoryName) VALUES ('Moodle')";
-        // mysqli_query($conn, $updateCat);
-
-        header("Location: index.php?PostSubmittedWithNoDocs"); // takes us back to index if Post has been submitted with no docs uploaded.
-    }
-
-
+}
+  
+// Line 71; query doesn't run, spits me into the "else" block.
 
 
 ?>
