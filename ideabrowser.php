@@ -188,28 +188,33 @@ $pageName = basename($_SERVER['PHP_SELF']);
 								} else {
 									$row["isUploadedDocuments"] = "Yes";
 								}
+							
+							
 						?>
-								<table style = 100% onclick="window.location.replace('indiv.php?id=<?= $row['PostID']; ?>')">
+								<table class="w3-table w3-striped w3-white" style="width:100%" onclick="window.location.replace('indiv.php?id=<?= $row['PostID']; ?>')">
                                     <tr>
                                         <th>Title</th>
-                                        <th>UploadedDocuments:</th>
-                                        <th> Body:  $row["Body"] </th>
-                                        <th> IDs:  $row["Category1ID"]  </th>
-                                        <th> IDs:  $row["Category2ID"]  </th>
-                                        <th> IDs:  $row["Category3ID"]  </th>
-                                        <th>Department:  $row["Department"]  </th>
-                                        <th>Downvotes:  $row["Downvotes"]  </th>
-                                        <th>Upvotes:  $row["Upvotes"]  </th>
-                                        <th> isAnonymous:  $row["isAnonymous"] == 1 ? "Yes" : $user['Username']; </th>
+                                        <th>UploadedDocuments</th>
+                                        <th>Body</th>
+                                        <th>IDs  </th>
+                                        <th>IDs</th>
+                                        <th>IDs </th>
+                                        <th>Department</th>
+                                        <th>Downvotes</th>
+                                        <th>Upvotes </th>
+                                        <th>Anonymous?</th>
                                     </tr>
                                     <tr>
-                                        <td> $row["Title"] </td>
-                                        <td> $row["isUploadedDocuments"] </td>';
-                                        <td>50</td>
-                                        <td>Smith</td>
-                                        <td>50</td>
-                                        <td>Smith</td>
-                                        <td>50</td>
+                                        <td> <?=$row["Title"] ?></td>
+                                        <td> <?=$row["isUploadedDocuments"] ?></td>
+										<td> <?=$row["Body"] ?></td>
+										<td>  <?=$row["Category1ID"]?></td>
+										<td>   <?=$row["Category2ID"]?>  </td>
+										<td> <?=$row["Category3ID"]?>  </td>
+										<td>  <?=$row["Department"]?>  </td>
+										<td> <?=$row["Downvotes"]?>  </td>
+										<td> <?=$row["Upvotes"]?>  </td>
+										<td> <?=$row["isAnonymous"] == 1 ? "Yes" : $user['Username'];?></td>										
                                     </tr>
                             </table>
 								</div>
