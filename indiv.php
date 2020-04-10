@@ -146,7 +146,7 @@
 
     <fieldset>
         <p class="w3-center">
-            <label for="fname">Ideas</label><br />
+            <br />
 
         </p>
         <div class="w3-panel">
