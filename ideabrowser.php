@@ -193,18 +193,18 @@ $pageName = basename($_SERVER['PHP_SELF']);
                                     <tr>
                                         <th>Title</th>
                                         <th>UploadedDocuments:</th>
-                                        <th> Body: <?= $row["Body"] ?> </th>
-                                        <th> IDs: <?= $row["Category1ID"] ?> </th>
-                                        <th> IDs: <?= $row["Category2ID"] ?> </th>
-                                        <th> IDs: <?= $row["Category3ID"] ?> </th>
-                                        <th>Department: <?= $row["Department"] ?> </th>
-                                        <th>Downvotes: <?= $row["Downvotes"] ?> </th>
-                                        <th>Upvotes: <?= $row["Upvotes"] ?> </th>
-                                        <th> isAnonymous: <?= $row["isAnonymous"] == 1 ? "Yes" : $user['Username']; ?></th>
+                                        <th> Body:  $row["Body"] </th>
+                                        <th> IDs:  $row["Category1ID"]  </th>
+                                        <th> IDs:  $row["Category2ID"]  </th>
+                                        <th> IDs:  $row["Category3ID"]  </th>
+                                        <th>Department:  $row["Department"]  </th>
+                                        <th>Downvotes:  $row["Downvotes"]  </th>
+                                        <th>Upvotes:  $row["Upvotes"]  </th>
+                                        <th> isAnonymous:  $row["isAnonymous"] == 1 ? "Yes" : $user['Username']; </th>
                                     </tr>
                                     <tr>
-                                        <td><?= $row["Title"] ?></td>
-                                        <td><?= $row["isUploadedDocuments"] ?></td>';
+                                        <td> $row["Title"] </td>
+                                        <td> $row["isUploadedDocuments"] </td>';
                                         <td>50</td>
                                         <td>Smith</td>
                                         <td>50</td>
