@@ -1,71 +1,11 @@
-﻿<?php 
-Session_start();
-include_once 'config.php';
- //   include_once 'session.php';
-$sqlgettop = "SELECT Title, Department, Body, Upvotes, Downvotes FROM Posts ORDER BY Upvotes DESC;";
-$result = mysqli_query($conn, $sqlgettop);
-
-$resultCheck = mysqli_num_rows($result);
+﻿<?php
+session_start();
 
 if(!isset($_SESSION['login_user']))
 {           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
     header("location: login.php?YouAreNotLoggedIn");
 }
-
-
-$level = intval($_SESSION['level_user']);
-if($level < -4 )
-{           // dont allow if banned
-	header("location: banned.php");
-    
-}
-
-		$date_now = date("Y-m-d");
-	$datequery = ("SELECT EnteredDate, DisableOrClose FROM Dates WHERE DisableOrClose = '1'");
-	$resultdate = mysqli_query($conn, $datequery);
-	$rowsdate = mysqli_num_rows($resultdate);
-    if ($rowsdate > 0) 
-    {            
-		while($rowsdate = mysqli_fetch_assoc($resultdate)) {
-					
-			$gotDate = $rowsdate['EnteredDate'];
-		}
-		
-		if ($date_now > $gotDate){
-				header("location: siteclosed.php");
-		} else{
-			
-		}
-	}
-	else 
-    {
-	}
-
-$pageName = basename($_SERVER['PHP_SELF']);
-	$queryupdateViews = ("SELECT PageName, Views FROM Pages WHERE PageName = '$pageName'");
-	$resultupdateViews = mysqli_query($conn, $queryupdateViews);
-	$rowsupdateViews = mysqli_num_rows($resultupdateViews);
-    
-	if ($rowsupdateViews == 1)
-	{
-		while ($rowupdateViews = mysqli_fetch_array($resultupdateViews))
-		{
-			$addonreview = $rowupdateViews['Views'] + 1;
-			$queryViewAdd = "UPDATE Pages SET Views = '$addonreview' WHERE PageName = '$pageName'";
-			$resultToInsertView = mysqli_query($conn, $queryViewAdd);
-			
-
-
-		}
-	}else{
-		$queryEnterPage = ("Insert into Pages (PageName, Views) VALUES ('$pageName','1')");
-		$resultEnterPage = mysqli_query($conn, $queryEnterPage);
-	}
-
-
-
 ?>
-
 
 <!DOCTYPE html>
 
@@ -183,26 +123,15 @@ $pageName = basename($_SERVER['PHP_SELF']);
 						</div>
 						<div class="w3-panel">
 							<div class="row">
-								
-									 <?php 
-									 $num=0;
-									if ($resultCheck>0){
-										
-										while ($row = mysqli_fetch_assoc($result)){
-											$ovlVotes = $row['Upvotes']-$row['Downvotes'];
-											echo '<div class=column><h1>'.$row['Title'].'</h1>';
-											echo '<h3>Department: '.$row['Department'].'</h3>';
-											echo '<h4>'.$row['Body'].'</h4><br>';
-											echo " Rating: +";
-											echo $ovlVotes.'<br>'."</div>";
-											$num++;
-											if ($num>2){
-												die();
-											}
-										}
-									}?>
-								
-								
+								<div class="column">
+									<p> poo</p>
+								</div>
+								<div class="column">
+									<p> poo</p>
+								</div>
+								<div class="column">
+									<p> poo</p>
+								</div>
 							</div>
 							
 
@@ -232,10 +161,10 @@ $pageName = basename($_SERVER['PHP_SELF']);
 
 			<div class="footer w3-dark-gray">
 				<p><span style='border-bottom:2px white solid;'>Other useful links!</p></span>
-				<i class="fab fa-snapchat-ghost w3-margin-right"><a href="https://www.snapchat.com/add/uniofgreenwich" target="_blank"></i></a>
-				<i class="fab fa-twitter w3-margin-right"><a href="https://twitter.com/UniofGreenwich" target="_blank"></i></a>
-				<i class="fab fa-facebook-f w3-margin-right"><a href="https://www.facebook.com/uniofgreenwich/" target="_blank"></i></a>
-				<i class="fab fa-instagram w3-margin-right"><a href="https://www.instagram.com/uniofgreenwich/?hl=en" target="_blank"></i></a>
+				<i class="fab fa-snapchat-ghost w3-margin-right"></i>
+				<i class="fab fa-twitter w3-margin-right"></i>
+				<i class="fab fa-facebook-f w3-margin-right"></i>
+				<i class="fab fa-instagram w3-margin-right"></i>
 			</div>
 </body>
 </html>

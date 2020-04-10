@@ -115,8 +115,7 @@
 <!-- Navigation Bar (Within Header) -->
 <div class="w3-padding-8">
     <div class="w3-bar w3-dark-gray">
-        <div class="w3-right w3-bar-item w3-button">Logout</div>
-        <button class="w3-button w3-dark-gray w3-margin-top" name="logout" ><a href="logout.php">LOGOUT HERE</a></button>
+        <button class="w3-button w3-dark-gray w3-margin-top" name="logout" ><a href="logout.php">Logout</a></div>
     </div>
 </div>
 
@@ -132,9 +131,9 @@
     <div class="w3-sidebar w3-bar-block w3-border-bottom" style="display:none" id="mySidebar">
         <button onclick="w3_close()" class="w3-bar-item w3-large">Close &times;</button>
         <a href="ideaSubmission.php" class="w3-bar-item w3-button">Idea Sub</a>
-        <a href="#" class="w3-bar-item w3-button">Link 2</a>
-        <a href="#" class="w3-bar-item w3-button">Link 3</a>
-        <a href="registration.php" class="w3-bar-item w3-button">Link Reg</a>
+        <a href="ideabrowser.php" class="w3-bar-item w3-button">Idea Browser</a>
+        <a href="admin.php" class="w3-bar-item w3-button">Admin Page</a>
+        <a href="qacoor.php" class="w3-bar-item w3-button">QA Manager Page</a>
     </div>
 
     <div class="w3-container">

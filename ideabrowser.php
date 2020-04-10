@@ -96,12 +96,8 @@ $pageName = basename($_SERVER['PHP_SELF']);
 
 		}
 		.footer {
-	  position: fixed;
-	  left: 0;
-	  bottom: 0;
-	  width: 100%;
-	  color: white;
-	  text-align: center;
+            grid-row-start: 2;
+            grid-row-end: 3;
 	}
 		.bI {
 			width: 100%;
@@ -152,17 +148,17 @@ $pageName = basename($_SERVER['PHP_SELF']);
 	<!-- Page Content -->
 	<div class="page w3-content" style="max-width:1500px">
 		<div class="w3-white w3-border-bottom">
-			<button class="w3-button w3-white w3-xlarge" name= "contentbar" onclick="w3_open()">☰</button>
+			<button onclick="w3_open()" class="w3-button w3-white w3-xlarge" name= "contentbar" >☰</button>
 			<img src="Images/uog-logo.png" style="margin-bottom: 10px; margin-top: 10px;">
 		</div>
 
 		<!-- Sidebar -->
 		<div class="w3-sidebar w3-bar-block w3-border-bottom" style="display:none" id="mySidebar">
 			<button onclick="w3_close()" class="w3-bar-item w3-large">Close &times;</button>
-			<a href="ideaSubmission.php" class="w3-bar-item w3-button">Idea Sub</a>
-			<a href="#" class="w3-bar-item w3-button">Link 2</a>
-			<a href="#" class="w3-bar-item w3-button">Link 3</a>
-			<a href="registration.php" class="w3-bar-item w3-button">Link Reg</a>
+            <a href="ideaSubmission.php" class="w3-bar-item w3-button">Idea Sub</a>
+            <a href="ideabrowser.php" class="w3-bar-item w3-button">Idea Browser</a>
+            <a href="admin.php" class="w3-bar-item w3-button">Admin Page</a>
+            <a href="qacoor.php" class="w3-bar-item w3-button">QA Manager Page</a>
 		</div>
 
 		<fieldset>
@@ -209,9 +205,11 @@ $pageName = basename($_SERVER['PHP_SELF']);
 							};
 						?>
 					</div>
-        </div>
+                </fieldset>
+                </div>
 			</div>
-
+    </div>
+    
 		<ul class="w3-center pagination">
 			<a href="?pageno=1" class= "w3-button">First</a>
 			<a href="?pageno=<?= $total_pages; ?>" class="w3-button">Last</a>
@@ -233,13 +231,14 @@ $pageName = basename($_SERVER['PHP_SELF']);
                     document.getElementById("mySidebar").style.display = "none";
                 }
 			</script>
+
+            <div class="footer w3-dark-gray w3-center">
+                <p><span style='border-bottom:2px white solid;'>Other useful links!</p></span>
+                <a href="https://www.snapchat.com/add/uniofgreenwich" target="_blank"><i class="fab fa-snapchat-ghost w3-margin-right"></i></a>
+                <a href="https://twitter.com/UniofGreenwich" target="_blank"><i class="fab fa-twitter w3-margin-right"></i></a>
+                <a href="https://www.facebook.com/uniofgreenwich/" target="_blank"><i class="fab fa-facebook-f w3-margin-right"></i></a>
+                <a href="https://www.instagram.com/uniofgreenwich/?hl=en" target="_blank"><i class="fab fa-instagram w3-margin-right"></i></a>
+            </div>
 			
-			<div class="footer w3-dark-gray">
-				<p><span style='border-bottom:2px white solid;'>Other useful links!</p></span>
-				<a href="https://www.snapchat.com/add/uniofgreenwich" target="_blank"><i class="fab fa-snapchat-ghost w3-margin-right"></i></a>
-				<a href="https://twitter.com/UniofGreenwich" target="_blank"><i class="fab fa-twitter w3-margin-right"></i></a>
-				<a href="https://www.facebook.com/uniofgreenwich/" target="_blank"><i class="fab fa-facebook-f w3-margin-right"></i></a>
-				<a href="https://www.instagram.com/uniofgreenwich/?hl=en" target="_blank"><i class="fab fa-instagram w3-margin-right"></i></a>
-			</div>
 	</body>
 </html>
