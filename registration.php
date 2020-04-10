@@ -1,5 +1,109 @@
 ﻿<?php
-	session_start();
+    include "config.php";
+
+    $message = "";
+	
+if(isset($_SESSION['login_user']))
+{           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
+    header("location: index.php?YouAlreadyHaveAnAccount");
+}
+
+		$date_now = date("Y-m-d");
+	$datequery = ("SELECT EnteredDate, DisableOrClose FROM Dates WHERE DisableOrClose = '1'");
+	$resultdate = mysqli_query($conn, $datequery);
+	$rowsdate = mysqli_num_rows($resultdate);
+    if ($rowsdate > 0) 
+    {            
+		while($rowsdate = mysqli_fetch_assoc($resultdate)) {
+					
+			$gotDate = $rowsdate['EnteredDate'];
+		}
+		
+		if ($date_now > $gotDate){
+				header("location: siteclosed.php");
+		} else{
+			
+		}
+	}
+	else 
+    {
+	}
+
+
+	if (isset($_POST['registrationBtn']))
+    {
+		$username = mysqli_real_escape_string($conn, $_POST['username']);
+		$email = mysqli_real_escape_string($conn ,$_POST['email']);
+		$password = mysqli_real_escape_string($conn ,$_POST['password']);
+		$Confirmpassword = mysqli_real_escape_string($conn ,$_POST['confirm-password']);
+		$Department = mysqli_real_escape_string($conn ,$_POST['ResDept']);
+
+        if($username == "" || $email == "" || $password !== $Confirmpassword || $Department == "")
+        {
+            $messages = "Check Fields" ;
+        }  else
+        {
+               $query = ("SELECT * FROM Accounts WHERE Email= '$email'");
+               if($query->num_rows > 0)
+               {
+                     $message = "Email already in database";
+               }
+               else
+               {
+                    $token = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890!$/()';
+			        $token = str_shuffle($token);
+			        $token = Substr($token, 0, 15);
+
+			        $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+
+                    $query = "INSERT INTO Accounts (Username, Password, Email, Department, Level, isConfirmed, token)
+					VALUES('$username', '$hashPassword', '$email', '$Department', 0, 0, '$token')";
+
+                    if($query) {
+                         ini_set("SMTP", 'n3plcpnl0054.prod.ams3.secureserver.net');
+                         ini_set("sendmail_from", "noreply@daredicing.com");
+
+                           $to = $email;
+                           $subject = "Email Verification";
+                           $message = "Hello, $username. Thank for signing up on daredicing.com, you will recieve an email shortly.
+                            <a href=\"http://daredicing.com/confirmemail.php?email=$email&token=$token\">Click Here</a><p> Best of luck from BigBoiGames Ltd";
+                           $header = "From: noreply@daredicing.com";
+                           $headers .= "MIME-Version: 1.0" . "\r\n";
+                           $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+                           mail($to, $subject, $message, $headers);
+
+                           header("location: evar.php");
+                        mysqli_query($conn, $query);
+                    }
+                    }
+            }
+    };
+
+$pageName = basename($_SERVER['PHP_SELF']);
+	$queryupdateViews = ("SELECT PageName, Views FROM Pages WHERE PageName = '$pageName'");
+	$resultupdateViews = mysqli_query($conn, $queryupdateViews);
+	$rowsupdateViews = mysqli_num_rows($resultupdateViews);
+    
+	if ($rowsupdateViews == 1)
+	{
+		while ($rowupdateViews = mysqli_fetch_array($resultupdateViews))
+		{
+			$addonreview = $rowupdateViews['Views'] + 1;
+			$queryViewAdd = "UPDATE Pages SET Views = '$addonreview' WHERE PageName = '$pageName'";
+			$resultToInsertView = mysqli_query($conn, $queryViewAdd);
+			
+
+
+		}
+	}else{
+		$queryEnterPage = ("Insert into Pages (PageName, Views) VALUES ('$pageName','1')");
+		$resultEnterPage = mysqli_query($conn, $queryEnterPage);
+	}
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -9,6 +113,7 @@
     <title>GRE: Registration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--This is the link to our CSS!-->
+    <link rel="stylesheet" href="https://daredicing.com/css.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
 </head>
@@ -71,87 +176,6 @@
 
 <body>
 
-<?php
-if(isset($_POST['Submit']))
-{
-require 'config.php';
-
-$USERNAME = $_POST['username'];
-$PASSWORD = $_POST['password'];
-$CONFIRMPASSWORD = $_POST['confirm-password'];
-$EMAIL = $_POST['email'];
-
-if(empty($USERNAME) || empty($PASSWORD) || empty($CONFIRMPASSWORD) || empty($EMAIL))
-{
-	header("Location: ../Registration.html?error=emptyfields&username=".$USERNAME.);
-	exit();
-}
-else if(!filter_var($email, FILTER_VALIDATE_EMAIL) &&("/^[a-zA-Z0-9]*$/", $USERNAME))
-{
-	header("Location: ../Registration.html?error=invaildinformation");
-	exit();
-}
-
-else if(!preg_match("/^[a-zA-Z0-9]*$/", $USERNAME)
-{
-	header("Location: ../Registration.html?error=invaildemail=".$EMAIL);
-	exit();
-}
-else if($PASSWORD !== $CONFIRMPASSWORD)
-{
-	header("Location: ../Registration.html?error=passwordcheckusername=".$USERNAME. "&email=" .$EMAIL);
-	exit();
-}
-else 
-{
-	$sql = "SELECT * FROM Accounts WHERE Username=?";
-	$stmt = mysqli_stmt_init($conn);
-	if (!mysqli_stmt_prepare($stmt, $sql))
-	{
-		header("Location: ../Registration.html?error=databaseerrorr");
-		exit();
-	}
-	else 
-	{
-		mysqli_stmt_bind_param($stmt, "s", $USERNAME );
-		mysqli_stmt_execute($stmt);
-		mysqli_stmt_store_result($stmt)
-		
-		$resultChecker = mysqli_stmt_num_rows($stmt);
-		if ($resultChecker > 0)
-		{
-			header("Location: ../Registration.html?error=usernametaken");
-			exit()
-		}
-		else {
-			
-			/* ADDED THE FIELDS FROM THE SQL TABLE */
-			$sql = "INSERT INTO Accounts (Username, Password,Email) VALUES (?, ?, ?)";
-			$stmt = mysqli_stmt_init($conn);
-		if (!mysqli_stmt_prepare($stmt, $sql))
-			{
-			header("Location: ../Registration.html?error=databaseerrorr");
-			exit();
-			
-			}
-		else 
-			{
-			
-		$hashPassword = password_hash($PASSWORD, PASSWORD_DEFAULT);	
-		mysqli_stmt_bind_param($stmt, "sss", $USERNAME, $PASSWORD, $EMAIL);
-		mysqli_stmt_execute($stmt);
-		header("Location: ../Registration.html?RegistrationComplete");
-		exit();
-			}
-		}
-	}
-
-mysqli_stmt_close($stmt);
-mysqi_close($conn);
-
-}
-?>
-
     <!-- Page Content -->
     <div class="page w3-content" style="max-width:1500px">
 
@@ -161,38 +185,36 @@ mysqi_close($conn);
         </div>
 
         <!-- This divider will hold the log-in box -->
-        <form action="authenticate.php" method="post" class="w3-display-right w3-margin-right w3-container w3-card-4 w3-dark-grey">
+        <form action="registration.php" method="post" class="w3-display-middle w3-margin-right w3-container w3-card-4 w3-greenwich" onsubmit="return validateForm();">
             <h2 class="w3-center">Create an account</h2>
 
-				<?php
-				if(isset($_GET['error']))
-				{
-					if($_GET['error'] == "emptyfields")
-					{
-						echo '<p class="signuperror"> Fill in the information! </p>';
-					} 
-					else if($_GET['Error'] == "invaildinformation")
-					{
-						echo '<p class="signuperror"> Check Information </p>';
-					} 
-					else if($_GET['Error'] == "invaildemail")
-					{
-						echo '<p class="signuperror"> Check Email </p>';
-					}
-					else if($_GET['Error'] == "passwordcheckusername")
-					{
-						echo '<p class="signuperror"> passwords do not match </p>';
-					}
-					else if($_GET['Error'] == "usernametaken")
-					{
-						echo '<p class="signuperror"> Username Taken </p>';
-					}
-					else if($_GET['signup'] == "RegistrationComplete")
-					{
-						echo '<p class="signupsuccessful"> Registration Complete </p>';
-					}
-				}  
-?>
+			 <?php
+              if($message != "")
+              {
+                  echo $message;
+              }
+        ?>
+              <script>
+                function validateForm()
+                {
+                    const passcode = document.getElementById('password').value;
+                    const conpass = document.getElementById('confirm-password').value;
+                    let valid = true;
+
+                    if (conpass !== passcode)
+                    {
+                    alert("Passwords dont match");
+                    valid = false;
+                    }
+
+                if (valid === true)
+                    {
+                    return true;
+                    }
+                    return false;
+
+                }
+            </script>
 
             <!-- Username input field -->
             <p class="w3-center">
@@ -206,22 +228,38 @@ mysqi_close($conn);
                 <label>Please enter a Password below</label>
                 <i class="fas fa-lock"></i>
                 <input class="w3-input w3-border w3-center" type="password" name="password" placeholder="Password" id="password" required>
-				
+			</p>
 			 <!-- Password input field -->
             <p class="w3-center">
                 <label>Confirm Password</label>
                 <i class="fas fa-lock"></i>
-                <input class="w3-input w3-border w3-center" type="password" name="password" placeholder="Password" id="password" required>
-				
-			<!-- Department  -->
+                <input class="w3-input w3-border w3-center" type="password" name="confirm-password" placeholder="Password" id="confirm-password" required>
+			 </p>
+			<!-- Email input field -->
+			<p class="w3-center">
+				  <label>Email</label>
+				  <i class="fas fa-lock"></i>
+				  <input class="w3-input w3-border w3-center" type="text" name="email" placeholder="EMAIL" id="email" required>
+			 </p>
+			<!-- Department-->
+			<fieldset>
 				<p class="w3-center">
-                <label>Confirm Password</label>
-                <i class="fas fa-lock"></i>
-                <input class="w3-input w3-border w3-center" type="password" name="password" placeholder="Password" id="password" required>
-				
-				<button class="w3-button w3-dark-gray w3-margin-top">Submit</button>
+                <select id="Department" name="ResDept" class="w3-dropdown-click" required>
+                <?php
+              $departmentQuery = "SELECT Department, COUNT(*) FROM Accounts GROUP BY Department HAVING COUNT(*) > 0 ORDER BY Department ASC";
+                    $resultDepartment = mysqli_query($conn, $departmentQuery);
+                    while($rowDepartment=mysqli_fetch_array($resultDepartment))
+                    {
+                         echo '<option>' . $rowDepartment['Department'] . '</option>';
+                    }
+                ?> 
+                </select></p>
+			 </fieldset>
+
+				<button class="w3-center w3-button greenwich w3-hover-dark-gray w3-margin-top" name="registrationBtn" value="Registration">Submit</button>
         </form>
-    </div>
+		</div>
+	</div>
 
     <div class="footer w3-dark-gray">
         <p><span style='border-bottom:2px white solid;'>Other useful links!</p></span>

@@ -9,13 +9,15 @@
 //$mysqli = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
  //Database credentials.
-$host = "daredicing.com";
-$username = "Greed";
-$password = "elion123";
+$host = "localhost";
+$username = "localhost";
+$password = "v*&Q^Qx12Hcu";
 $dbName = "Greenwich";
- 
+
+$date = date_default_timezone_set('Europe/London');
+
 /* Attempt to connect to MySQL database */
-$conn = mysqli_connect($host, $username, $password, dbName);
+$conn = mysqli_connect($host, $username, $password, $dbName);
   
 // Check connection
 if(!$conn){
