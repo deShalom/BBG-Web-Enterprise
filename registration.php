@@ -2,6 +2,33 @@
     include "config.php";
 
     $message = "";
+	
+if(isset($_SESSION['login_user']))
+{           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
+    header("location: index.php?YouAlreadyHaveAnAccount");
+}
+
+		$date_now = date("Y-m-d");
+	$datequery = ("SELECT EnteredDate, DisableOrClose FROM Dates WHERE DisableOrClose = '1'");
+	$resultdate = mysqli_query($conn, $datequery);
+	$rowsdate = mysqli_num_rows($resultdate);
+    if ($rowsdate > 0) 
+    {            
+		while($rowsdate = mysqli_fetch_assoc($resultdate)) {
+					
+			$gotDate = $rowsdate['EnteredDate'];
+		}
+		
+		if ($date_now > $gotDate){
+				header("location: siteclosed.php");
+		} else{
+			
+		}
+	}
+	else 
+    {
+	}
+
 
 	if (isset($_POST['registrationBtn']))
     {
