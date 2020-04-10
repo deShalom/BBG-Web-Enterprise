@@ -9,9 +9,12 @@ if(!isset($_SESSION['login_user']))
 }
 
 	$level = intval($_SESSION['level_user']);
-	if ($level < -4){
-		header("location: banned.php");
-	}else if (!$level > 2){
+
+	if ($level < 2){
+		
+			if ($level < -4){
+				header("location: banned.php");
+			}
 		header ("location: index.php?YouAreNotAQACoordinator");
 	}
 	
