@@ -109,14 +109,44 @@ if(isset($_FILES['fileToUpload'])) // if document upload is submitted
                 
     }
 }
-
+$user_level = $_SESSION['level_user']; // session variable for user level
+$username = $_SESSION['username'];
 insertNoDoc:  // when no docs are selected, code will jump to this.                 
             $updatePost = "INSERT INTO Posts (Department, Title, Body, Category1ID, Category2ID, Category3ID, isUploadedDocuments, Views, UserID, isAnonymous, ProblemTxt) 
                             VALUES ('$ideadept', '$posttitle', '$problem', '$category1', '$category2', '$category3', '$docupload', '0','$userID', '$anon', '$idea');";
             mysqli_query($conn, $updatePost); // runs the query and checks if it runs fine
-            header("Location: index.php?PostSubmitted"); // takes us back to Index with a success msg for this specific event
-  
-// Line 71; query doesn't run, spits me into the "else" block.
+            //header("Location: index.php?PostSubmitted"); // takes us back to Index with a success msg for this specific event
 
+                $retrieveQACoord = "SELECT Username FROM Accounts WHERE LEVEL = 3 AND Department = '$ideadept'"; // SQL to find username of QA Coord
+                $retrieveQACoordResult = mysqli_query($conn, $retrieveQACoord); // exec query
+                $rowQACoord = mysqli_fetch_assoc($retrieveQACoordResult); // fetching results
+                $QAusername = $rowQACoord['Username'];              // works
+
+                $doesQAexist = "SELECT 1 FROM Accounts WHERE Level = 3 AND Department = '$ideadept';"; // SQL to see if a QA exists for that department
+                $doesQAexistResult = mysqli_query($conn, $doesQAexist); // exec query
+                $rowQAExist = mysqli_fetch_assoc($doesQAexistResult); // fetch results                          // Works
+            
+                $retrieveEmail = "SELECT Email FROM Accounts WHERE Level = 3 AND Department = '$ideadept';"; // query to grab email from appropriate account
+                $retrieveEmailResult = mysqli_query($conn, $retrieveEmail); // exec the query
+                $foundQAEmail = mysqli_fetch_assoc($retrieveEmailResult); // fetch the results                             // Works   
+                
+                if($rowQAExist['1']){ // checks if QA Coor exists 
+                    ini_set("SMTP", 'n3plcpnl0054.prod.ams3.secureserver.net');
+                    ini_set("sendmail_from", "noreply@daredicing.com");
+
+                      $to = $foundQAEmail['Email'];     // variable setting the Email address this email will be sent to
+                      $subject = "New Idea Submission for your Department!"; // subject of the email.
+                      $message = "Hello, $QAusername. As the QA Coordinator for your department, $ideadept, I would like to notify you of a new Idea Submission titled $posttitle for your department!
+                                   Check it out by logging into the portal here: <a href=\"http://daredicing.com/login.php\">Click Here</a><p> Best of luck from BigBoiGames Ltd</p>";
+                                    // Body text of the email; including variables for the QACoordinator username, the idea department and the title of post.                   
+                      $header = "From: noreply@daredicing.com";
+                      $headers .= "MIME-Version: 1.0" . "\r\n";
+                      $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+                      mail($to, $subject, $message, $headers);
+                      header("Location: index.php?PostSubmittedEmailSentToQACoord"); // success message; if email is found and everything goes well; update Post and send email. Works fine.
+                }else{
+                    header("Location: index.php?PostSubmittedEmailNotSent"); // if there is no QACoord for that department, email will not be sent but Post will be submitted.
+                }
 
 ?>
