@@ -18,7 +18,6 @@
 	$date = date('Y-m-d H:i:s'); //now you can save in DB
 	$query = "SELECT LastLoggedIn, Username FROM Accounts WHERE UserID = $userID";
 	$result = mysqli_query($conn, $query);
-	echo "Nero3";
 	if(mysqli_num_rows($result) == 0)
 	{
 		$messages = "Welcome New User";
