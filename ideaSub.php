@@ -45,25 +45,28 @@ $target_dir = ('uploadedDocs/'); // target directory
 if (isset($_POST['submitidea'])){ // if submit button is pressed
 
     // Creating variables allowing us to use the functionality of our other php pages (in this case, minaly ideaSubmission.php)
+    $ideadept = $_POST['department'];
     $category1 = $_POST['category1'];
     $category2 = $_POST['category2'];
     $category3 = $_POST['category3'];
+    $posttitle = mysqli_real_escape_string($conn, $_POST['posttitle']);
     $problem = mysqli_real_escape_string($conn, $_POST['problem']);
     $idea = mysqli_real_escape_string($conn, $_POST['idea']);
-    // Creating a boolean variable to let us know if a post has documents attached. With FALSE as default.
-    $docupload = '0';
-    $posttitle = mysqli_real_escape_string($conn, $_POST['posttitle']);
-    $ideadept = $_POST['department'];
+    $docupload = '0'; // changes to "1" if files are ready to be uploaded.   
 
     // if anon checkbox is ticked, it is set to 1; if not, set to 0.
     if(isset($_POST['anon'])){
-        $anon = "1";
+        $anon = "1"; // if set, then "1"
     }
     else{
-        $anon = "0";
+        $anon = "0"; // if not set, then "0"
     }    
     
-    $updatePost = "INSERT INTO Posts (Department, Title, Body, Category1ID, Category2ID, Category3ID, isUploadedDocuments, UserID, isAnonymous, ProblemTxt) VALUES ('$ideadept', '$posttitle', '$problem', '$category1', '$category2', '$category3', '$docupload', '$userID', '$anon', '$idea');";
+    // $updatePost = "INSERT INTO Categories (CategoryName) VALUES ('inserttest');"; THIS WORKS FINE, updates the Categories table
+    //$updatePost = "INSERT INTO Posts (Department, Title, Body, Category1ID, Category2ID, Category3ID, isUploadedDocuments, UserID, isAnonymous, ProblemTxt) VALUES ('$ideadept', '$posttitle', '$problem', '$category1', '$category2', '$category3', '$docupload', '$userID', '$anon', '$idea');";
+        // query above takes variables as input to db; does NOT work.
+    //$updatePost = "INSERT INTO Posts (Department, Title, Body, Category1ID, Category2ID, Category3ID, isUploadedDocuments, UserID, isAnonymous, ProblemTxt) VALUES ('Computing', 'Test Title', 'This is a problem', '3', '2', '0', '1', '$userID', '0', 'This is how I fix problem');";
+        // query above takes my own inputs to db; does NOT work.
     if(mysqli_query($conn, $updatePost)){ // runs the query and checks if it runs fine
         header("Location: index.php?NoDocsUploadedPostUpdated"); // takes us back to Index with a success msg for this specific event     
     }
