@@ -25,7 +25,7 @@
     $category2Name = mysqli_query($conn, "SELECT CategoryName FROM Categories WHERE CategoryID = $category2ID;");
     $category3Name = mysqli_query($conn, "SELECT CategoryName FROM Categories WHERE CategoryID = $category3ID;");
 
-    $commentsData = mysqli_query($conn, "SELECT UserID, Body FROM Comments WHERE PostID=$postID");
+    $commentsData = mysqli_query($conn, "SELECT UserID, Body, isAnonymous FROM Comments WHERE PostID=$postID");
     $userID = $post['UserID'];
     $userData = mysqli_query($conn, "SELECT Username FROM Accounts WHERE UserID=$userID");
     $user = mysqli_fetch_array($userData);
@@ -141,7 +141,7 @@
         <!-- This  is the field for the idea's title -->
         <p class="w3-center"><u><?= $post["Title"]; ?></u></p>
         <!-- This  is the field for the idea's text -->
-        <p class="w3-center w3-border">Idea's example text here!</p>
+
     </div>
 
     <fieldset>
@@ -153,9 +153,9 @@
             <div class="w3-row-padding w3-padding-16">
                 <div class="flex-container">
                     <div class="column ">
-                        <p>Title: <?= $post["Title"]; ?></p>
 
-                        <p> Body: <?= $post["Body"]; ?></p>
+
+                        <p> <?= $post["Body"]; ?></p>
 
                         <p>Department: <?= $post["Department"]; ?></p>
 
@@ -206,11 +206,11 @@
 
                 </div>
             </div>
-            <form action="/comment.php" id="usrform" method="post">
+            <form action="/comment.php?id=<?= $postID ?>" id="usrform" method="post">
                     <div>
                         <input type='hidden' name='UserID' value='Anonymous'>
                         <input type='hidden' name='PostID' value='postID'>
-                        <textarea name="messages"></textarea><br>
+                        <textarea name="messages" placeholder="Type Comment"required></textarea><br>
                         <input type='checkbox' id='anoncheck' name='anoncheck' value='Anon'>
                         <label for="anoncheck"> Post Anonymously</label><br>
                         <button type="w3-button submit" name="submitpost">Comment</button>
@@ -223,8 +223,14 @@
                     while($comment = mysqli_fetch_assoc($commentsData)) {
                 $commentuserID= $comment['UserID'];
                 $getusername= mysqli_query($conn,"SELECT Username FROM Accounts WHERE UserID=$commentuserID");
+                        $anonc = $comment['isAnonymous'];
                    $username = mysqli_fetch_assoc($getusername);
-                    echo ("Posted by ".$username['Username']."<br>");
+
+                   if ($anonc == 1) {
+                       echo("Posted by Anon" . "<br>");
+                   } else {
+                       echo("Posted by " . $username['Username'] . "<br>");
+                   }
                     echo ($comment['Body']."<br><br>");
                
                     }
