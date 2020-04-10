@@ -114,7 +114,8 @@ $LoggedInUserID=$_SESSION['userID'];
 <!-- Navigation Bar (Within Header) -->
 <div class="w3-padding-8">
     <div class="w3-bar w3-dark-gray">
-        <button class="w3-button w3-dark-gray w3-margin-top" name="logout" ><a href="logout.php">Logout</a></div>
+        <div class="w3-right w3-bar-item w3-button">Logout</div>
+        <button class="w3-button w3-dark-gray w3-margin-top" name="logout" ><a href="logout.php">LOGOUT HERE</a></button>
     </div>
 </div>
 
@@ -130,9 +131,9 @@ $LoggedInUserID=$_SESSION['userID'];
     <div class="w3-sidebar w3-bar-block w3-border-bottom" style="display:none" id="mySidebar">
         <button onclick="w3_close()" class="w3-bar-item w3-large">Close &times;</button>
         <a href="ideaSubmission.php" class="w3-bar-item w3-button">Idea Sub</a>
-        <a href="ideabrowser.php" class="w3-bar-item w3-button">Idea Browser</a>
-        <a href="admin.php" class="w3-bar-item w3-button">Admin Page</a>
-        <a href="qacoor.php" class="w3-bar-item w3-button">QA Manager Page</a>
+        <a href="#" class="w3-bar-item w3-button">Link 2</a>
+        <a href="#" class="w3-bar-item w3-button">Link 3</a>
+        <a href="registration.php" class="w3-bar-item w3-button">Link Reg</a>
     </div>
 
     <div class="w3-container">
@@ -150,29 +151,30 @@ $LoggedInUserID=$_SESSION['userID'];
         <div class="w3-panel">
             <div class="w3-row-padding w3-padding-16">
                 <div class="flex-container">
-                    <div class="column ">
 
 
-                        <p> <?= $post["Body"]; ?></p>
 
-                        <p>Department: <?= $post["Department"]; ?></p>
+                         <table class="w3-table w3-striped w3-white style=\width:100%\" ">
+                        <tr><p><?= $post["Body"]; ?></p></tr>
+
+                        <tr><p>Department: <?= $post["Department"]; ?></p></tr>
 
                         <!--- Show upvotes and downvotes--->
-                        <p>Downvotes: <?php while($row = mysqli_fetch_assoc($downvotes)){
+                        <tr><p>Downvotes: <?php while($row = mysqli_fetch_assoc($downvotes)){
                             echo ($row['Down']);
                         } 
                         
                         ?>
-                        </p>
-                        <p>Upvotes: <?php  while($row = mysqli_fetch_assoc($upvotes)){
+                            </p></tr>
+                        <tr><p>Upvotes: <?php  while($row = mysqli_fetch_assoc($upvotes)){
                             echo ($row['Up']);
                         } 
                         ?>
-                        </p>
+                            </p></tr>
 
                         <!--- if not show username--->
-                        <p> Posted by: <?= $anon == 1 ? "Anon" : $user['Username']; ?></p>
-                        <p>
+                        <tr><p> Posted by: <?= $anon == 1 ? "Anon" : $user['Username']; ?></p></tr>
+                        <tr><p>
                             Categories: 
                         <?php
                         if (isset($category1ID)){
@@ -188,8 +190,8 @@ $LoggedInUserID=$_SESSION['userID'];
                              echo ($row['CategoryName']);
                         }}
                         ?>
-                        </p>
-                    </div>
+                        </p></tr>
+
 
                
 
@@ -216,7 +218,7 @@ $LoggedInUserID=$_SESSION['userID'];
                 </form>
                 <div>
                     <h3>Comments</h3>
-                <p>
+                    <table class="w3-table w3-striped w3-white style=\width:100%\" ">
                 <?php
                     while($comment = mysqli_fetch_assoc($commentsData)) {
                 $commentuserID= $comment['UserID'];
@@ -226,11 +228,11 @@ $LoggedInUserID=$_SESSION['userID'];
                    $username = mysqli_fetch_assoc($getusername);
 
                    if ($anonc == 1) {
-                       echo("Posted by Anon" . "<br>");
+                       echo("<tr><p>Posted by Anon" . "</tr></p>");
                    } else {
-                       echo("Posted by " . $username['Username'] . "<br>");
+                       echo("<tr><p>Posted by " . $username['Username'] . "</p></tr>");
                    }
-                    echo ($comment['Body']."<br>");
+                    echo ("<tr><p>".$comment['Body']."</p></tr>");
                if ($LoggedInUserID == $commentuserID){
                    $href = '<a href="deletecomment.php?id='.$postID.'&commentid='.$commentID.'">Delete Comment (Cannot be undone)</a><br>';
                    echo($href);
@@ -238,7 +240,7 @@ $LoggedInUserID=$_SESSION['userID'];
                     $href2='<a href="reportcomment.php?id='.$postID.'&commentid='.$commentID.'">Report Comment</a><br><br>';
                     echo($href2);
                     }
-                ?></p>
+                ?></table>
                 </div>
         </div>
     </fieldset>
