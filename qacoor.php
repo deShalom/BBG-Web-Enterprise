@@ -238,11 +238,7 @@ if(!isset($_SESSION['login_user']))
                 </div>
             </div>
         </div>
-
-
-
-
-
+        
 <!-- Categories Analysis -->
 
   <div class="w3-panel">
