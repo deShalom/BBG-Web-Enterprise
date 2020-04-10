@@ -41,7 +41,7 @@ $email =  mysqli_fetch_assoc($getemail);
     $to = $email['Email'];
     $subject = "New comment on your idea";
     $message = "A new comment has been posted on your idea. 
-                            <a href=\"http://daredicing.com/indiv.php?id=$postID">"Click Here</a><p> to view it.";
+                            <a href=\"http://daredicing.com/indiv.php?id=$postID\">Click Here</a><p> to view it.";
     $headers = "From: noreply@daredicing.com";
     $headers .= "MIME-Version: 1.0" . "\r\n";
     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
