@@ -12,41 +12,23 @@
 	}
 	
 	include 'config.php';
+	
+	$userID = $_SESSION['userID'];
+	
 	$date = date('Y-m-d H:i:s'); //now you can save in DB
-	$query = "SELECT LastLoggedIn, Username FROM Accounts WHERE Username = '$UseName'";
-	//SELECT LastLoggedIn, Username FROM Accounts WHERE LastLoggedIn =  "$timedate"
-	echo "Nero";
-	echo "$UseName";
-	echo "$lOogaBooga";
+	$query = "SELECT LastLoggedIn, Username FROM Accounts WHERE UserID = $userID";
 	$result = mysqli_query($conn, $query);
-	$row = mysqli_fetch_array($result);
-	echo $row["Username"];
-	echo "Nero1";
-	$UseName = $row["Username"];
-	$lOogaBooga = $row['LostLoggedIn'];
-	
-	echo "Nero2";
-	$messages = '';
-	
 	echo "Nero3";
-	
-	if(mysqli_num_rows($result) > 0)
+	if(mysqli_num_rows($result) == 0)
 	{
-		
-		while  ($row = mysqli_fetch_array($result))
-		{
-			$messages .= "Welcome New User";
-			echo "Nero4";
-		}
-		else
-		{
-			$
-		}
-		
-		
-		
+		$messages = "Welcome New User";
 	}
-	
+	else
+	{
+		while($row = mysqli_fetch_assoc($result)) {
+            $messages = "Welcome " . $row['Username'] . ". Last Login was: " . $row['LastLoggedIn'];
+        }
+	}
 ?>
 
 
@@ -138,7 +120,7 @@
 	
 	<!-- Banned user content -->
 	<div class="w3-display-middle" style="background-color:#060360;">
-		<p class="w3-margin-right w3-margin-left" style="color:#ffffff"><i class="fas fa-check w3-margin-right" style="color:#ffffff"></i><?php echo $messages?> </p>
+		<p class="w3-margin-right w3-margin-left" style="color:#ffffff"><i class="fas fa-check w3-margin-right" style="color:#ffffff"></i><?php echo $messages ?> </p>
 	</div>
 	
 	<button class="sB w3-display-middle w3-button" style="background-color:#060360; color:#ffffff"><a href="http://daredicing.com/index.php"><i class="fas fa-sign-out-alt"></i>Click Here</button></a>

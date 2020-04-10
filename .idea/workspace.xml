@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b9d955f8-728e-4a29-bec4-e86a566c3758" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authenticate.php" beforeDir="false" afterPath="$PROJECT_DIR$/authenticate.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ideabrowser.php" beforeDir="false" afterPath="$PROJECT_DIR$/ideabrowser.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/welcome.php" beforeDir="false" afterPath="$PROJECT_DIR$/welcome.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -75,10 +73,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="254" height="195" key="DatabaseViewActions_Filter/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586461801804" />
-    <state x="795" y="443" key="NewPhpFileDialog" timestamp="1586380568717">
+    <state x="795" y="443" key="NewPhpFileDialog" timestamp="1586466433879">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="795" y="443" key="NewPhpFileDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586380568717" />
+    <state x="795" y="443" key="NewPhpFileDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586466433879" />
     <state x="461" y="162" key="SettingsEditor" timestamp="1586438717021">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -87,9 +85,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="661" y="344" key="com.intellij.ide.util.TipDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586437488698" />
-    <state x="616" y="240" key="run.anything.popup" timestamp="1586444212347">
+    <state x="616" y="240" key="run.anything.popup" timestamp="1586477764296">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="616" y="240" key="run.anything.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586444212347" />
+    <state x="616" y="240" key="run.anything.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586477764296" />
   </component>
 </project>
