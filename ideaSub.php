@@ -42,17 +42,17 @@ function reArrayFiles($file_post){ // function to help with rearranging the file
 
 $target_dir = ('uploadedDocs/'); // target directory
 
-if (isset($_POST['submitidea'])){ // if submit button is pressed
+// Creating variables allowing us to use the functionality of our other php pages (in this case, minaly ideaSubmission.php)
+$ideadept = $_POST['department'];
+$category1 = $_POST['category1'];
+$category2 = $_POST['category2'];
+$category3 = $_POST['category3'];
+$posttitle = mysqli_real_escape_string($conn, $_POST['posttitle']);
+$problem = mysqli_real_escape_string($conn, $_POST['problem']);
+$idea = mysqli_real_escape_string($conn, $_POST['idea']);
+$docupload = '0'; // changes to "1" if files are ready to be uploaded.
 
-    // Creating variables allowing us to use the functionality of our other php pages (in this case, minaly ideaSubmission.php)
-    $ideadept = $_POST['department'];
-    $category1 = $_POST['category1'];
-    $category2 = $_POST['category2'];
-    $category3 = $_POST['category3'];
-    $posttitle = mysqli_real_escape_string($conn, $_POST['posttitle']);
-    $problem = mysqli_real_escape_string($conn, $_POST['problem']);
-    $idea = mysqli_real_escape_string($conn, $_POST['idea']);
-    $docupload = '0'; // changes to "1" if files are ready to be uploaded.   
+if (isset($_POST['submitidea'])){ // if submit button is pressed       
 
     // if anon checkbox is ticked, it is set to 1; if not, set to 0.
     if(isset($_POST['anon'])){
@@ -61,18 +61,18 @@ if (isset($_POST['submitidea'])){ // if submit button is pressed
     else{
         $anon = "0"; // if not set, then "0"
     }    
-    
+    // This was a test to see if i could get it to run off of (isset($_POST['submitidea'])
     // $updatePost = "INSERT INTO Categories (CategoryName) VALUES ('inserttest');"; THIS WORKS FINE, updates the Categories table
     //$updatePost = "INSERT INTO Posts (Department, Title, Body, Category1ID, Category2ID, Category3ID, isUploadedDocuments, UserID, isAnonymous, ProblemTxt) VALUES ('$ideadept', '$posttitle', '$problem', '$category1', '$category2', '$category3', '$docupload', '$userID', '$anon', '$idea');";
         // query above takes variables as input to db; does NOT work.
     //$updatePost = "INSERT INTO Posts (Department, Title, Body, Category1ID, Category2ID, Category3ID, isUploadedDocuments, UserID, isAnonymous, ProblemTxt) VALUES ('Computing', 'Test Title', 'This is a problem', '3', '2', '0', '1', '$userID', '0', 'This is how I fix problem');";
         // query above takes my own inputs to db; does NOT work.
-    if(mysqli_query($conn, $updatePost)){ // runs the query and checks if it runs fine
-        header("Location: index.php?NoDocsUploadedPostUpdated"); // takes us back to Index with a success msg for this specific event     
-    }
-    else{
-        echo "faked it";
-    }
+    //if(mysqli_query($conn, $updatePost)){ // runs the query and checks if it runs fine
+        //header("Location: index.php?NoDocsUploadedPostUpdated"); // takes us back to Index with a success msg for this specific event     
+    //}
+    //else{
+        //echo "faked it";
+    //}
 }
 
 if(isset($_FILES['fileToUpload'])) // if document upload is submitted
@@ -84,13 +84,15 @@ if(isset($_FILES['fileToUpload'])) // if document upload is submitted
             if($file_array[$i]['error'] = '4'){ // this is a unique handler as if a doc hasnt been select, it will run this
                 echo "No docs have been uploaded!";
                 // The Query below doesn't wanna work and throws me into the "else"; help.
-                //$updatePost = "INSERT INTO Posts (Department, Title, Body, Category1ID, Category2ID, Category3ID, isUploadedDocuments, UserID, isAnonymous, ProblemTxt) VALUES ('$ideadept', '$posttitle', '$problem', '$category1', '$category2', '$category3', '$docupload', '$userID', '$anon', '$idea');";
-                    //if(mysqli_query($conn, $updatePost)){ // runs the query and checks if it runs fine
+                // Tested with updating Categories table; works fine.
+                $updatePost = "INSERT INTO Posts (Department, Title, Body, Category1ID, Category2ID, Category3ID, isUploadedDocuments, UserID, isAnonymous, ProblemTxt) 
+                                VALUES ('$ideadept', '$posttitle', '$problem', '$category1', '$category2', '$category3', '$docupload', '$userID', '$anon', '$idea');";
+                    if(mysqli_query($conn, $updatePost)){ // runs the query and checks if it runs fine
                         //header("Location: index.php?NoDocsUploadedPostUpdated"); // takes us back to Index with a success msg for this specific event     
-                    //}
-                    //else{
+                    }
+                    else{
                         //echo "query doesn't go through"; // if query doesnt go through
-                    //}
+                    }
             }
             else{ // if any other error occurs, it will be displayed.
                 echo $file_array[$i]['name'].' - '.$phpFileUploadErrors[$file_array[$i]['error']];
