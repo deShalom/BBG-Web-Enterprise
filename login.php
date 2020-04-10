@@ -25,7 +25,7 @@ include('authenticate.php'); // Includes Login Script
 	
 	if(isset($_SESSION['login_user']))
 {           // if they are logged in no access to login page
-    header("location: index.php");
+    header("location: welcome.php");
 }
 	
  
