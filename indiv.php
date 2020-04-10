@@ -6,7 +6,7 @@
 	{           // if used attempts to access this site without being logged in, verified by session, they will be taken back to login.php with a error msgs!
 		header("location: login.php?YouAreNotLoggedIn");
 	}
-
+$LoggedInUserID=$_SESSION['userID'];
     $postID = $_GET["id"];
 
     mysqli_query($conn, "UPDATE Posts SET Views=Views+1 WHERE PostID=$postID");
@@ -25,11 +25,10 @@
     $category2Name = mysqli_query($conn, "SELECT CategoryName FROM Categories WHERE CategoryID = $category2ID;");
     $category3Name = mysqli_query($conn, "SELECT CategoryName FROM Categories WHERE CategoryID = $category3ID;");
 
-    $commentsData = mysqli_query($conn, "SELECT UserID, Body, isAnonymous FROM Comments WHERE PostID=$postID");
+    $commentsData = mysqli_query($conn, "SELECT CommentID, UserID, Body, isAnonymous FROM Comments WHERE PostID=$postID");
     $userID = $post['UserID'];
     $userData = mysqli_query($conn, "SELECT Username FROM Accounts WHERE UserID=$userID");
     $user = mysqli_fetch_array($userData);
-    $LoggedInUserID=$_SESSION['userID'];
     $upvotes = mysqli_query($conn, "SELECT COUNT(DISTINCT userID) as Up FROM Votes WHERE PostID = $postID AND VoteType = 1");
     $downvotes = mysqli_query($conn, "SELECT COUNT(DISTINCT userID) AS Down FROM Votes WHERE PostID = $postID AND VoteType = 0")
 
@@ -221,6 +220,7 @@
                 <?php
                     while($comment = mysqli_fetch_assoc($commentsData)) {
                 $commentuserID= $comment['UserID'];
+                $commentID = $comment['CommentID'];
                 $getusername= mysqli_query($conn,"SELECT Username FROM Accounts WHERE UserID=$commentuserID");
                         $anonc = $comment['isAnonymous'];
                    $username = mysqli_fetch_assoc($getusername);
@@ -230,8 +230,13 @@
                    } else {
                        echo("Posted by " . $username['Username'] . "<br>");
                    }
-                    echo ($comment['Body']."<br><br>");
-               
+                    echo ($comment['Body']."<br>");
+               if ($LoggedInUserID == $commentuserID){
+                   $href = '<a href="deletecomment.php?id='.$postID.'&commentid='.$commentID.'">Delete Comment (Cannot be undone)</a><br>';
+                   echo($href);
+               }
+                    $href2='<a href="reportcomment.php?id='.$postID.'&commentid='.$commentID.'">Report Comment</a><br><br>';
+                    echo($href2);
                     }
                 ?></p>
                 </div>

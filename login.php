@@ -38,7 +38,7 @@ include('authenticate.php'); // Includes Login Script
     <title>GRE: Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--This is the link to our CSS!-->
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://daredicing.com/css.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
 </head>
 
@@ -100,7 +100,7 @@ include('authenticate.php'); // Includes Login Script
         </div>
 
     <!-- This divider will hold the log-in box -->
-    <form method="post" action="" class="w3-display-middle w3-margin-right w3-container w3-card-4 w3-dark-grey">
+    <form method="post" action="" class="w3-display-middle w3-margin-right w3-container w3-card-4 w3-greenwich">
         <h2 class="w3-center">Login</h2>
 
         <!-- Username input field -->
@@ -114,12 +114,12 @@ include('authenticate.php'); // Includes Login Script
             <label>Password</label>
             <i class="fas fa-lock"></i>
             <input class="w3-input w3-border w3-center" type="password" name="password" placeholder="Password" id="password" required>
-            <button type="submit" class="w3-button w3-dark-gray w3-margin-top" name="loginbtn">Login</button>
+            <button type="submit" class="w3-button w3-greenwich w3-hover-dark-gray w3-margin-top" name="loginbtn">Login</button>
             <br />
             <br />
             <br />
         <div>
-            <a href="registration.php" button class="w3-button w3-dark-gray w3-display-bottommiddle w3-margin-bottom" >Create an account!</a>
+            <a href="registration.php" button class="w3-button w3-greenwich w3-hover-dark-gray w3-display-bottommiddle w3-margin-bottom" >Create an account!</a>
         </div>
 
     </form>
