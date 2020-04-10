@@ -11,8 +11,8 @@ $level = intval($_SESSION['level_user']);
 		header("location: banned.php");
 
 	}
-$level = intval($_SESSION['level_user']);
-	if ($level = -3){
+
+	if ($level == -3){
 		header("location: index.php?YouAreBlockedFromPosting");
 
 	}
