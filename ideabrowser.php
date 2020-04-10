@@ -155,12 +155,13 @@ $pageName = basename($_SERVER['PHP_SELF']);
 		<!-- Sidebar -->
 		<div class="w3-sidebar w3-bar-block w3-border-bottom" style="display:none" id="mySidebar">
 			<button onclick="w3_close()" class="w3-bar-item w3-large">Close &times;</button>
+            <a href="index.php" class="w3-bar-item w3-button">Home</a>
             <a href="ideaSubmission.php" class="w3-bar-item w3-button">Idea Sub</a>
             <a href="ideabrowser.php" class="w3-bar-item w3-button">Idea Browser</a>
             <a href="admin.php" class="w3-bar-item w3-button">Admin Page</a>
             <a href="qacoor.php" class="w3-bar-item w3-button">QA Manager Page</a>
 		</div>
-
+    </div>
 		<fieldset>
 			<p class="w3-center">
 				<label for="fname">Submitted Ideas</label><br />
@@ -172,7 +173,7 @@ $pageName = basename($_SERVER['PHP_SELF']);
 							$total_pages_sql = "SELECT COUNT(*) AS numPages FROM Posts";
 							$queryResult = mysqli_query($conn, $total_pages_sql);
 							$total_rows = mysqli_fetch_array($queryResult);
-							$total_pages = ceil($total_rows['numPages'] / 5);
+							$total_pages = ceil($total_rows['numPages'] / 6);
 
 							$sql = "SELECT * FROM Posts LIMIT 5 OFFSET $offset";
 							$data = mysqli_query($conn,$sql);
@@ -225,7 +226,6 @@ $pageName = basename($_SERVER['PHP_SELF']);
                 </fieldset>
                 </div>
 			</div>
-    </div>
     
 		<ul class="w3-center pagination">
 			<a href="?pageno=1" class= "w3-button">First</a>

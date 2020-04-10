@@ -130,6 +130,7 @@ $LoggedInUserID=$_SESSION['userID'];
     <!-- Sidebar -->
     <div class="w3-sidebar w3-bar-block w3-border-bottom" style="display:none" id="mySidebar">
         <button onclick="w3_close()" class="w3-bar-item w3-large">Close &times;</button>
+        <a href="index.php" class="w3-bar-item w3-button">Home</a>
         <a href="ideaSubmission.php" class="w3-bar-item w3-button">Idea Sub</a>
         <a href="#" class="w3-bar-item w3-button">Link 2</a>
         <a href="#" class="w3-bar-item w3-button">Link 3</a>
