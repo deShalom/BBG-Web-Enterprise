@@ -52,54 +52,33 @@ $problem = mysqli_real_escape_string($conn, $_POST['problem']);
 $idea = mysqli_real_escape_string($conn, $_POST['idea']);
 $docupload = '0'; // changes to "1" if files are ready to be uploaded.
 
-if (isset($_POST['submitidea'])){ // if submit button is pressed       
-
+if (isset($_POST['submitidea'])){ // if submit button is pressed
     // if anon checkbox is ticked, it is set to 1; if not, set to 0.
     if(isset($_POST['anon'])){
         $anon = "1"; // if set, then "1"
     }
     else{
         $anon = "0"; // if not set, then "0"
-    }    
-    // This was a test to see if i could get it to run off of (isset($_POST['submitidea'])
-    // $updatePost = "INSERT INTO Categories (CategoryName) VALUES ('inserttest');"; THIS WORKS FINE, updates the Categories table
-    //$updatePost = "INSERT INTO Posts (Department, Title, Body, Category1ID, Category2ID, Category3ID, isUploadedDocuments, UserID, isAnonymous, ProblemTxt) VALUES ('$ideadept', '$posttitle', '$problem', '$category1', '$category2', '$category3', '$docupload', '$userID', '$anon', '$idea');";
-        // query above takes variables as input to db; does NOT work.
-    //$updatePost = "INSERT INTO Posts (Department, Title, Body, Category1ID, Category2ID, Category3ID, isUploadedDocuments, UserID, isAnonymous, ProblemTxt) VALUES ('Computing', 'Test Title', 'This is a problem', '3', '2', '0', '1', '$userID', '0', 'This is how I fix problem');";
-        // query above takes my own inputs to db; does NOT work.
-    //if(mysqli_query($conn, $updatePost)){ // runs the query and checks if it runs fine
-        //header("Location: index.php?NoDocsUploadedPostUpdated"); // takes us back to Index with a success msg for this specific event     
-    //}
-    //else{
-        //echo "faked it";
-    //}
+    }
 }
 
 if(isset($_FILES['fileToUpload'])) // if document upload is submitted
 {
-    $docupload = "1";
+    
     $file_array = reArrayFiles($_FILES['fileToUpload']); // rearranged the array for file information
     for ($i=0; $i < count($file_array); $i++) {  // for loop for each uploaded file
         if($file_array[$i]['error']){ // if an error occurs handler
-            if($file_array[$i]['error'] = '4'){ // this is a unique handler as if a doc hasnt been select, it will run this
+            if($file_array[$i]['error'] = '4'){ // this is a unique handler as if a doc hasnt been select, it will run this                 
                 echo "No docs have been uploaded!";
-                // The Query below doesn't wanna work and throws me into the "else"; help.
-                // Tested with updating Categories table; works fine.
-                $updatePost = "INSERT INTO Posts (Department, Title, Body, Category1ID, Category2ID, Category3ID, isUploadedDocuments, UserID, isAnonymous, ProblemTxt) 
-                                VALUES ('$ideadept', '$posttitle', '$problem', '$category1', '$category2', '$category3', '$docupload', '$userID', '$anon', '$idea');";
-                    if(mysqli_query($conn, $updatePost)){ // runs the query and checks if it runs fine
-                        //header("Location: index.php?NoDocsUploadedPostUpdated"); // takes us back to Index with a success msg for this specific event     
-                    }
-                    else{
-                        //echo "query doesn't go through"; // if query doesnt go through
-                    }
-            }
+                $docupload = "0";
+                goto insertNoDoc;                    
+            }                
             else{ // if any other error occurs, it will be displayed.
                 echo $file_array[$i]['name'].' - '.$phpFileUploadErrors[$file_array[$i]['error']];
             }
         }
         else{ // if no errors, proceed with this block.
-            $allowed = array('png','pdf'); // allowed extensions.
+            $allowed = array('jpg','pdf','png','doc','gif','jpeg','tif'); // allowed extensions.
             $file_ext = explode('.',$file_array[$i]['name']); // exploding file names to obtain actual extension
             $file_ext = end($file_ext); // grabbing the last(end) bit of the exploded file name
             $fileNameNew = uniqid('', true).".".$file_ext; // creating a unique name for each file
@@ -108,6 +87,7 @@ if(isset($_FILES['fileToUpload'])) // if document upload is submitted
                 echo $userID.".".$fileNameNew."- Invalid File Extension."; // echos out msg if extension isn't allowed
             }
             else{ // if extension is allowed, proceed with this block.
+                $docupload = "1";
                 move_uploaded_file($file_array[$i]['tmp_name'], "uploadedDocs/".$fileNameNew); // moves files to upload directory WORKS
                 echo $fileNameNew.' - '.$phpFileUploadErrors[$file_array[$i]['error']]; // echo out the new file name as well as any additional errors.
                 $selectPostID = "SELECT PostID FROM Posts ORDER BY PostID DESC LIMIT 1;"; // sql query to grab latest PostID
@@ -116,16 +96,25 @@ if(isset($_FILES['fileToUpload'])) // if document upload is submitted
                 $newPostID = $row['PostID'] + 1; // adds 1 to latest PostID so I can update Document table
                 $updateDocTable = "INSERT INTO Documents (FileType, PostID, UserID, FileName) VALUES ('$file_ext', '$newPostID', '$userID','$fileNameNew');";
                 // sql statement to insert data into Documents table
-                if(mysqli_query($conn, $updateDocTable)){ // if statement runs fine, run this block.
-                    echo "New Document record created!";
-                }
-                else{ // if statement did not run, run this block.
-                    echo "error of somekind";
-                }
+                mysqli_query($conn, $updateDocTable);
+                //if(){ // if statement runs fine, run this block.
+                    //echo "New Document record created!";
+                    //header("Location: index.php?WithDocsUploadedPostUpdated"); // takes us back to Index with a success msg for this specific event
+                //}
+                //else{ // if statement did not run, run this block.
+                    //echo "error of somekind";
+                //}                               
             }
         }
+                
     }
 }
+
+insertNoDoc:  // when no docs are selected, code will jump to this.                 
+            $updatePost = "INSERT INTO Posts (Department, Title, Body, Category1ID, Category2ID, Category3ID, isUploadedDocuments, Views, UserID, isAnonymous, ProblemTxt) 
+                            VALUES ('$ideadept', '$posttitle', '$problem', '$category1', '$category2', '$category3', '$docupload', '0','$userID', '$anon', '$idea');";
+            mysqli_query($conn, $updatePost); // runs the query and checks if it runs fine
+            header("Location: index.php?PostSubmitted"); // takes us back to Index with a success msg for this specific event
   
 // Line 71; query doesn't run, spits me into the "else" block.
 

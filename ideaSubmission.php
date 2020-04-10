@@ -114,12 +114,12 @@ if(!isset($_SESSION['login_user']))
                 <p class="w3-center">                    
                     <label for="IdeaDept">Choose a Department:</label>
                     <select id="department" name="department" class="w3-dropdown-click">
-                        <option value="cat1">Archaeology</option>
-                        <option value="cat2">Computing</option>
-                        <option value="cat3">Humanities</option>
-                        <option value="cat4">Languages</option>
-                        <option value="cat5">Mathematics</option>
-                        <option value="cat6">Science</option>
+                        <option value="Archaeology">Archaeology</option>
+                        <option value="Computing">Computing</option>
+                        <option value="Humanities">Humanities</option>
+                        <option value="Languages">Languages</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Science">Science</option>
                     </select>
                     <label for="IdeaCategory">Choose 3 Categories:</label>
                     <select id="category1" name="category1" class="w3-dropdown-click">                        
@@ -178,11 +178,12 @@ if(!isset($_SESSION['login_user']))
                 <br />
             <!--Added a button for annonimity. Allowing the user to tick the box if they wish to post as annon.-->
                 <p class="w3-left-align">Do you wish to be annonymous?</p>
-                <p><input type="checkbox" id="anon" name="anon" value="1"> Tick if you wish to be an annonymous poster.</p>
+                <p><input type="checkbox" id="anon" name="anon"> Tick if you wish to be an annonymous poster.</p>
             </fieldset>
             <br />
             <!--Fieldset allowing the user to upload multiple files as well as Submit their idea; again if some required fields are empty, pop ups will show-->
             <fieldset>
+                <p class="w3-left-align">Only these file types will be uploaded: jpg, pdf, png, doc, gif, jpeg, tif.</p>
                 <p class="w3-left-align">Select files to upload and upload your idea:</p>
                 <input type="file" name="fileToUpload[]" id="fileToUpload[]" value="" multiple>
                 <input type="submit" value="Submit Your Idea" name="submitidea">
