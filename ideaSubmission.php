@@ -139,7 +139,7 @@ $level = intval($_SESSION['level_user']);
     <div class="page w3-content" style="max-width:1500px">
 
 		<div class="w3-white w3-border-bottom">
-			<button class="w3-button w3-white w3-xlarge" onclick="w3_open()">?</button>
+			<button class="w3-button w3-white w3-xlarge" onclick="w3_open()">☰</button>
 			<img src="Images/uog-logo.png" style="margin-bottom: 10px; margin-top: 10px;">
 		</div>
 
