@@ -14,6 +14,7 @@
 	include 'config.php';
 	
 	$userID = $_SESSION['userID'];
+	$LastLogged = $_SESSION['LastLogIn'];
 	
 	$date = date('Y-m-d H:i:s'); //now you can save in DB
 	$query = "SELECT LastLoggedIn, Username FROM Accounts WHERE UserID = $userID";
@@ -25,7 +26,7 @@
 	else
 	{
 		while($row = mysqli_fetch_assoc($result)) {
-            $messages = "Welcome " . $row['Username'] . ". Last Login was: " . $row['LastLoggedIn'];
+            $messages = "Welcome " . $row['Username'] . ". Last Login was: " . $LastLogged;
         }
 	}
 ?>

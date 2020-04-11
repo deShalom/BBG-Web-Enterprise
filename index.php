@@ -99,12 +99,8 @@ $pageName = basename($_SERVER['PHP_SELF']);
 
 		}
 		.footer {
-	  position: fixed;
-	  left: 0;
-	  bottom: 0;
-	  width: 100%;
-	  color: white;
-	  text-align: center;
+            grid-row-start: 2;
+            grid-row-end: 3;
 	}
 		.bI {
 			width: 100%;
@@ -164,7 +160,6 @@ $pageName = basename($_SERVER['PHP_SELF']);
 		<!-- Sidebar -->
 		<div class="w3-sidebar w3-bar-block w3-border-bottom" style="display:none" id="mySidebar">
 			<button onclick="w3_close()" class="w3-bar-item w3-large">Close &times;</button>
-            <a href="index.php" class="w3-bar-item w3-button">Home</a>
             <a href="ideaSubmission.php" class="w3-bar-item w3-button">Idea Sub</a>
             <a href="ideabrowser.php" class="w3-bar-item w3-button">Idea Browser</a>
             <a href="admin.php" class="w3-bar-item w3-button">Admin Page</a>
@@ -224,10 +219,10 @@ $pageName = basename($_SERVER['PHP_SELF']);
 
 			<div class="footer w3-dark-gray w3-center">
 				<p><span style='border-bottom:2px white solid;'>Other useful links!</p></span>
-				<a href="https://www.snapchat.com/add/uniofgreenwich" target="_blank"><i class="fab fa-snapchat-ghost w3-margin-right"></i></a>
-				<a href="https://twitter.com/UniofGreenwich" target="_blank"><i class="fab fa-twitter w3-margin-right"></i></a>
-				<a href="https://www.facebook.com/uniofgreenwich/" target="_blank"><i class="fab fa-facebook-f w3-margin-right"></i></a>
-				<a href="https://www.instagram.com/uniofgreenwich/?hl=en" target="_blank"><i class="fab fa-instagram w3-margin-right"></i></a>
+				<i class="fab fa-snapchat-ghost w3-margin-right"><a href="https://www.snapchat.com/add/uniofgreenwich" target="_blank"></i></a>
+				<i class="fab fa-twitter w3-margin-right"><a href="https://twitter.com/UniofGreenwich" target="_blank"></i></a>
+				<i class="fab fa-facebook-f w3-margin-right"><a href="https://www.facebook.com/uniofgreenwich/" target="_blank"></i></a>
+				<i class="fab fa-instagram w3-margin-right"><a href="https://www.instagram.com/uniofgreenwich/?hl=en" target="_blank"></i></a>
 			</div>
 </body>
 </html>

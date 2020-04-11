@@ -33,4 +33,8 @@ if($conn === false){
                     header("Location: indiv.php?id=$postID");
 
 
+
+
+
+
 ?>

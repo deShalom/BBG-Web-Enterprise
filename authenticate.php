@@ -17,7 +17,7 @@ if (isset($_POST['loginbtn']))
         $password = mysqli_real_escape_string($conn, $_POST['password']);
         // SQL query to fetch information of registerd users and finds user match.
         //AND Password='$password'--->
-        $authquery = ("SELECT UserID, Username, Password, LastLoggedIn Level FROM Accounts WHERE Username='$username'");
+        $authquery = ("SELECT UserID, Username, Password, LastLoggedIn, Level FROM Accounts WHERE Username='$username'");
         $result = mysqli_query($conn, $authquery);
         $rows = mysqli_num_rows($result);
     
@@ -31,13 +31,12 @@ if (isset($_POST['loginbtn']))
 	                $_SESSION['login_user'] = $username; // Initializing Session
 	                $_SESSION['userID'] = $row['UserID'];
 	                $_SESSION['level_user'] = $row['Level'];
+					$_SESSION['LastLogIn'] = $row['LastLoggedIn'];
                 	
 		                $date = date('Y-m-d H:i:s'); //now you can save in DB
 		                $updateTime = "UPDATE Accounts SET LastLoggedIn = '$date' WHERE username = '$username'";
 		                mysqli_query($conn, $updateTime);
 		                
-		                $_SESSION['LastLogIn'] = $row['LastLoggedIn'];
-
 						$browser = new Browser();
 						$browsername = $browser->getBrowser();
  
@@ -66,7 +65,7 @@ if (isset($_POST['loginbtn']))
 						
                 }
             }
-            header("location: welcome.php");
+            header("location: banned.php");
             // Redirecting To Other Page
         }
             else

@@ -114,11 +114,10 @@
         <br />
 
         <div class="footer w3-dark-gray">
-            <p><span style='border-bottom:2px white solid;'>Other useful links!</span></p>
-            <i class="fab fa-snapchat-ghost w3-margin-right"></i>
-            <i class="fab fa-twitter w3-margin-right"></i>
-            <i class="fab fa-facebook-f w3-margin-right"></i>
-            <i class="fab fa-instagram w3-margin-right"></i>
+            <p><span style='border-bottom:2px white solid;'>Other useful links!</span></p>           <a href="https://www.snapchat.com/add/uniofgreenwich" target="_blank"><i class="fab fa-snapchat-ghost w3-margin-right"></i></a>
+           <a href="https://twitter.com/UniofGreenwich" target="_blank"><i class="fab fa-twitter w3-margin-right"></i></a>
+           <a href="https://www.facebook.com/uniofgreenwich/" target="_blank"><i class="fab fa-facebook-f w3-margin-right"></i></a>
+           <a href="https://www.instagram.com/uniofgreenwich/?hl=en" target="_blank"><i class="fab fa-instagram w3-margin-right"></i></a>
         </div>
 </body>
 </html> 

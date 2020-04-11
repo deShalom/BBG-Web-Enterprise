@@ -159,8 +159,9 @@ if($level < 5 )
     <!-- Navigation Bar (Within Header) -->
     <div class="w3-padding-8">
         <div class="w3-bar w3-dark-gray">
-            <button class="w3-button w3-dark-gray w3-margin-top" name="logout" ><a href="logout.php">Logout</a></div>
-    </div>
+            <div class="w3-right w3-bar-item w3-button">Logout</div>
+			<button class="w3-button w3-dark-gray w3-margin-top" name="logout" ><a href="logout.php">LOGOUT HERE</a></button>
+        </div>
     </div>
 
     <!-- Page Content -->
@@ -173,7 +174,6 @@ if($level < 5 )
 		<!-- Sidebar -->
 		<div class="w3-sidebar w3-bar-block w3-border-bottom" style="display:none" id="mySidebar">
 			<button onclick="w3_close()" class="w3-bar-item w3-large">Close &times;</button>
-            <a href="index.php" class="w3-bar-item w3-button">Home</a>
             <a href="ideaSubmission.php" class="w3-bar-item w3-button">Idea Sub</a>
             <a href="ideabrowser.php" class="w3-bar-item w3-button">Idea Browser</a>
             <a href="admin.php" class="w3-bar-item w3-button">Admin Page</a>
